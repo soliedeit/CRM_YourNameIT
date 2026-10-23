@@ -1,0 +1,2 @@
+[2026-08-24 10:22:32] WARNING: (404) Portal ID not detected. :: GET /portal/ :: /home/crm/domains/crm.yournameit.nl/public_html/application/Espo/Core/ApplicationRunners/PortalClient.php(86)
+[2026-08-24 12:26:35] WARNING: (404) Portal ID not detected. :: GET /portal/ :: /home/crm/domains/crm.yournameit.nl/public_html/application/Espo/Core/ApplicationRunners/PortalClient.php(86)

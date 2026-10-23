@@ -1,0 +1,10 @@
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e84b08caedc': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e84c265e216': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e84d21230c7': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e84e0dac5af': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e84eedbfc3e': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e84fddb6b6b': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e850bbcb0b7': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e851a5c838e': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: Scheduled Job '6888d0e852923f05f': SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+[2026-06-04 00:55:38] ERROR: (HY000) Uncaught Exception PDOException: "SQLSTATE[HY000]: General error: 2006 MySQL server has gone away" at /home/crm/domains/crm.yournameit.nl/public_html/application/Espo/ORM/Executor/DefaultSqlExecutor.php line 77 :: /home/crm/domains/crm.yournameit.nl/public_html/application/Espo/ORM/Executor/DefaultSqlExecutor.php(77)
