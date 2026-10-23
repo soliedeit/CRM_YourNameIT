@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -237,8 +237,9 @@ class Permission
                     $pKey = $rule[$count];
                 }
 
+                /** @phpstan-ignore-next-line empty.variable */
                 if (!empty($pKey)) {
-                    $permission[$pKey]= $val;
+                    $permission[$pKey] = $val;
                 }
 
                 $count++;

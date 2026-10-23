@@ -172,7 +172,7 @@ Weet je het zeker?'
       'listForContact' => 'Lijst (voor contact)'
     ],
     'fieldTypes' => [
-      'base' => 'Base',
+      'base' => 'Basis',
       'address' => 'Adres',
       'array' => 'Reeks',
       'foreign' => 'Extern',
@@ -181,6 +181,7 @@ Weet je het zeker?'
       'personName' => 'Naam persoon',
       'autoincrement' => 'Automatisch ophogen',
       'bool' => 'Booleaans',
+      'decimal' => 'Decimaal',
       'currency' => 'Valuta',
       'currencyConverted' => 'Valuta (geconverteerd)',
       'date' => 'Datum',
@@ -260,7 +261,7 @@ Weet je het zeker?'
       'dynamicLogicRequired' => 'Het veld voor het maken van voorwaarden is vereist',
       'dynamicLogicOptions' => 'Voorwaardelijke opties',
       'dynamicLogicInvalid' => 'Condities die veld ongeldig maken',
-      'dynamicLogicReadOnlySaved' => 'Saved state conditions making field read-only',
+      'dynamicLogicReadOnlySaved' => 'Opgeslagen voorwaarden waardoor veld alleen-lezen is',
       'probabilityMap' => 'Fasekansen (%)',
       'notActualOptions' => 'Niet actuele opties',
       'activeOptions' => 'Actieve opties',
@@ -297,7 +298,8 @@ Weet je het zeker?'
       'relateOnImport' => 'Relateer op import',
       'aclScope' => 'ACL Toepassing',
       'onlyAdmin' => 'Alleen voor Admin',
-      'notStorable' => 'Not Storable'
+      'notStorable' => 'Niet op te slaan',
+      'itemsEditable' => 'Items bewerkbaar'
     ],
     'strings' => [
       'rebuildRequired' => 'Reconstrueren vereist'
@@ -378,7 +380,7 @@ Weet je het zeker?'
       'pdfTemplates' => 'Sjablonen om af te drukken naar PDF.',
       'formulaSandbox' => 'Formulescripts schrijven en testen.',
       'addressCountries' => 'Landen beschikbaar voor adresvelden.',
-      'oAuthProviders' => 'OAuth providers for integrations.'
+      'oAuthProviders' => 'OAuth providers voor integraties.'
     ],
     'keywords' => [
       'settings' => 'systeem',
@@ -440,13 +442,14 @@ Weet je het zeker?'
       'reminder' => 'Herinnering'
     ],
     'tooltips' => [
-      'tabUrl' => 'Can start with `#` to navigate to an application page.',
-      'tabUrlAclScope' => 'The tab will be available for users who have access to the specified scope.'
+      'tabUrl' => 'Kan starten met `#` om naar een toepassingspagina te navigeren.',
+      'tabUrlAclScope' => 'Het tabblad is beschikbaar voor gebruikers die toegang hebben tot het opgegeven bereik.'
     ]
   ],
   'ApiUser' => [
     'labels' => [
-      'Create ApiUser' => 'Creëer API gebruiker'
+      'Create ApiUser' => 'Creëer API gebruiker',
+      'OpenAPI spec' => 'OpenAPI spec'
     ]
   ],
   'AppLogRecord' => [
@@ -744,6 +747,44 @@ Weet je het zeker?'
       'ZAR' => 'Zuid-Afrikaanse Rand',
       'ZMW' => 'Zambiaanse Kwacha',
       'ZWL' => 'Zimbabwe Dollar'
+    ],
+    'messages' => [
+      'rateOnDateAlreadyExists' => 'A rate on this date already exists.'
+    ]
+  ],
+  'CurrencyRecord' => [
+    'fields' => [
+      'code' => 'Code',
+      'status' => 'Status',
+      'label' => 'Label',
+      'symbol' => 'Symbol',
+      'isBase' => 'Is Base',
+      'rate' => 'Rate',
+      'rateDate' => 'Rate Date'
+    ],
+    'links' => [
+      'rates' => 'Rates'
+    ],
+    'options' => [
+      'status' => [
+        'Active' => 'Active',
+        'Inactive' => 'Inactive'
+      ]
+    ]
+  ],
+  'CurrencyRecordRate' => [
+    'labels' => [
+      'Create CurrencyRecordRate' => 'Create Exchange Rate'
+    ],
+    'fields' => [
+      'record' => 'Currency',
+      'baseCode' => 'Base',
+      'date' => 'Date',
+      'rate' => 'Rate',
+      'number' => 'Number'
+    ],
+    'links' => [
+      'record' => 'Currency'
     ]
   ],
   'DashboardTemplate' => [
@@ -772,15 +813,15 @@ Weet je het zeker?'
       'entityType' => 'Type entiteit',
       'primaryFilter' => 'Primair filter',
       'boolFilterList' => 'Extra filters',
-      'sortBy' => 'Sortering (veld)',
-      'sortDirection' => 'Sortering (richting)',
+      'sortBy' => 'Sorteer op',
+      'sortDirection' => 'Sorteer richting',
       'expandedLayout' => 'Lay-out',
       'skipOwn' => 'Geen eigen records tonen',
       'url' => 'URL',
       'dateFilter' => 'Datumfilter',
       'text' => 'Tekst',
       'folder' => 'Map',
-      'includeShared' => 'Include Shared',
+      'includeShared' => 'Gedeeld opnemen',
       'team' => 'Groep',
       'futureDays' => 'Volgende X dagen',
       'useLastStage' => 'Groeperen op laatst bereikte fase'
@@ -806,8 +847,8 @@ Weet je het zeker?'
       'skipOwn' => 'Acties van uw gebruikersaccount worden niet weergegeven.'
     ],
     'otherFields' => [
-      'soft' => 'Soft Color',
-      'small' => 'Small Font'
+      'soft' => 'Zachte kleur',
+      'small' => 'Klein lettertype'
     ]
   ],
   'DynamicLogic' => [
@@ -884,8 +925,8 @@ Weet je het zeker?'
       'sentBy' => 'Verzonden door',
       'toEmailAddresses' => 'Naar e-mailadressen',
       'ccEmailAddresses' => 'CC e-mailadressen',
-      'bccEmailAddresses' => 'BCC e-mail adressen',
-      'replyToEmailAddresses' => 'Antwoord Aan e-mail adressen',
+      'bccEmailAddresses' => 'BCC e-mailadressen',
+      'replyToEmailAddresses' => 'Reply-To e-mailadressen',
       'messageId' => 'Bericht-ID',
       'messageIdInternal' => 'Bericht-ID (intern)',
       'folderId' => 'Map-ID',
@@ -905,6 +946,7 @@ Weet je het zeker?'
       'groupFolder' => 'Groepsmap',
       'groupStatusFolder' => 'Groeps Status map',
       'sendAt' => 'Verzenden naar',
+      'isAutoReply' => 'Is automatisch antwoord',
       'tasks' => 'Taken'
     ],
     'links' => [
@@ -1064,7 +1106,8 @@ Hij zal ook voor andere gebruikers worden verwijderd.',
       'smtpSecurity' => 'SMTP beveiliging',
       'smtpAuthMechanism' => 'SMTP Auth Mechanisme',
       'smtpUsername' => 'SMTP gebruikersnaam',
-      'smtpPassword' => 'SMTP wachtwoord'
+      'smtpPassword' => 'SMTP wachtwoord',
+      'folderMap' => 'Maptoewijzing'
     ],
     'links' => [
       'filters' => 'Filters',
@@ -1101,6 +1144,7 @@ Hij zal ook voor andere gebruikers worden verwijderd.',
       'active' => 'Actief'
     ],
     'messages' => [
+      'noFolder' => 'De toegewezen map bestaat niet.',
       'couldNotConnectToImap' => 'Kan geen verbinding maken met IMAP server',
       'connectionIsOk' => 'Verbinding is Ok',
       'imapNotConnected' => 'Kan geen verbinding maken met [IMAP-account](#EmailAccount/view/{id}).'
@@ -1108,9 +1152,9 @@ Hij zal ook voor andere gebruikers worden verwijderd.',
     'tooltips' => [
       'useSmtp' => 'De mogelijkheid om e-mails te verzenden.',
       'emailAddress' => 'Het gebruikersrecord (toegewezen gebruiker) moet hetzelfde e-mailadres hebben om dit e-mailaccount te kunnen gebruiken voor verzending.',
-      'monitoredFolders' => 'Meerdere mappen moeten gescheiden worden door een komma.
+      'monitoredFolders' => 'Selecteer IMAP-mappen om te importeren. U kunt ze optioneel toewijzen aan Espo-mappen.
 
-U kunt een \'Verzonden\' map toevoegen om e-mails te synchroniseren die zijn verzonden vanuit een externe e-mail cliënt.',
+U kunt de map \'Verzonden\' toevoegen om e-mails te synchroniseren die zijn verzonden vanuit een externe e-mailclient.',
       'storeSentEmails' => 'Verzonden E-mails worden opgeslagen op de IMAP server. E-mailadres veld moet overeenkomen met het E-mailadres waarvan verzonden wordt.'
     ]
   ],
@@ -1123,7 +1167,7 @@ U kunt een \'Verzonden\' map toevoegen om e-mails te synchroniseren die zijn ver
     'fields' => [
       'optOut' => 'Afgemeld',
       'invalid' => 'Ongeldig',
-      'lower' => 'Lower-case Name'
+      'lower' => 'Kleine letters Naam'
     ],
     'presetFilters' => [
       'orphan' => 'Wees'
@@ -1201,6 +1245,12 @@ U kunt een \'Verzonden\' map toevoegen om e-mails te synchroniseren die zijn ver
       'Info' => 'Info',
       'Available placeholders' => 'Beschikbare aanduidingen'
     ],
+    'options' => [
+      'status' => [
+        'Active' => 'Actief',
+        'Inactive' => 'Inactief'
+      ]
+    ],
     'messages' => [
       'infoText' => 'Beschikbare plaatshouders:
 
@@ -1212,7 +1262,7 @@ U kunt een \'Verzonden\' map toevoegen om e-mails te synchroniseren die zijn ver
       'oneOff' => 'Controleer of u deze sjabloon maar één keer gaat gebruiken. Bijv. voor verzamel e-mail.'
     ],
     'presetFilters' => [
-      'actual' => 'Actueel'
+      'actual' => 'Actief'
     ],
     'placeholderTexts' => [
       'today' => 'Datum van vandaag',
@@ -1259,8 +1309,8 @@ U kunt een \'Verzonden\' map toevoegen om e-mails te synchroniseren die zijn ver
       'linkForeign' => 'Externe link',
       'link' => 'Link',
       'labelForeign' => 'Extern label',
-      'sortBy' => 'Standaard sortering (veld)',
-      'sortDirection' => 'Standaard sortering (richting)',
+      'sortBy' => 'Standaard sorteer veld',
+      'sortDirection' => 'Standaard sorteer richting',
       'relationName' => 'Middelste tabelnaam',
       'linkMultipleField' => 'Link meerdere velden',
       'linkMultipleFieldForeign' => 'Externe link meervoudig veld',
@@ -1383,7 +1433,7 @@ Evenement - beschikbaar in het paneel Agenda en Activiteiten.',
     'options' => [
       'format' => [
         'csv' => 'CSV',
-        'xlsx' => 'XLSX (Excel)'
+        'xlsx' => 'XLSX · Spreadsheet'
       ],
       'status' => [
         'Pending' => 'In behandeling',
@@ -1436,7 +1486,7 @@ Evenement - beschikbaar in het paneel Agenda en Activiteiten.',
       'Name' => 'Naam',
       'Label' => 'Label',
       'Type' => 'Type',
-      'View Details' => 'View Details'
+      'View Details' => 'Bekijk Details'
     ],
     'options' => [
       'dateTimeDefault' => [
@@ -1478,6 +1528,7 @@ Evenement - beschikbaar in het paneel Agenda en Activiteiten.',
         'javascript: return this.dateTime.getDateShiftedFromToday(8, \'days\');' => '+8 dagen',
         'javascript: return this.dateTime.getDateShiftedFromToday(9, \'days\');' => '+9 dagen',
         'javascript: return this.dateTime.getDateShiftedFromToday(10, \'days\');' => '+10 dagen',
+        'javascript: return this.dateTime.getDateShiftedFromToday(30, \'days\');' => '+30 days',
         'javascript: return this.dateTime.getDateShiftedFromToday(1, \'weeks\');' => '+1 week',
         'javascript: return this.dateTime.getDateShiftedFromToday(2, \'weeks\');' => '+2 weken',
         'javascript: return this.dateTime.getDateShiftedFromToday(3, \'weeks\');' => '+3 weken',
@@ -1536,6 +1587,7 @@ Evenement - beschikbaar in het paneel Agenda en Activiteiten.',
       'conversionDisabled' => 'De valutaconversie actie zal niet worden toegepast op dit veld.',
       'pattern' => 'Een reguliere expressie om een veldwaarde aan te toetsen. Definieer een uitdrukking of selecteer een vooraf gedefinieerde.',
       'options' => 'Een lijst van mogelijke waarden en hun labels.',
+      'itemsEditable' => 'Items kunnen worden bewerkt. Alleen van toepassing als er geen opties zijn opgegeven.',
       'optionsArray' => 'Een lijst met mogelijke waarden en hun labels. Als het veld leeg is, kunnen er aangepaste waarden worden ingevoerd.',
       'maxCount' => 'Maximum aantal items dat mag worden geselecteerd.',
       'displayAsList' => 'Elk item op een nieuwe regel.',
@@ -1570,6 +1622,7 @@ Het schakelt ook de mogelijkheid uit om een gerelateerd record te maken vanuit r
     ],
     'fieldInfo' => [
       'varchar' => 'Een tekst van één regel.',
+      'decimal' => 'Een decimaal getal met vaste-komma-precisie.',
       'enum' => 'Selectbox, kan slechts één waarde worden geselecteerd.',
       'text' => 'Een meerregelige tekst met markdown-ondersteuning.',
       'date' => 'Datum zonder tijd.',
@@ -1609,7 +1662,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'namingFieldLinkConflict' => 'Naam \'{field}\' conflicteert met link.'
     ],
     'otherFields' => [
-      'attributes' => 'Attributes'
+      'attributes' => 'Attributen'
     ]
   ],
   'Formula' => [
@@ -1655,7 +1708,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'Stream' => 'Stream',
       'Import' => 'Importeren',
       'ImportError' => 'Importfout',
-      'Template' => 'Template',
+      'Template' => 'PDF-sjabloon',
       'Job' => 'Job',
       'EmailFilter' => 'E-mail filter',
       'Portal' => 'Portaal',
@@ -1695,7 +1748,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'LayoutSet' => 'Lay-out set',
       'Webhook' => 'Webhook',
       'WebhookQueueItem' => 'Webhook wachtrij item',
-      'WebhookEventQueueItem' => 'Webhook Event Queue Item',
+      'WebhookEventQueueItem' => 'Webhook-gebeurteniswachtrijitem',
       'Mass Action' => 'Massa-actie',
       'WorkingTimeCalendar' => 'Werktijd Kalender',
       'WorkingTimeRange' => 'Werktijd uitzondering',
@@ -1704,7 +1757,10 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'AddressCountry' => 'Adres Land',
       'AppSecret' => 'App Geheim',
       'OAuthProvider' => 'OAuth Provider',
-      'OAuthAccount' => 'OAuth Account',
+      'OAuthAccount' => 'OAuth account',
+      'OpenApi' => 'OpenAPI',
+      'CurrencyRecord' => 'Currency Record',
+      'CurrencyRecordRate' => 'Currency Rate',
       'Account' => 'Relatie',
       'Contact' => 'Contact',
       'Lead' => 'Lead',
@@ -1726,7 +1782,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'KnowledgeBaseArticle' => 'Kennisbank artikel',
       'KnowledgeBaseCategory' => 'Kennisbank categorie',
       'CampaignLogRecord' => 'Campagne log record',
-      'TargetListCategory' => 'Target List Category'
+      'TargetListCategory' => 'Doellijst Categorie'
     ],
     'scopeNamesPlural' => [
       'Note' => 'Opmerkingen',
@@ -1749,7 +1805,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'Stream' => 'Stream',
       'Import' => 'Importeren',
       'ImportError' => 'Importfouten',
-      'Template' => 'Templates',
+      'Template' => 'PDF-sjablonen',
       'Job' => 'Jobs',
       'EmailFilter' => 'E-mail filter',
       'Portal' => 'Portalen',
@@ -1776,7 +1832,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'LayoutSet' => 'Lay-out sets',
       'Webhook' => 'Webhooks',
       'WebhookQueueItem' => 'Webhook wachtrij items',
-      'WebhookEventQueueItem' => 'Webhook Event Queue Items',
+      'WebhookEventQueueItem' => 'Webhook-gebeurteniswachtrijitems',
       'WorkingTimeCalendar' => 'Werktijd kalenders',
       'WorkingTimeRange' => 'Werktijd uitzonderingen',
       'AuthenticationProvider' => 'Authenticatie aanbieders',
@@ -1784,7 +1840,10 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'AddressCountry' => 'Adres Landen',
       'AppSecret' => 'App Geheimen',
       'OAuthProvider' => 'OAuth Providers',
-      'OAuthAccount' => 'OAuth Accounts',
+      'OAuthAccount' => 'OAuth accounts',
+      'OpenApi' => 'OpenAPI',
+      'CurrencyRecord' => 'Currencies',
+      'CurrencyRecordRate' => 'Currency Rates',
       'Account' => 'Relaties',
       'Contact' => 'Contacten',
       'Lead' => 'Leads',
@@ -1806,7 +1865,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'KnowledgeBaseArticle' => 'Kennisbank',
       'KnowledgeBaseCategory' => 'Kennisbank categorieën',
       'CampaignLogRecord' => 'Campagne log record',
-      'TargetListCategory' => 'Target List Categories'
+      'TargetListCategory' => 'Doellijst Categorieën'
     ],
     'labels' => [
       'Previous Page' => 'Vorige pagina',
@@ -1842,10 +1901,11 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'Done' => 'Gedaan',
       'Access denied' => 'Toegang geweigerd',
       'Not found' => 'Niet gevonden',
+      'Internal server error' => 'Internal server error',
       'Access' => 'Toegang',
       'Timeout' => 'Time-out',
       'No internet' => 'Geen internet',
-      'Network error' => 'Network error',
+      'Network error' => 'Netwerk error',
       'Are you sure?' => 'Zeker?',
       'Record has been removed' => 'Record is verwijderd',
       'Wrong username/password' => 'Onjuiste gebruikersnaam/wachtwoord',
@@ -1952,6 +2012,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'No' => 'Nee',
       'Select All Results' => 'Selecteer alle resultaten',
       'Value' => 'Value',
+      'Edit Item' => 'Item bewerken',
       'Current version' => 'Huidige versie',
       'List View' => 'List View',
       'Tree View' => 'Structuur overzicht',
@@ -2025,6 +2086,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'Tasks' => 'Taken'
     ],
     'messages' => [
+      'checkLogsForDetails' => 'Check logs for details.',
       'pleaseWait' => 'Even geduld...',
       'loading' => 'Bezig met laden...',
       'saving' => 'Opslaan...',
@@ -2070,7 +2132,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'fieldExceedsMaxCount' => 'Aantal overschrijdt max. toegestaan {maxCount}',
       'barcodeInvalid' => '{field} is ongeldig {type}',
       'arrayItemMaxLength' => 'Item mag niet langer zijn dan {max} tekens',
-      'arrayInputNotEmpty' => 'Item is entered but not added',
+      'arrayInputNotEmpty' => 'Item is ingevoerd maar niet toegevoegd',
       'resetPreferencesDone' => 'Voorkeuren zijn naar standaardwaarden teruggezet',
       'confirmation' => 'Zeker?',
       'unlinkAllConfirmation' => 'Weet u zeker dat u alle gerelateerde records wilt ontkoppelen?',
@@ -2086,6 +2148,7 @@ Het verwijderen van velden verwijdert geen gegevens uit de database. Gegevens ui
       'massRemoveResult' => '{count} bestanden waren verwijderd',
       'massRemoveResultSingle' => '{count} bestanden zijn verwijderd',
       'noRecordsRemoved' => 'Er werden geen bestanden verwijderd',
+      'changesLossConfirmation' => 'Niet opgeslagen wijzigingen gaan verloren. Weet u het zeker?',
       'clickToRefresh' => 'Klik om te vernieuwen',
       'writeYourCommentHere' => 'Schrijf hier uw opmerkingen',
       'writeMessageToUser' => 'Schrijf een bericht naar {user}',
@@ -2132,7 +2195,7 @@ Validatie: `{type}`',
       'cannotRelateForbiddenLink' => 'Geen toegang tot link "{link}".',
       'cannotLinkAlreadyLinked' => 'Kan een gekoppeld record niet koppelen.',
       'error404' => 'De door u opgevraagde url kan niet worden verwerkt.',
-      'error403' => 'Je hebt geen toegang tot dit gedeelte.',
+      'error403' => 'Je hebt geen toegang tot dit deel.',
       'emptyMassUpdate' => 'Geen velden beschikbaar voor massale update.',
       'attemptIntervalFailure' => 'De bewerking is niet toegestaan tijdens een bepaald tijdsinterval. Wacht enige tijd voor de volgende poging.',
       'confirmRestoreFromAudit' => 'De vorige waarden worden ingesteld in een formulier. Daarna kun je het record opslaan om de vorige waarden te herstellen.',
@@ -2143,7 +2206,7 @@ Validatie: `{type}`',
       'duplicateConflict' => 'Er bestaat al een record.',
       'cannotRemoveCategoryWithChildCategory' => 'Kan geen categorie verwijderen die een subcategorie heeft.',
       'cannotRemoveNotEmptyCategory' => 'Kan een niet-lege categorie niet verwijderen.',
-      'sameRecordIsAlreadyBeingEdited' => 'The record is already being edited.'
+      'sameRecordIsAlreadyBeingEdited' => 'Het record wordt al bewerkt.'
     ],
     'boolFilters' => [
       'onlyMy' => 'Alleen mijn',
@@ -2154,7 +2217,8 @@ Validatie: `{type}`',
     'presetFilters' => [
       'followed' => 'Gevolgd',
       'all' => 'Alle',
-      'starred' => 'Sterren'
+      'starred' => 'Sterren',
+      'active' => 'Actief'
     ],
     'massActions' => [
       'delete' => 'Verwijder',
@@ -2282,6 +2346,7 @@ Validatie: `{type}`',
       'entityRemoved' => '{user} verwijderde {entityType} {entity}',
       'emailInbox' => '{user} voegde e-mail {entiteit} toe aan je inbox',
       'userPostReaction' => '{user} reageerde op je {post}',
+      'addedToCollaborators' => '{user} heeft je toegevoegd als medewerker aan {entityType} {entity}',
       'userPostInParentReaction' => '{user} reageerde op je {post} in {entityType} {entity}',
       'eventAttendee' => '{user} heeft je toegevoegd aan {entityType} {entity}'
     ],
@@ -2500,6 +2565,7 @@ Validatie: `{type}`',
         'tr_TR' => 'Turkish',
         'uk_UA' => 'Ukrainian',
         'ur_PK' => 'Urdu',
+        'ur_IN' => 'Urdu (India)',
         'vi_VN' => 'Vietnamese',
         'zh_CN' => 'Simplified Chinese (China)',
         'zh_HK' => 'Traditional Chinese (Hong Kong)',
@@ -2557,8 +2623,8 @@ Validatie: `{type}`',
         'isEmpty' => 'Is leeg',
         'isNotEmpty' => 'Is niet leeg',
         'notEquals' => 'Niet gelijk aan',
-        'anyOf' => 'Any Of',
-        'noneOf' => 'None Of'
+        'anyOf' => 'Een van',
+        'noneOf' => 'Geen van'
       ],
       'intSearchRanges' => [
         'equals' => 'Gelijk aan',
@@ -2845,7 +2911,7 @@ Validatie: `{type}`',
       'What to Import?' => 'Wat te importeren?',
       'Entity Type' => 'Type entiteit',
       'What to do?' => 'Wat uit te voeren?',
-      'Properties' => 'Eigenschappen',
+      'Parameters' => 'Parameters',
       'Header Row' => 'Koptekst rij',
       'Person Name Format' => 'Format persoonsnaam',
       'John Smith' => 'Johan Visser',
@@ -3070,7 +3136,7 @@ Merk op dat door deze parameter in te schakelen, het e-mailadres van deze accoun
       'siteKey' => 'Site sleutel',
       'secretKey' => 'Geheime sleutel',
       'scoreThreshold' => 'Drempel Score',
-      'mapId' => 'Map ID'
+      'mapId' => 'Map-ID'
     ],
     'titles' => [
       'GoogleMaps' => 'Google Maps',
@@ -3128,7 +3194,7 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'align' => 'Uitlijnen',
       'panelName' => 'Paneel naam',
       'style' => 'Stijl',
-      'sticked' => 'Vastgezet',
+      'sticked' => 'Blijf boven',
       'isMuted' => 'Gedempte kleur',
       'isLarge' => 'Groot lettertype',
       'hidden' => 'Verborgen',
@@ -3218,8 +3284,8 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'formId' => 'Formulier ID',
       'formEnabled' => 'Webformulier',
       'formUrl' => 'Formulier URL',
-      'formTitle' => 'Form Title',
-      'formTheme' => 'Form Theme',
+      'formTitle' => 'Titel formulier',
+      'formTheme' => 'Formulier Thema',
       'formSuccessText' => 'Tekst die moet worden weergegeven na verzenden van formulier',
       'formText' => 'Weer te geven tekst op formulier',
       'formSuccessRedirectUrl' => 'URL om naar door te verwijzen na verzenden van formulier',
@@ -3309,11 +3375,11 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
     ],
     'options' => [
       'targetType' => [
-        'self' => 'aan mezelf',
-        'users' => 'voor bepaalde gebruiker (s)',
-        'teams' => 'naar een specifiek(e) groep(en)',
-        'all' => 'voor alle interne gebruikers',
-        'portals' => 'voor portaalgebruikers'
+        'self' => 'Zelf',
+        'users' => 'Gebruikers',
+        'teams' => 'Teams',
+        'all' => 'Alle interne gebruikers',
+        'portals' => 'Portaal Gebruikers'
       ],
       'type' => [
         'Post' => 'Post',
@@ -3330,7 +3396,7 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
     ],
     'labels' => [
       'View Posts' => 'Posts bekijken',
-      'View Attachments' => 'View Attachments',
+      'View Attachments' => 'Bekijk bijlagen',
       'View Activity' => 'Activiteit bekijken',
       'Pin' => 'Pin',
       'Unpin' => 'Ontpin',
@@ -3348,23 +3414,23 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'related' => 'Verwant'
     ],
     'otherFields' => [
-      'to' => 'To'
+      'to' => 'Aan'
     ]
   ],
   'OAuthAccount' => [
     'labels' => [
-      'Create OAuthAccount' => 'Create OAuth Account',
-      'Connection' => 'Connection'
+      'Create OAuthAccount' => 'Creëer OAuth-account',
+      'Connection' => 'Connectie'
     ],
     'fields' => [
-      'provider' => 'Provider',
-      'hasAccessToken' => 'Has Access Token',
-      'user' => 'User',
-      'providerIsActive' => 'Provider is Active',
+      'provider' => 'Aanbieder',
+      'hasAccessToken' => 'Heeft toegangstoken',
+      'user' => 'Gebruiker',
+      'providerIsActive' => 'Aanbieder is actief',
       'data' => 'Data'
     ],
     'links' => [
-      'provider' => 'Provider'
+      'provider' => 'Aanbieder'
     ]
   ],
   'OAuthProvider' => [
@@ -3372,23 +3438,23 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'Create OAuthProvider' => 'Create OAuth Provider'
     ],
     'fields' => [
-      'isActive' => 'Is Active',
-      'clientId' => 'Client ID',
-      'clientSecret' => 'Client Secret',
-      'authorizationEndpoint' => 'Authorization Endpoint',
-      'tokenEndpoint' => 'Token Endpoint',
-      'authorizationRedirectUri' => 'Authorization Redirect URI',
-      'scopes' => 'Scopes',
+      'isActive' => 'Is actief',
+      'clientId' => 'Klant ID',
+      'clientSecret' => 'Geheime Code',
+      'authorizationEndpoint' => 'Autorisatie Eindpunt',
+      'tokenEndpoint' => 'Token Eindpunt',
+      'authorizationRedirectUri' => 'Autorisatie omleiding URI',
+      'scopes' => 'Scopen',
       'scopeSeparator' => 'Scope Separator',
-      'hasAccessToken' => 'Has Access Token',
-      'authorizationPrompt' => 'Authorization Prompt',
-      'authorizationParams' => 'Authorization Params'
+      'hasAccessToken' => 'Heeft toegangstoken',
+      'authorizationPrompt' => 'Autorisatievraag',
+      'authorizationParams' => 'Autorisatieparameters'
     ],
     'links' => [
       'accounts' => 'Accounts'
     ],
     'tooltips' => [
-      'authorizationParams' => 'Additional query parameters to be sent to the authorization endpoint. Specified in JSON format.'
+      'authorizationParams' => 'Extra queryparameters die naar het autorisatie-eindpunt moeten worden gestuurd. Opgegeven in JSON-formaat.'
     ]
   ],
   'PhoneNumber' => [
@@ -3488,13 +3554,14 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'assignmentNotificationsIgnoreEntityTypeList' => 'Kennisgevingen van toewijzing in de applicatie',
       'assignmentEmailNotificationsIgnoreEntityTypeList' => 'Kennisgevingen van e-mailtoewijzingen',
       'reactionNotifications' => 'In-app meldingen over reacties',
+      'reactionNotificationsNotFollowed' => 'Meldingen over reacties op niet-gevolgde records',
       'autoFollowEntityTypeList' => 'Auto-Follow',
       'signature' => 'E-mail handtekening',
       'dashboardTabList' => 'Tabbladen lijst',
       'defaultReminders' => 'Standaard herinneringen',
       'defaultRemindersTask' => 'Standaard herinneringen voor taken',
       'theme' => 'Thema',
-      'pageContentWidth' => 'Content Width',
+      'pageContentWidth' => 'Breedte inhoud',
       'useCustomTabList' => 'Eigen tabbladen lijst',
       'addCustomTabs' => 'Aangepaste Tabs toevoegen',
       'tabList' => 'Tabbladen lijst',
@@ -3506,6 +3573,7 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'followEntityOnStreamPost' => 'Record automatisch volgen na plaatsing in Stream',
       'followCreatedEntities' => 'Aangemaakte records automatisch volgen',
       'followCreatedEntityTypeList' => 'Aangemaakte records van specifieke entiteitstypen automatisch volgen',
+      'followAsCollaborator' => 'Automatisch volgen wanneer toegevoegd als medewerker',
       'emailUseExternalClient' => 'Gebruik een externe e-mail cliënt',
       'textSearchStoringDisabled' => 'Tekstfilter opslaan uitschakelen',
       'calendarSlotDuration' => 'Kalender duur',
@@ -3518,8 +3586,8 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
         1 => 'Maandag'
       ],
       'pageContentWidth' => [
-        '' => 'Normal',
-        'Wide' => 'Wide'
+        '' => 'Normaal',
+        'Wide' => 'Breed'
       ]
     ],
     'labels' => [
@@ -3595,7 +3663,8 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'Access' => 'Toegang',
       'Create Role' => 'Creëer Functie',
       'Scope Level' => 'Toepassingsniveau',
-      'Field Level' => 'Veldniveau'
+      'Field Level' => 'Veldniveau',
+      'Baseline' => 'Basislijn'
     ],
     'options' => [
       'accessList' => [
@@ -3702,7 +3771,7 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'outboundSmsFromNumber' => 'SMS van nummer',
       'emailAddress' => 'E-mail',
       'outboundEmailFromName' => 'Van naam',
-      'outboundEmailFromAddress' => 'Van Adres',
+      'outboundEmailFromAddress' => 'E-mailadres systeem',
       'outboundEmailIsShared' => 'Gedeeld',
       'emailAddressLookupEntityTypeList' => 'Scopes voor het opzoeken van e-mailadressen',
       'emailAddressSelectEntityTypeList' => 'Bereik voor selecteren e-mailadres',
@@ -3832,11 +3901,11 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'auth2FAInPortal' => 'Sta 2FA toe in portalen',
       'workingTimeCalendar' => 'Werktijd Kalender',
       'oidcClientId' => 'OIDC Klant ID',
-      'oidcClientSecret' => 'OIDC cliënt geheim',
+      'oidcClientSecret' => 'OIDC Geheime Code',
       'oidcAuthorizationRedirectUri' => 'OIDC autorisatie omleiding URI',
       'oidcAuthorizationEndpoint' => 'OIDC autorisatie eindpunt',
       'oidcTokenEndpoint' => 'OIDC token eindpunt',
-      'oidcUserInfoEndpoint' => 'OIDC UserInfo Endpoint',
+      'oidcUserInfoEndpoint' => 'OIDC UserInfo Eindpunt',
       'oidcJwksEndpoint' => 'OIDC JSON Eindpunt websleutel instellen',
       'oidcJwtSignatureAlgorithmList' => 'OIDC JWT toegestane handtekening algoritmen',
       'oidcScopes' => 'OIDC scopes',
@@ -3857,10 +3926,7 @@ Bezoek [Google Developers Console](https://console.developers.google.com/project
       'authIpAddressWhitelist' => 'Whitelist IP-adres',
       'authIpAddressCheckExcludedUsers' => 'Users uitgezonderd van controle',
       'availableReactions' => 'Beschikbare reacties',
-      'smtpPort' => 'Poort',
-      'smtpSecurity' => 'Beveiliging',
-      'smtpUsername' => 'Gebruikersnaam',
-      'smtpPassword' => 'Wachtwoord'
+      'baselineRole' => 'Basisrol'
     ],
     'options' => [
       'authenticationMethod' => [
@@ -3916,7 +3982,7 @@ Portalen worden niet beïnvloed door de beperking.',
       'emailAddressLookupEntityTypeList' => 'Voor e-mail adres automatisch aanvullen.',
       'emailAddressSelectEntityTypeList' => 'Beschikbare entiteittypes bij het zoeken naar een e-mailadres vanuit een formulier.',
       'emailNotificationsDelay' => 'Een bericht kan binnen de opgegeven termijn worden bewerkt voordat de kennisgeving wordt verzonden.',
-      'outboundEmailFromAddress' => 'Het e-mailadres van het systeem.',
+      'outboundEmailFromAddress' => 'Vanaf dit e-mailadres worden systeeme-mails verzonden. Een [groep e-mailaccount](#InboundEmail) met hetzelfde e-mailadres moet worden ingesteld en correct worden geconfigureerd om e-mails te verzenden.',
       'busyRangesEntityList' => 'Waarmee rekening wordt gehouden bij het tonen van bezette tijden in planner en tijdlijn.',
       'massEmailVerp' => 'Variabele retourpad van de enveloppe. Voor een betere afhandeling van gekaatste berichten. Zorg ervoor dat uw SMTP-provider dit ondersteunt.',
       'recordsPerPage' => 'Aantal zichtbare records in lijsten.',
@@ -3997,7 +4063,9 @@ Beschikbare plaatshouders:
 * `{siteUrl}`
 * `{clientId}`',
       'quickSearchFullTextAppendWildcard' => 'Voeg een wildcard toe aan een autocomplete zoekopdracht wanneer zoeken op volledige tekst is ingeschakeld. Vermindert de zoekprestaties.',
-      'smtpServer' => 'Indien leeg, dan wordt de e-mailaccount van de groep met het corresponderende e-mailadres gebruikt.'
+      'baselineRole' => 'De standaardrol die op alle gebruikers wordt toegepast. Alle extra rollen die aan een gebruiker worden toegewezen, verlenen rechten bovenop deze basis.
+
+**Belangrijk**. Het wijzigen van deze rol heeft gevolgen voor alle gebruikers. Controleer de wijziging zorgvuldig om te voorkomen dat onbedoelde rechten worden verleend.'
     ],
     'labels' => [
       'Group Tab' => 'Tabblad Groep',
@@ -4031,7 +4099,8 @@ Beschikbare plaatshouders:
       'Recovery' => 'Herstel'
     ],
     'messages' => [
-      'ldapTestConnection' => 'De verbinding is succesvol tot stand gebracht.'
+      'ldapTestConnection' => 'De verbinding is succesvol tot stand gebracht.',
+      'confirmBaselineRoleChange' => 'Weet u zeker dat u de basisrol wilt wijzigen? Een verkeerde wijziging kan onbedoelde machtigingen aan alle gebruikers verlenen.'
     ]
   ],
   'Stream' => [
@@ -4100,13 +4169,19 @@ Beschikbare plaatshouders:
       'pageHeight' => 'Pagina Hoogte (mm)',
       'fontFace' => 'Lettertype',
       'title' => 'Titel',
-      'style' => 'Stijl'
+      'style' => 'Stijl',
+      'status' => 'Status',
+      'filename' => 'Bestandsnaam'
     ],
     'links' => [],
     'labels' => [
       'Create Template' => 'Creëer Sjabloon'
     ],
     'options' => [
+      'status' => [
+        'Active' => 'Actief',
+        'Inactive' => 'Inactief'
+      ],
       'pageOrientation' => [
         'Portrait' => 'Portret',
         'Landscape' => 'Landschap'
@@ -4122,6 +4197,13 @@ Beschikbare plaatshouders:
       'fontFace' => []
     ],
     'tooltips' => [
+      'filename' => 'Een optionele bestandsnaam. Entiteitsattributen kunnen worden gebruikt als plaatshouders.
+
+Extra plaatshouder:
+- `{{today}}`
+
+Voorbeeld:
+`Document_{{today}}_{{name}}`',
       'footer' => 'Gebruik {pageNumber} om het paginanummer af te drukken.',
       'variables' => 'Kopieer en plak de benodigde aanduiding naar koptekst, hoofdtekst of voettekst.'
     ]
@@ -4315,19 +4397,28 @@ Beschikbare plaatshouders:
       'user' => 'API gebruiker',
       'entityType' => 'Type entiteit',
       'field' => 'Veld',
-      'secretKey' => 'Geheime sleutel'
+      'secretKey' => 'Geheime sleutel',
+      'skipOwn' => 'Eigen overslaan'
     ],
     'links' => [
       'user' => 'Gebruiker',
-      'queueItems' => 'Queue Items'
+      'queueItems' => 'Wachtrij items'
+    ],
+    'tooltips' => [
+      'skipOwn' => 'Niet verzenden als het evenement is geïnitieerd door de gebruiker die eigenaar is van de webhook.'
     ]
   ],
   'WebhookEventQueueItem' => [
     'fields' => [
       'event' => 'Event',
-      'target' => 'Target',
+      'target' => 'Doel',
       'data' => 'Data',
-      'isProcessed' => 'Is Processed'
+      'isProcessed' => 'Wordt verwerkt',
+      'user' => 'Gebruiker'
+    ],
+    'links' => [
+      'target' => 'Doel',
+      'user' => 'Gebruiker'
     ]
   ],
   'WebhookQueueItem' => [
@@ -4543,9 +4634,8 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
       'User List' => 'Gebruikers lijst',
       'View Calendar' => 'Bekijk de kalender',
       'Create Shared View' => 'Creëer gedeelde weergave',
-      'Edit Shared View' => 'Edit Shared View',
-      'Shared Mode Options' => 'Shared Mode Options',
-      'Manage Users' => 'Gebruikers beheren'
+      'Edit Shared View' => 'Bewerk gedeelde weergave',
+      'Shared Mode Options' => 'Opties gedeelde modus'
     ]
   ],
   'Call' => [
@@ -4648,7 +4738,7 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
     'options' => [
       'type' => [
         'Email' => 'E-mail',
-        'Informational Email' => 'Informational Email',
+        'Informational Email' => 'Informatieve e-mail',
         'Web' => 'Web',
         'Television' => 'Televisie',
         'Radio' => 'Radio',
@@ -4681,7 +4771,7 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
       'active' => 'Actief'
     ],
     'messages' => [
-      'cannotChangeType' => 'Cannot change type.',
+      'cannotChangeType' => 'Kan type niet veranderen.',
       'unsubscribed' => 'U bent uitgeschreven van onze mailinglijst.',
       'subscribedAgain' => 'U bent opnieuw ingeschreven.'
     ],
@@ -4984,7 +5074,7 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
       'categories' => 'Categorieën',
       'language' => 'Taal',
       'portals' => 'Portalen',
-      'bodyPlain' => 'Body Plain'
+      'bodyPlain' => 'Body gewoon'
     ],
     'links' => [
       'cases' => 'Tickets',
@@ -5145,7 +5235,7 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
       'storeSentEmails' => 'E-mails worden opgeslagen in CRM.'
     ],
     'presetFilters' => [
-      'actual' => 'Actueel',
+      'actual' => 'Actief',
       'complete' => 'Voltooi'
     ]
   ],
@@ -5169,7 +5259,7 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
       'isAllDay' => 'Is de hele dag',
       'sourceEmail' => 'Bron E-mail',
       'uid' => 'UID',
-      'joinUrl' => 'Join URL'
+      'joinUrl' => 'Aanmeld URL'
     ],
     'links' => [],
     'options' => [
@@ -5279,7 +5369,7 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
       'targetStatus' => 'Doel status',
       'isOptedOut' => 'Is afgemeld',
       'sourceCampaign' => 'Bron Campagne',
-      'category' => 'Category'
+      'category' => 'Categorie'
     ],
     'links' => [
       'accounts' => 'Relaties',
@@ -5287,7 +5377,7 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
       'leads' => 'Leads',
       'campaigns' => 'Campagnes',
       'massEmails' => 'Verzamel e-mails',
-      'category' => 'Category'
+      'category' => 'Categorie'
     ],
     'options' => [
       'type' => [
@@ -5311,10 +5401,10 @@ Laat het veld leeg als je de uitzondering alleen wilt toepassen op specifieke ge
   ],
   'TargetListCategory' => [
     'labels' => [
-      'Create TargetListCategory' => 'Create Category'
+      'Create TargetListCategory' => 'Creëer categorie'
     ],
     'links' => [
-      'targetLists' => 'Target Lists'
+      'targetLists' => 'Doellijsten'
     ]
   ],
   'Task' => [

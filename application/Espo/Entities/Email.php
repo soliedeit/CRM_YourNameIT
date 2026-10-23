@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -72,6 +72,14 @@ class Email extends Entity
 
     private const ATTR_BODY_PLAIN = 'bodyPlain';
 
+    public const LINK_REPLIES = 'replies';
+
+    public const ADDRESS_FROM = 'from';
+    public const ADDRESS_TO = 'to';
+    public const ADDRESS_CC = 'cc';
+    public const ADDRESS_BCC = 'bcc';
+    public const ADDRESS_REPLY_TO = 'replyTo';
+
     public function get(string $attribute): mixed
     {
         if ($attribute === 'subject') {
@@ -116,6 +124,24 @@ class Email extends Entity
         }
 
         return parent::has($attribute);
+    }
+
+    public function getFetched(string $attribute): mixed
+    {
+        if ($attribute === 'subject') {
+            return $this->getFetched(Field::NAME);
+        }
+
+        return parent::getFetched($attribute);
+    }
+
+    public function isAttributeChanged(string $name): bool
+    {
+        if ($name === 'subject') {
+            $name = Field::NAME;
+        }
+
+        return parent::isAttributeChanged($name);
     }
 
     /** @noinspection PhpUnused */
@@ -884,5 +910,15 @@ class Email extends Entity
     public function setIsReplied(bool $isReplied = true): self
     {
         return $this->set('isReplied', $isReplied);
+    }
+
+    public function isAutoReply(): bool
+    {
+        return $this->get('isAutoReply');
+    }
+
+    public function setIsAutoReply(bool $isAutoReply = true): self
+    {
+        return $this->set('isAutoReply', $isAutoReply);
     }
 }

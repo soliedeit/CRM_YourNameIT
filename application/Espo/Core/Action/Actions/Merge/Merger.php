@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -35,12 +35,14 @@ use Espo\Core\Action\Params;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\Exceptions\NotFound;
 use Espo\Core\Name\Field;
+use Espo\Core\Name\Link;
 use Espo\Core\ORM\EntityManager;
 use Espo\Core\ORM\Type\FieldType;
 use Espo\Core\Record\ActionHistory\Action;
 use Espo\Core\Record\ServiceContainer;
 use Espo\Core\Utils\Metadata;
 use Espo\Core\Utils\ObjectUtil;
+use Espo\Entities\Attachment;
 use Espo\Entities\Note;
 use Espo\ORM\Entity;
 use Espo\Entities\EmailAddress;
@@ -218,7 +220,7 @@ class Merger
 
         /** @var iterable<EmailAddress> $collection */
         $collection = $this->entityManager
-            ->getRelation($entity, 'emailAddresses')
+            ->getRelation($entity, Link::EMAIL_ADDRESSES)
             ->find();
 
         foreach ($collection as $entity) {
@@ -287,7 +289,7 @@ class Merger
         $entityDefs = $this->entityManager->getDefs()->getEntity($entityType);
 
         $ignoreList = [
-            'emailAddresses',
+            Link::EMAIL_ADDRESSES,
             'phoneNumbers',
         ];
 
@@ -303,6 +305,13 @@ class Merger
                 ->get(['entityDefs', $entityType, 'links', $name, 'notMergeable']);
 
             if ($notMergeable) {
+                continue;
+            }
+
+            if (
+                $relationDefs->tryGetForeignEntityType() === Attachment::ENTITY_TYPE &&
+                $type === RelationType::HAS_CHILDREN
+            ) {
                 continue;
             }
 

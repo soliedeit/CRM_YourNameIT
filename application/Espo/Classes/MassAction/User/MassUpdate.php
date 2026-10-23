@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -178,7 +178,9 @@ class MassUpdate implements MassAction
 
     private function clearRoleCache(string $id): void
     {
-        $this->fileManager->removeFile('data/cache/application/acl/' . $id . '.php');
+        $part = basename($id);
+
+        $this->fileManager->removeFile("data/cache/application/acl/$part.php");
     }
 
     private function clearPortalRolesCache(): void

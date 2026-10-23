@@ -11,6 +11,8 @@ return [
   'AuthenticationProvider' => 'Espo\\Entities\\AuthenticationProvider',
   'Autofollow' => 'Espo\\Entities\\Autofollow',
   'Currency' => 'Espo\\Entities\\Currency',
+  'CurrencyRecord' => 'Espo\\Entities\\CurrencyRecord',
+  'CurrencyRecordRate' => 'Espo\\Entities\\CurrencyRecordRate',
   'DashboardTemplate' => 'Espo\\Entities\\DashboardTemplate',
   'Email' => 'Espo\\Entities\\Email',
   'EmailAccount' => 'Espo\\Entities\\EmailAccount',

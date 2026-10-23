@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,8 +31,8 @@ namespace Espo\Tools\Email;
 
 use Espo\Core\Exceptions\Conflict;
 use Espo\Core\Exceptions\Error;
-use Espo\Core\Exceptions\NotFound;
 use Espo\Core\FileStorage\Manager;
+use Espo\Core\Mail\Exceptions\ImapError;
 use Espo\Core\Mail\Importer;
 use Espo\Core\Mail\Importer\Data;
 use Espo\Core\Mail\MessageWrapper;
@@ -40,6 +40,7 @@ use Espo\Core\Mail\Parsers\MailMimeParser;
 use Espo\Entities\Attachment;
 use Espo\Entities\Email;
 use Espo\ORM\EntityManager;
+use RuntimeException;
 
 class ImportEmlService
 {
@@ -54,19 +55,20 @@ class ImportEmlService
     /**
      * Import an EML.
      *
-     * @param string $fileId An attachment ID.
      * @param ?string $userId A user ID to relate an email with.
      * @return Email An Email.
-     * @throws NotFound
      * @throws Error
      * @throws Conflict
      */
-    public function import(string $fileId, ?string $userId = null): Email
+    public function import(Attachment $attachment, ?string $userId = null): Email
     {
-        $attachment = $this->getAttachment($fileId);
         $contents = $this->fileStorageManager->getContents($attachment);
 
-        $message = new MessageWrapper(1, null, $this->parser, $contents);
+        try {
+            $message = new MessageWrapper(1, null, $this->parser, $contents);
+        } catch (ImapError $e) {
+            throw new RuntimeException(previous: $e);
+        }
 
         $this->checkDuplicate($message);
 
@@ -85,20 +87,6 @@ class ImportEmlService
         $this->entityManager->removeEntity($attachment);
 
         return $email;
-    }
-
-    /**
-     * @throws NotFound
-     */
-    private function getAttachment(string $fileId): Attachment
-    {
-        $attachment = $this->entityManager->getRDBRepositoryByClass(Attachment::class)->getById($fileId);
-
-        if (!$attachment) {
-            throw new NotFound("Attachment not found.");
-        }
-
-        return $attachment;
     }
 
     /**

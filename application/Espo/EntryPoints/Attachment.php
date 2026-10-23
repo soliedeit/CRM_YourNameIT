@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -95,7 +95,7 @@ class Attachment implements EntryPoint
         $response
             ->setHeader('Content-Length', (string) $size)
             ->setHeader('Cache-Control', 'private, max-age=864000, immutable')
-            ->setHeader('Content-Security-Policy', "default-src 'self'")
+            ->setHeader('Content-Security-Policy', "default-src 'self'; script-src 'none'; object-src 'none';")
             ->setBody($stream);
     }
 

@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -82,6 +82,14 @@ class Currency implements FieldConverter
                 ->withDbType($dbType)
                 ->withParam(AttributeParam::PRECISION, $precision)
                 ->withParam(AttributeParam::SCALE, $scale);
+
+            $defaultValue = $fieldDefs->getParam(AttributeParam::DEFAULT);
+
+            if (is_int($defaultValue) || is_float($defaultValue)) {
+                $defaultValue = number_format($defaultValue, $scale, '.', '');
+
+                $amountDefs = $amountDefs->withParam(AttributeParam::DEFAULT, $defaultValue);
+            }
         }
 
         if ($fieldDefs->isNotStorable()) {
@@ -116,12 +124,8 @@ class Currency implements FieldConverter
         $currencyAttribute = $name . 'Currency';
 
         $defaultCurrency = $this->configDataProvider->getDefaultCurrency();
-        $baseCurrency = $this->configDataProvider->getBaseCurrency();
-        $rates = $this->configDataProvider->getCurrencyRates()->toAssoc();
 
-        if ($defaultCurrency !== $baseCurrency) {
-            $rates = $this->exchangeRates($baseCurrency, $defaultCurrency, $rates);
-        }
+        $rates = $this->configDataProvider->getCurrencyList();
 
         $expr = Expr::multiply(
             Expr::column($name),
@@ -208,28 +212,7 @@ class Currency implements FieldConverter
     }
 
     /**
-     * @param array<string, float> $currencyRates
-     * @return array<string, float>
-     */
-    private function exchangeRates(string $baseCurrency, string $defaultCurrency, array $currencyRates): array
-    {
-        $precision = 5;
-        $defaultCurrencyRate = round(1 / $currencyRates[$defaultCurrency], $precision);
-
-        $exchangedRates = [];
-        $exchangedRates[$baseCurrency] = $defaultCurrencyRate;
-
-        unset($currencyRates[$baseCurrency], $currencyRates[$defaultCurrency]);
-
-        foreach ($currencyRates as $currencyName => $rate) {
-            $exchangedRates[$currencyName] = round($rate * $defaultCurrencyRate, $precision);
-        }
-
-        return $exchangedRates;
-    }
-
-    /**
-     * @param array<string, float> $rates
+     * @param string[] $rates
      */
     private function buildExpression(string $currencyAttribute, array $rates): Expr|float
     {
@@ -237,13 +220,11 @@ class Currency implements FieldConverter
             return 0.0;
         }
 
-        $currency = array_key_first($rates);
-        $value = $rates[$currency];
-        unset($rates[$currency]);
+        $currency = array_shift($rates);
 
         return Expr::if(
             Expr::equal(Expr::column($currencyAttribute), $currency),
-            $value,
+            Expr::create("CURRENCY_RATE:('$currency')"),
             $this->buildExpression($currencyAttribute, $rates)
         );
     }
@@ -255,7 +236,7 @@ class Currency implements FieldConverter
     {
         $name = $fieldDefs->getName();
 
-        $alias = $name . 'CurrencyRate';
+        $alias = $name . 'CurrencyRecordRate';
         $leftJoins = [
             [
                 'Currency',

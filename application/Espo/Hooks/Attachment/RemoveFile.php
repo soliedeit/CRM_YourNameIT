@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -89,7 +89,9 @@ class RemoveFile implements AfterRemove
         $sizeList = array_keys($this->metadata->get(['app', 'image', 'sizes']) ?? []);
 
         foreach ($sizeList as $size) {
-            $filePath = "data/upload/thumbs/{$entity->getSourceId()}_{$size}";
+            $file = basename("{$entity->getSourceId()}_$size");
+
+            $filePath = "data/upload/thumbs/$file";
 
             if ($this->fileManager->isFile($filePath)) {
                 $this->fileManager->removeFile($filePath);

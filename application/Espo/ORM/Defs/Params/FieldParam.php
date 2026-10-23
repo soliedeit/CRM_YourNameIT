@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -93,4 +93,49 @@ class FieldParam
      * Dependee attributes.
      */
     public const DEPENDEE_ATTRIBUTE_LIST = 'dependeeAttributeList';
+
+    /**
+     * Foreign link.
+     */
+    public const LINK = 'link';
+
+    /**
+     * Foreign field.
+     */
+    public const FIELD = 'field';
+
+    /**
+     * Required.
+     *
+     * @since 9.3.0
+     */
+    public const REQUIRED = 'required';
+
+    /**
+     * Disabled.
+     *
+     * @since 9.3.0
+     */
+    public const DISABLED = 'disabled';
+
+    /**
+     * Utility. For internal purposes.
+     *
+     * @since 9.3.0
+     */
+    public const UTILITY = 'utility';
+
+    /**
+     * Min value.
+     *
+     * @since 9.3.0
+     */
+    public const MIN = 'min';
+
+    /**
+     * Max value.
+     *
+     * @since 9.3.0
+     */
+    public const MAX = 'max';
 }

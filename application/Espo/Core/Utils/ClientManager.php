@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,6 +47,8 @@ use Slim\ResponseEmitter;
 
 /**
  * Renders the main HTML page.
+ *
+ * @todo Use Handlebars.
  */
 class ClientManager
 {
@@ -249,7 +251,7 @@ class ClientManager
         $data = [
             'applicationId' => $this->applicationId,
             'apiUrl' => $this->apiUrl,
-            'applicationName' => $pageTitle ?? $this->config->get('applicationName', 'EspoCRM'),
+            'applicationName' => $this->escapeValue($pageTitle ?? $this->config->get('applicationName', 'EspoCRM')),
             'cacheTimestamp' => $cacheTimestamp,
             'appTimestamp' => $appTimestamp,
             'loaderCacheTimestamp' => Json::encode($loaderCacheTimestamp),
@@ -265,10 +267,11 @@ class ClientManager
             'faviconAlternate' => $faviconAlternate,
             'favicon' => $favicon,
             'faviconType' => $faviconType,
-            'ajaxTimeout' => $this->config->get('ajaxTimeout') ?? 60000,
+            'ajaxTimeout' => (int) ($this->config->get('ajaxTimeout') ?? 60000),
             'internalModuleList' => Json::encode($internalModuleList),
             'bundledModuleList' => Json::encode($this->getBundledModuleList()),
-            'applicationDescription' => $this->config->get('applicationDescription') ?? self::APP_DESCRIPTION,
+            'applicationDescription' =>
+                $this->escapeValue($this->config->get('applicationDescription') ?? self::APP_DESCRIPTION),
             'nonce' => $this->nonce,
             'loaderParams' => Json::encode([
                 'basePath' => $this->basePath,
@@ -487,5 +490,12 @@ class ClientManager
         $faviconType = str_ends_with($faviconSvgPath, '.svg') ? 'image/svg+xml' : 'image/png';
 
         return [$faviconSvgPath, $faviconType];
+    }
+
+    private function escapeValue(string $value): string
+    {
+        $value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+        return str_replace(['{', '}'], ['&#123;', '&#125;'], $value);
     }
 }

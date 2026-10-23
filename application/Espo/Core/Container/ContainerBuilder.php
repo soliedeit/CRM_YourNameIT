@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 
 namespace Espo\Core\Container;
 
+use Espo\Core\Application\ApplicationParams;
 use Espo\Core\Container;
 use Espo\Core\Container\Container as ContainerInterface;
 
@@ -52,7 +53,7 @@ use Espo\Core\Loaders\Metadata as MetadataLoader;
  */
 class ContainerBuilder
 {
-    /** @var class-string<ContainerInterface> */
+    /** @var class-string<ContainerInterface & Container> */
     private string $containerClassName = Container::class;
     /** @var class-string<Configuration> */
     private string $containerConfigurationClassName = ContainerConfiguration::class;
@@ -74,6 +75,14 @@ class ContainerBuilder
         'metadata' => MetadataLoader::class,
         'applicationState' => ApplicationStateLoader::class,
     ];
+    private ?ApplicationParams $params = null;
+
+    public function withParams(?ApplicationParams $params): self
+    {
+        $this->params = $params;
+
+        return $this;
+    }
 
     public function withBindingLoader(BindingLoader $bindingLoader): self
     {
@@ -108,7 +117,7 @@ class ContainerBuilder
     }
 
     /**
-     * @param class-string<ContainerInterface> $containerClassName
+     * @param class-string<ContainerInterface & Container> $containerClassName
      */
     public function withContainerClassName(string $containerClassName): self
     {
@@ -161,6 +170,8 @@ class ContainerBuilder
 
     public function build(): ContainerInterface
     {
+       $this->services['applicationParams'] = $this->params ?? new ApplicationParams();
+
         /** @var Config $config */
         $config = $this->services['config'] ?? (
             new $this->configClassName(
@@ -196,7 +207,10 @@ class ContainerBuilder
         $this->services['systemConfig'] = $systemConfig;
 
         $bindingLoader = $this->bindingLoader ?? (
-            new EspoBindingLoader($module)
+            new EspoBindingLoader(
+                module: $module,
+                binding: $this->params?->binding,
+            )
         );
 
         $bindingContainer = new BindingContainer($bindingLoader->load());

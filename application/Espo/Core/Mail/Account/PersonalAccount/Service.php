@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,21 +30,23 @@
 namespace Espo\Core\Mail\Account\PersonalAccount;
 
 use Espo\Core\Exceptions\ErrorSilent;
+use Espo\Core\Mail\Account\Util\AddressUtil;
 use Espo\Core\Mail\Account\Util\NotificationHelper;
 use Espo\Core\Mail\Exceptions\ImapError;
 use Espo\Core\Mail\Exceptions\NoImap;
+use Espo\Core\Utils\Config;
 use Espo\Core\Utils\Log;
-use Exception;
-use Laminas\Mail\Exception\ExceptionInterface;
-use Laminas\Mail\Message;
-
 use Espo\Core\Mail\Account\Account as Account;
 use Espo\Core\Exceptions\Forbidden;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Mail\Account\Fetcher;
 use Espo\Core\Mail\Account\Storage\Params;
 use Espo\Core\Mail\Account\StorageFactory;
+use Espo\Core\Utils\Security\HostCheck;
 use Espo\Entities\User;
+use Espo\Core\Mail\Sender\Message;
+
+use Exception;
 
 class Service
 {
@@ -54,7 +56,9 @@ class Service
         private StorageFactory $storageFactory,
         private User $user,
         private Log $log,
-        private NotificationHelper $notificationHelper
+        private NotificationHelper $notificationHelper,
+        private HostCheck $hostCheck,
+        private AddressUtil $addressUtil,
     ) {}
 
     /**
@@ -96,8 +100,23 @@ class Service
             throw new Forbidden();
         }
 
+        if (
+            $params->getHost() &&
+            !$this->addressUtil->isAllowedAddress($params) &&
+            !$this->hostCheck->isHostAndNotInternal($params->getHost())
+        ) {
+            throw new Forbidden("Not allowed internal host.");
+        }
+
         if ($params->getId()) {
             $account = $this->accountFactory->create($params->getId());
+
+            if (
+                !$this->user->isAdmin() &&
+                $account->getUser()->getId() !== $this->user->getId()
+            ) {
+                throw new Forbidden();
+            }
 
             $params = $params
                 ->withPassword($this->getPassword($params, $account))
@@ -129,6 +148,14 @@ class Service
             throw new Forbidden();
         }
 
+        if (
+            $params->getHost() &&
+            !$this->addressUtil->isAllowedAddress($params) &&
+            !$this->hostCheck->isHostAndNotInternal($params->getHost())
+        ) {
+            throw new Forbidden("Not allowed host.");
+        }
+
         if ($params->getId()) {
             $account = $this->accountFactory->create($params->getId());
 
@@ -153,7 +180,7 @@ class Service
                 'message' => $e->getMessage(),
             ]);
 
-            $message = $e instanceof ExceptionInterface || $e instanceof ImapError ?
+            $message = $e instanceof ImapError ?
                 $e->getMessage() : '';
 
             throw new ErrorSilent($message);

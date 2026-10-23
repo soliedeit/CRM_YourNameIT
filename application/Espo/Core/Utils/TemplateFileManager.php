@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,25 +32,34 @@ namespace Espo\Core\Utils;
 use Espo\Core\Utils\File\Manager as FileManager;
 use Espo\Core\Utils\Resource\FileReader;
 use Espo\Core\Utils\Resource\FileReader\Params as FileReaderParams;
+use Espo\Core\Utils\Metadata;
 
 class TemplateFileManager
 {
     public function __construct(
         private Config $config,
         private FileManager $fileManager,
-        private FileReader $fileReader
+        private FileReader $fileReader,
+        private Metadata $metadata,
     ) {}
 
     public function getTemplate(
         string $type,
         string $name,
         ?string $entityType = null,
-        ?string $defaultModuleName = null
     ): string {
+
+        $templates = $this->metadata->get(['app', 'templates']);
+
+        $moduleName = null;
+
+        if (isset($templates[$type]) && isset($templates[$type]["module"])) {
+            $moduleName = $templates[$type]["module"];
+        }
 
         $params = FileReaderParams::create()
             ->withScope($entityType)
-            ->withModuleName($defaultModuleName);
+            ->withModuleName($moduleName);
 
         if ($entityType) {
             $path1 = $this->getPath($type, $name, $entityType);
@@ -115,7 +124,13 @@ class TemplateFileManager
         ?string $entityType = null
     ): string {
 
+        $type = basename($type);
+        $language = basename($language);
+        $name = basename($name);
+
         if ($entityType) {
+            $entityType = basename($entityType);
+
             return "custom/Espo/Custom/Resources/templates/{$type}/{$language}/{$entityType}/{$name}.tpl";
         }
 
@@ -143,7 +158,13 @@ class TemplateFileManager
         ?string $entityType = null
     ): string {
 
+        $type = basename($type);
+        $language = basename($language);
+        $name = basename($name);
+
         if ($entityType) {
+            $entityType = basename($entityType);
+
             return "templates/{$type}/{$language}/{$entityType}/{$name}.tpl";
         }
 

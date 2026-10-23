@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -121,8 +121,8 @@ class ArrayValue extends Database
                 continue;
             }
 
-            if (strlen($value) > $itemMaxLength) {
-                $value = substr($value, 0, $itemMaxLength);
+            if (mb_strlen($value) > $itemMaxLength) {
+                $value = mb_substr($value, 0, $itemMaxLength);
             }
 
             $arrayValue = $this->getNew();

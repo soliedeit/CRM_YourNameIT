@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 
 namespace Espo\Entities;
 
+use Espo\Core\Field\Link;
 use Espo\Core\Field\LinkParent;
 
 use Espo\Core\ORM\Entity;
@@ -40,12 +41,18 @@ class Notification extends Entity
 
     public const TYPE_ENTITY_REMOVED = 'EntityRemoved';
     public const TYPE_ASSIGN = 'Assign';
+    public const TYPE_COLLABORATING = 'Collaborating';
     public const TYPE_EMAIL_RECEIVED = 'EmailReceived';
     public const TYPE_NOTE = 'Note';
     public const TYPE_MENTION_IN_POST = 'MentionInPost';
     public const TYPE_MESSAGE = 'Message';
     public const TYPE_USER_REACTION = 'UserReaction';
     public const TYPE_SYSTEM = 'System';
+
+    public const ATTR_READ = 'read';
+    public const ATTR_USER_ID = 'userId';
+    public const ATTR_ACTION_ID = 'actionId';
+    public const ATTR_NUMBER = 'number';
 
     public function getType(): ?string
     {
@@ -93,12 +100,21 @@ class Notification extends Entity
         return $this;
     }
 
+    public function getCreatedBy(): ?Link
+    {
+        /** @var ?Link */
+        return $this->getValueObject('createdBy');
+    }
+
     public function getRelated(): ?LinkParent
     {
         /** @var ?LinkParent */
         return $this->getValueObject('related');
     }
 
+    /**
+     * Note: 'relatedName' is not loaded for a performance reason. Pass 'relatedName' in 'data'.
+     */
     public function setRelated(LinkParent|Entity|null $related): self
     {
         if ($related instanceof LinkParent) {
@@ -149,5 +165,28 @@ class Notification extends Entity
         $this->set('read', $read);
 
         return $this;
+    }
+
+    /**
+     * @since 9.2.0
+     */
+    public function setActionId(?string $actionId): self
+    {
+        $this->set('actionId', $actionId);
+
+        return $this;
+    }
+
+    /**
+     * @since 9.2.0
+     */
+    public function getActionId(): ?string
+    {
+        return $this->get('actionId');
+    }
+
+    public function setGroupedCount(?int $groupedCount): self
+    {
+        return $this->set('groupedCount', $groupedCount);
     }
 }

@@ -95,7 +95,8 @@ return (object) [
         0 => 'source',
         1 => 'createdAt',
         2 => 'createdBy',
-        3 => 'storage'
+        3 => 'modifiedAt',
+        4 => 'storage'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -109,7 +110,8 @@ return (object) [
         2 => 'createdAt',
         3 => 'createdById',
         4 => 'createdByName',
-        5 => 'storage'
+        5 => 'modifiedAt',
+        6 => 'storage'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -253,6 +255,86 @@ return (object) [
       'nonAdminReadOnly' => []
     ]
   ],
+  'CurrencyRecord' => (object) [
+    'fields' => (object) [
+      'forbidden' => [],
+      'internal' => [],
+      'onlyAdmin' => [],
+      'readOnly' => [
+        0 => 'code',
+        1 => 'label',
+        2 => 'symbol',
+        3 => 'rateDate',
+        4 => 'rate',
+        5 => 'isBase',
+        6 => 'deleteId'
+      ],
+      'nonAdminReadOnly' => []
+    ],
+    'attributes' => (object) [
+      'forbidden' => [],
+      'internal' => [],
+      'onlyAdmin' => [],
+      'readOnly' => [
+        0 => 'code',
+        1 => 'label',
+        2 => 'symbol',
+        3 => 'rateDate',
+        4 => 'rate',
+        5 => 'isBase',
+        6 => 'deleteId'
+      ],
+      'nonAdminReadOnly' => []
+    ],
+    'links' => (object) [
+      'forbidden' => [],
+      'internal' => [],
+      'onlyAdmin' => [],
+      'readOnly' => [
+        0 => 'rates'
+      ],
+      'nonAdminReadOnly' => []
+    ]
+  ],
+  'CurrencyRecordRate' => (object) [
+    'fields' => (object) [
+      'forbidden' => [],
+      'internal' => [],
+      'onlyAdmin' => [],
+      'readOnly' => [
+        0 => 'baseCode',
+        1 => 'createdAt',
+        2 => 'modifiedAt',
+        3 => 'createdBy',
+        4 => 'modifiedBy',
+        5 => 'deleteId'
+      ],
+      'nonAdminReadOnly' => []
+    ],
+    'attributes' => (object) [
+      'forbidden' => [],
+      'internal' => [],
+      'onlyAdmin' => [],
+      'readOnly' => [
+        0 => 'baseCode',
+        1 => 'createdAt',
+        2 => 'modifiedAt',
+        3 => 'createdById',
+        4 => 'createdByName',
+        5 => 'modifiedById',
+        6 => 'modifiedByName',
+        7 => 'deleteId'
+      ],
+      'nonAdminReadOnly' => []
+    ],
+    'links' => (object) [
+      'forbidden' => [],
+      'internal' => [],
+      'onlyAdmin' => [],
+      'readOnly' => [],
+      'nonAdminReadOnly' => []
+    ]
+  ],
   'DashboardTemplate' => (object) [
     'fields' => (object) [
       'forbidden' => [],
@@ -324,30 +406,31 @@ return (object) [
         27 => 'bodyPlain',
         28 => 'hasAttachment',
         29 => 'deliveryDate',
-        30 => 'createdAt',
-        31 => 'modifiedAt',
-        32 => 'createdBy',
-        33 => 'sentBy',
-        34 => 'modifiedBy',
-        35 => 'replies',
-        36 => 'isSystem',
-        37 => 'isJustSent',
-        38 => 'isBeingImported',
-        39 => 'skipNotificationMap',
-        40 => 'users',
-        41 => 'assignedUsers',
-        42 => 'inboundEmails',
-        43 => 'emailAccounts',
-        44 => 'icsContents',
-        45 => 'icsEventData',
-        46 => 'icsEventUid',
-        47 => 'icsEventDateStart',
-        48 => 'createdEvent',
-        49 => 'groupFolder',
-        50 => 'groupStatusFolder',
-        51 => 'account',
-        52 => 'tasks',
-        53 => 'icsEventDateStartDate'
+        30 => 'isAutoReply',
+        31 => 'createdAt',
+        32 => 'modifiedAt',
+        33 => 'createdBy',
+        34 => 'sentBy',
+        35 => 'modifiedBy',
+        36 => 'replies',
+        37 => 'isSystem',
+        38 => 'isJustSent',
+        39 => 'isBeingImported',
+        40 => 'skipNotificationMap',
+        41 => 'users',
+        42 => 'assignedUsers',
+        43 => 'inboundEmails',
+        44 => 'emailAccounts',
+        45 => 'icsContents',
+        46 => 'icsEventData',
+        47 => 'icsEventUid',
+        48 => 'icsEventDateStart',
+        49 => 'createdEvent',
+        50 => 'groupFolder',
+        51 => 'groupStatusFolder',
+        52 => 'account',
+        53 => 'tasks',
+        54 => 'icsEventDateStartDate'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -393,44 +476,46 @@ return (object) [
         34 => 'bodyPlain',
         35 => 'hasAttachment',
         36 => 'deliveryDate',
-        37 => 'createdAt',
-        38 => 'modifiedAt',
-        39 => 'createdById',
-        40 => 'createdByName',
-        41 => 'sentById',
-        42 => 'sentByName',
-        43 => 'modifiedById',
-        44 => 'modifiedByName',
-        45 => 'repliesIds',
-        46 => 'repliesNames',
-        47 => 'isSystem',
-        48 => 'isJustSent',
-        49 => 'isBeingImported',
-        50 => 'skipNotificationMap',
-        51 => 'usersIds',
-        52 => 'usersNames',
-        53 => 'assignedUsersIds',
-        54 => 'assignedUsersNames',
-        55 => 'inboundEmailsIds',
-        56 => 'inboundEmailsNames',
-        57 => 'emailAccountsIds',
-        58 => 'emailAccountsNames',
-        59 => 'icsContents',
-        60 => 'icsEventData',
-        61 => 'icsEventUid',
-        62 => 'icsEventDateStart',
-        63 => 'icsEventDateStartDate',
-        64 => 'createdEventId',
-        65 => 'createdEventType',
-        66 => 'createdEventName',
-        67 => 'groupFolderId',
-        68 => 'groupFolderName',
-        69 => 'groupStatusFolder',
-        70 => 'accountId',
-        71 => 'accountName',
-        72 => 'tasksIds',
-        73 => 'tasksNames',
-        74 => 'icsEventDateStartDate'
+        37 => 'isAutoReply',
+        38 => 'createdAt',
+        39 => 'modifiedAt',
+        40 => 'createdById',
+        41 => 'createdByName',
+        42 => 'sentById',
+        43 => 'sentByName',
+        44 => 'modifiedById',
+        45 => 'modifiedByName',
+        46 => 'repliesIds',
+        47 => 'repliesNames',
+        48 => 'isSystem',
+        49 => 'isJustSent',
+        50 => 'isBeingImported',
+        51 => 'skipNotificationMap',
+        52 => 'usersIds',
+        53 => 'usersColumns',
+        54 => 'usersNames',
+        55 => 'assignedUsersIds',
+        56 => 'assignedUsersNames',
+        57 => 'inboundEmailsIds',
+        58 => 'inboundEmailsNames',
+        59 => 'emailAccountsIds',
+        60 => 'emailAccountsNames',
+        61 => 'icsContents',
+        62 => 'icsEventData',
+        63 => 'icsEventUid',
+        64 => 'icsEventDateStart',
+        65 => 'icsEventDateStartDate',
+        66 => 'createdEventId',
+        67 => 'createdEventType',
+        68 => 'createdEventName',
+        69 => 'groupFolderId',
+        70 => 'groupFolderName',
+        71 => 'groupStatusFolder',
+        72 => 'accountId',
+        73 => 'accountName',
+        74 => 'tasksIds',
+        75 => 'tasksNames',
+        76 => 'icsEventDateStartDate'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -615,10 +700,11 @@ return (object) [
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
-        0 => 'createdAt',
-        1 => 'modifiedAt',
-        2 => 'createdBy',
-        3 => 'modifiedBy'
+        0 => 'order',
+        1 => 'createdAt',
+        2 => 'modifiedAt',
+        3 => 'createdBy',
+        4 => 'modifiedBy'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -627,12 +713,13 @@ return (object) [
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
-        0 => 'createdAt',
-        1 => 'modifiedAt',
-        2 => 'createdById',
-        3 => 'createdByName',
-        4 => 'modifiedById',
-        5 => 'modifiedByName'
+        0 => 'order',
+        1 => 'createdAt',
+        2 => 'modifiedAt',
+        3 => 'createdById',
+        4 => 'createdByName',
+        5 => 'modifiedById',
+        6 => 'modifiedByName'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -1116,7 +1203,9 @@ return (object) [
         0 => 'createdAt',
         1 => 'related',
         2 => 'relatedParent',
-        3 => 'createdBy'
+        3 => 'actionId',
+        4 => 'groupedCount',
+        5 => 'createdBy'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -1132,8 +1221,10 @@ return (object) [
         4 => 'relatedParentId',
         5 => 'relatedParentType',
         6 => 'relatedParentName',
-        7 => 'createdById',
-        8 => 'createdByName'
+        7 => 'actionId',
+        8 => 'groupedCount',
+        9 => 'createdById',
+        10 => 'createdByName'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -1346,8 +1437,9 @@ return (object) [
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
-        0 => 'createdAt',
-        1 => 'modifiedAt'
+        0 => 'info',
+        1 => 'createdAt',
+        2 => 'modifiedAt'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -1356,8 +1448,9 @@ return (object) [
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
-        0 => 'createdAt',
-        1 => 'modifiedAt'
+        0 => 'info',
+        1 => 'createdAt',
+        2 => 'modifiedAt'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -1371,7 +1464,9 @@ return (object) [
   ],
   'ScheduledJob' => (object) [
     'fields' => (object) [
-      'forbidden' => [],
+      'forbidden' => [
+        0 => 'isInternal'
+      ],
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
@@ -1385,7 +1480,9 @@ return (object) [
       'nonAdminReadOnly' => []
     ],
     'attributes' => (object) [
-      'forbidden' => [],
+      'forbidden' => [
+        0 => 'isInternal'
+      ],
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
@@ -1443,7 +1540,9 @@ return (object) [
   ],
   'Settings' => (object) [
     'fields' => (object) [
-      'forbidden' => [],
+      'forbidden' => [
+        0 => 'dashletsOptions'
+      ],
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
@@ -1458,7 +1557,9 @@ return (object) [
       'nonAdminReadOnly' => []
     ],
     'attributes' => (object) [
-      'forbidden' => [],
+      'forbidden' => [
+        0 => 'dashletsOptions'
+      ],
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
@@ -2419,7 +2520,8 @@ return (object) [
         0 => 'createdAt',
         1 => 'modifiedAt',
         2 => 'createdBy',
-        3 => 'modifiedBy'
+        3 => 'modifiedBy',
+        4 => 'order'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -2433,7 +2535,8 @@ return (object) [
         2 => 'createdById',
         3 => 'createdByName',
         4 => 'modifiedById',
-        5 => 'modifiedByName'
+        5 => 'modifiedByName',
+        6 => 'order'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -2699,10 +2802,11 @@ return (object) [
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
-        0 => 'createdAt',
-        1 => 'modifiedAt',
-        2 => 'createdBy',
-        3 => 'modifiedBy'
+        0 => 'order',
+        1 => 'createdAt',
+        2 => 'modifiedAt',
+        3 => 'createdBy',
+        4 => 'modifiedBy'
       ],
       'nonAdminReadOnly' => []
     ],
@@ -2711,12 +2815,13 @@ return (object) [
       'internal' => [],
       'onlyAdmin' => [],
       'readOnly' => [
-        0 => 'createdAt',
-        1 => 'modifiedAt',
-        2 => 'createdById',
-        3 => 'createdByName',
-        4 => 'modifiedById',
-        5 => 'modifiedByName'
+        0 => 'order',
+        1 => 'createdAt',
+        2 => 'modifiedAt',
+        3 => 'createdById',
+        4 => 'createdByName',
+        5 => 'modifiedById',
+        6 => 'modifiedByName'
       ],
       'nonAdminReadOnly' => []
     ],

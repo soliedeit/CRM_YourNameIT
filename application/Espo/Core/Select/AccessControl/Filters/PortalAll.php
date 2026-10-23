@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,10 +30,10 @@
 namespace Espo\Core\Select\AccessControl\Filters;
 
 use Espo\Core\Select\AccessControl\Filter;
-use Espo\ORM\Query\SelectBuilder as QueryBuilder;
+use Espo\ORM\Query\SelectBuilder;
 
 class PortalAll implements Filter
 {
-    public function apply(QueryBuilder $queryBuilder): void
+    public function apply(SelectBuilder $queryBuilder): void
     {}
 }

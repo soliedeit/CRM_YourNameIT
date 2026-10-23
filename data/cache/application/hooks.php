@@ -21,6 +21,18 @@ return [
     ]
   ],
   'Call' => [
+    'afterSave' => [
+      0 => [
+        'className' => 'Espo\\Modules\\Crm\\Hooks\\Call\\CalendarWebSocket',
+        'order' => 9
+      ]
+    ],
+    'afterRemove' => [
+      0 => [
+        'className' => 'Espo\\Modules\\Crm\\Hooks\\Call\\CalendarWebSocket',
+        'order' => 9
+      ]
+    ],
     'beforeSave' => [
       0 => [
         'className' => 'Espo\\Modules\\Crm\\Hooks\\Call\\ParentLink',
@@ -44,6 +56,124 @@ return [
       ],
       1 => [
         'className' => 'Espo\\Modules\\Crm\\Hooks\\CaseObj\\IsInternal',
+        'order' => 9
+      ]
+    ]
+  ],
+  'Common' => [
+    'afterSave' => [
+      0 => [
+        'className' => 'Espo\\Hooks\\Common\\FieldProcessing',
+        'order' => -11
+      ],
+      1 => [
+        'className' => 'Espo\\Hooks\\Common\\ForeignFields',
+        'order' => 8
+      ],
+      2 => [
+        'className' => 'Espo\\Modules\\Crm\\Hooks\\Common\\CalendarWebSocket',
+        'order' => 9
+      ],
+      3 => [
+        'className' => 'Espo\\Hooks\\Common\\AssignmentEmailNotification',
+        'order' => 9
+      ],
+      4 => [
+        'className' => 'Espo\\Hooks\\Common\\Stream',
+        'order' => 9
+      ],
+      5 => [
+        'className' => 'Espo\\Hooks\\Common\\Notifications',
+        'order' => 10
+      ],
+      6 => [
+        'className' => 'Espo\\Hooks\\Common\\StreamNotesAcl',
+        'order' => 10
+      ],
+      7 => [
+        'className' => 'Espo\\Hooks\\Common\\WebSocketSubmit',
+        'order' => 20
+      ],
+      8 => [
+        'className' => 'Espo\\Hooks\\Common\\CallDeferredActions',
+        'order' => 101
+      ],
+      9 => [
+        'className' => 'Espo\\Hooks\\Common\\Webhook',
+        'order' => 101
+      ]
+    ],
+    'afterRemove' => [
+      0 => [
+        'className' => 'Espo\\Modules\\Crm\\Hooks\\Common\\CalendarWebSocket',
+        'order' => 9
+      ],
+      1 => [
+        'className' => 'Espo\\Hooks\\Common\\Stream',
+        'order' => 9
+      ],
+      2 => [
+        'className' => 'Espo\\Hooks\\Common\\Notifications',
+        'order' => 10
+      ],
+      3 => [
+        'className' => 'Espo\\Hooks\\Common\\Webhook',
+        'order' => 101
+      ]
+    ],
+    'beforeSave' => [
+      0 => [
+        'className' => 'Espo\\Hooks\\Common\\CurrencyConverted',
+        'order' => 1
+      ],
+      1 => [
+        'className' => 'Espo\\Hooks\\Common\\Collaborators',
+        'order' => 7
+      ],
+      2 => [
+        'className' => 'Espo\\Hooks\\Common\\DeleteId',
+        'order' => 9
+      ],
+      3 => [
+        'className' => 'Espo\\Hooks\\Common\\NextNumber',
+        'order' => 9
+      ],
+      4 => [
+        'className' => 'Espo\\Hooks\\Common\\Stream',
+        'order' => 9
+      ],
+      5 => [
+        'className' => 'Espo\\Hooks\\Common\\VersionNumber',
+        'order' => 9
+      ],
+      6 => [
+        'className' => 'Espo\\Hooks\\Common\\Formula',
+        'order' => 11
+      ],
+      7 => [
+        'className' => 'Espo\\Hooks\\Common\\CurrencyDefault',
+        'order' => 200
+      ]
+    ],
+    'beforeRemove' => [
+      0 => [
+        'className' => 'Espo\\Hooks\\Common\\DeleteId',
+        'order' => 9
+      ],
+      1 => [
+        'className' => 'Espo\\Hooks\\Common\\Notifications',
+        'order' => 10
+      ]
+    ],
+    'afterRelate' => [
+      0 => [
+        'className' => 'Espo\\Hooks\\Common\\Stream',
+        'order' => 9
+      ]
+    ],
+    'afterUnrelate' => [
+      0 => [
+        'className' => 'Espo\\Hooks\\Common\\Stream',
         'order' => 9
       ]
     ]
@@ -107,8 +237,18 @@ return [
     ]
   ],
   'Meeting' => [
+    'afterSave' => [
+      0 => [
+        'className' => 'Espo\\Modules\\Crm\\Hooks\\Meeting\\CalendarWebSocket',
+        'order' => 9
+      ]
+    ],
     'afterRemove' => [
       0 => [
+        'className' => 'Espo\\Modules\\Crm\\Hooks\\Meeting\\CalendarWebSocket',
+        'order' => 9
+      ],
+      1 => [
         'className' => 'Espo\\Modules\\Crm\\Hooks\\Meeting\\EmailCreatedEvent',
         'order' => 9
       ]
@@ -151,6 +291,18 @@ return [
     ]
   ],
   'Task' => [
+    'afterSave' => [
+      0 => [
+        'className' => 'Espo\\Modules\\Crm\\Hooks\\Task\\CalendarWebSocket',
+        'order' => 9
+      ]
+    ],
+    'afterRemove' => [
+      0 => [
+        'className' => 'Espo\\Modules\\Crm\\Hooks\\Task\\CalendarWebSocket',
+        'order' => 9
+      ]
+    ],
     'beforeSave' => [
       0 => [
         'className' => 'Espo\\Modules\\Crm\\Hooks\\Task\\DateCompleted',
@@ -184,108 +336,18 @@ return [
       ]
     ]
   ],
-  'Common' => [
-    'afterSave' => [
-      0 => [
-        'className' => 'Espo\\Hooks\\Common\\FieldProcessing',
-        'order' => -11
-      ],
-      1 => [
-        'className' => 'Espo\\Hooks\\Common\\ForeignFields',
-        'order' => 8
-      ],
-      2 => [
-        'className' => 'Espo\\Hooks\\Common\\AssignmentEmailNotification',
-        'order' => 9
-      ],
-      3 => [
-        'className' => 'Espo\\Hooks\\Common\\Stream',
-        'order' => 9
-      ],
-      4 => [
-        'className' => 'Espo\\Hooks\\Common\\Notifications',
-        'order' => 10
-      ],
-      5 => [
-        'className' => 'Espo\\Hooks\\Common\\StreamNotesAcl',
-        'order' => 10
-      ],
-      6 => [
-        'className' => 'Espo\\Hooks\\Common\\WebSocketSubmit',
-        'order' => 20
-      ],
-      7 => [
-        'className' => 'Espo\\Hooks\\Common\\Webhook',
-        'order' => 101
-      ]
-    ],
+  'CurrencyRecordRate' => [
     'beforeSave' => [
       0 => [
-        'className' => 'Espo\\Hooks\\Common\\CurrencyConverted',
-        'order' => 1
-      ],
-      1 => [
-        'className' => 'Espo\\Hooks\\Common\\Collaborators',
-        'order' => 7
-      ],
-      2 => [
-        'className' => 'Espo\\Hooks\\Common\\DeleteId',
+        'className' => 'Espo\\Hooks\\CurrencyRecordRate\\SetFields',
         'order' => 9
-      ],
-      3 => [
-        'className' => 'Espo\\Hooks\\Common\\NextNumber',
-        'order' => 9
-      ],
-      4 => [
-        'className' => 'Espo\\Hooks\\Common\\Stream',
-        'order' => 9
-      ],
-      5 => [
-        'className' => 'Espo\\Hooks\\Common\\VersionNumber',
-        'order' => 9
-      ],
-      6 => [
-        'className' => 'Espo\\Hooks\\Common\\Formula',
-        'order' => 11
-      ],
-      7 => [
-        'className' => 'Espo\\Hooks\\Common\\CurrencyDefault',
-        'order' => 200
       ]
-    ],
-    'beforeRemove' => [
-      0 => [
-        'className' => 'Espo\\Hooks\\Common\\DeleteId',
-        'order' => 9
-      ],
-      1 => [
-        'className' => 'Espo\\Hooks\\Common\\Notifications',
-        'order' => 10
-      ]
-    ],
+    ]
+  ],
+  'Email' => [
     'afterRemove' => [
       0 => [
-        'className' => 'Espo\\Hooks\\Common\\Stream',
-        'order' => 9
-      ],
-      1 => [
-        'className' => 'Espo\\Hooks\\Common\\Notifications',
-        'order' => 10
-      ],
-      2 => [
-        'className' => 'Espo\\Hooks\\Common\\Webhook',
-        'order' => 101
-      ]
-    ],
-    'afterRelate' => [
-      0 => [
-        'className' => 'Espo\\Hooks\\Common\\Stream',
-        'order' => 9
-      ]
-    ],
-    'afterUnrelate' => [
-      0 => [
-        'className' => 'Espo\\Hooks\\Common\\Stream',
+        'className' => 'Espo\\Hooks\\Email\\NoteRemove',
         'order' => 9
       ]
     ]
@@ -378,6 +440,14 @@ return [
     'beforeSave' => [
       0 => [
         'className' => 'Espo\\Hooks\\Sms\\Numbers',
+        'order' => 9
+      ]
+    ]
+  ],
+  'Template' => [
+    'afterSave' => [
+      0 => [
+        'className' => 'Espo\\Hooks\\Template\\WebSocketSubmit',
         'order' => 9
       ]
     ]

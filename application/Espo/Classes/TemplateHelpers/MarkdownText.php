@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ namespace Espo\Classes\TemplateHelpers;
 use Espo\Core\Htmlizer\Helper;
 use Espo\Core\Htmlizer\Helper\Data;
 use Espo\Core\Htmlizer\Helper\Result;
-use Michelf\MarkdownExtra as MarkdownTransformer;
+use Espo\Core\Utils\Markdown\Markdown;
 
 class MarkdownText implements Helper
 {
@@ -44,7 +44,7 @@ class MarkdownText implements Helper
             return Result::createEmpty();
         }
 
-        $transformed = MarkdownTransformer::defaultTransform($value);
+        $transformed = Markdown::transform($value);
 
         return Result::createSafeString($transformed);
     }

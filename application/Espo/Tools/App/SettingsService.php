@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,10 +31,10 @@ namespace Espo\Tools\App;
 
 use Espo\Core\Mail\ConfigDataProvider as EmailConfigDataProvider;
 use Espo\Core\Utils\ThemeManager;
+use Espo\Entities\Email;
 use Espo\Entities\Settings;
 use Espo\ORM\Entity;
 use Espo\ORM\EntityManager;
-
 use Espo\Core\Exceptions\BadRequest;
 use Espo\Core\Exceptions\Error;
 use Espo\Core\Exceptions\Forbidden;
@@ -49,14 +49,22 @@ use Espo\Core\Utils\Metadata;
 use Espo\Core\Utils\Config;
 use Espo\Core\Utils\Config\ConfigWriter;
 use Espo\Core\Utils\Config\Access;
-
 use Espo\Entities\Portal;
 use Espo\Repositories\Portal as PortalRepository;
-
+use Espo\Tools\Currency\SyncManager as CurrencySyncManager;
 use stdClass;
 
 class SettingsService
 {
+    /**
+     * @var string[]
+     * @todo Do not use when these parameters moved away from the settings.
+     */
+    private array $ignoreUpdateParamList = [
+        'loginView',
+        'loginData',
+    ];
+
     public function __construct(
         private ApplicationState $applicationState,
         private Config $config,
@@ -72,6 +80,9 @@ class SettingsService
         private ThemeManager $themeManager,
         private Config\SystemConfig $systemConfig,
         private EmailConfigDataProvider $emailConfigDataProvider,
+        private Acl\Cache\Clearer $aclCacheClearer,
+        private CurrencySyncManager $currencySyncManager,
+        private CurrencyDatabasePopulator $currencyDatabasePopulator,
     ) {}
 
     /**
@@ -85,11 +96,22 @@ class SettingsService
         $this->filterData($data);
         $this->loadAdditionalParams($data);
 
+        /** @noinspection PhpDeprecationInspection */
+        $metadataData = $this->getMetadataConfigData();
+
+        foreach (get_object_vars($metadataData) as $key => $value) {
+            $data->$key = $value;
+        }
+
         return $data;
     }
 
     /**
      * Get metadata to be used in config.
+     *
+     * @todo Make private in v9.4.0.
+     * @todo Move away from settings. Use some different approach.
+     * @deprecated Since v9.3.2.
      */
     public function getMetadataConfigData(): stdClass
     {
@@ -206,6 +228,7 @@ class SettingsService
         }
 
         $ignoreItemList = array_merge(
+            $this->ignoreUpdateParamList,
             $this->access->getSystemParamList(),
             $this->access->getReadOnlyParamList(),
             $this->isRestrictedMode() && !$user->isSuperAdmin() ?
@@ -237,8 +260,13 @@ class SettingsService
             $this->dataManager->clearCache();
         }
 
-        if (isset($data->defaultCurrency) || isset($data->baseCurrency) || isset($data->currencyRates)) {
-            $this->populateDatabaseWithCurrencyRates();
+        if (property_exists($data, 'baselineRoleId')) {
+            $this->aclCacheClearer->clearForAllInternalUsers();
+        }
+
+        if (isset($data->baseCurrency) || isset($data->currencyList) || isset($data->defaultCurrency)) {
+            $this->currencySyncManager->sync();
+            $this->currencyDatabasePopulator->process();
         }
     }
 
@@ -334,11 +362,6 @@ class SettingsService
         }
     }
 
-    private function populateDatabaseWithCurrencyRates(): void
-    {
-        $this->injectableFactory->create(CurrencyDatabasePopulator::class)->process();
-    }
-
     private function filterData(stdClass $data): void
     {
         $user = $this->applicationState->getUser();
@@ -368,8 +391,8 @@ class SettingsService
         }
 
         if (
-            !$this->acl->checkScope('Email', 'create') ||
-            !$this->config->get('outboundEmailIsShared')
+            !$this->acl->checkScope(Email::ENTITY_TYPE, Acl\Table::ACTION_CREATE) ||
+            !$this->emailConfigDataProvider->isSystemOutboundAddressShared()
         ) {
             unset($data->outboundEmailFromAddress);
             unset($data->outboundEmailFromName);

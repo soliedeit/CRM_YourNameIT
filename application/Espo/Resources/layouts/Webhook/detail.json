@@ -11,8 +11,13 @@
             ],
             [
                 {"name": "secretKey"},
-                false
+                {"name": "skipOwn"}
             ]
+        ]
+    },
+    {
+        "rows": [
+            [{"name": "description"}]
         ]
     }
 ]

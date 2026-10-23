@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ use Espo\Core\Formula\EvaluatedArgumentList;
 use Espo\Core\Formula\Exceptions\BadArgumentType;
 use Espo\Core\Formula\Exceptions\TooFewArguments;
 use Espo\Core\Formula\Func;
-use Michelf\Markdown;
+use Espo\Core\Utils\Markdown\Markdown;
 
 /**
  * @noinspection PhpUnused
@@ -52,6 +52,6 @@ class TransformType implements Func
             throw BadArgumentType::create(1, 'string');
         }
 
-        return Markdown::defaultTransform($string);
+        return Markdown::transform($string);
     }
 }

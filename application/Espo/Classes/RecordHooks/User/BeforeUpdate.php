@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -158,9 +158,7 @@ class BeforeUpdate implements SaveHook
     private function processTypeChecking(User $entity): void
     {
         if (
-            $entity->isSuperAdmin() ||
-            !$entity->isAttributeChanged('type') ||
-            !$entity->getType() ||
+            !$entity->isAttributeChanged(User::ATTR_TYPE) ||
             in_array($entity->getType(), $this->util->getAllowedUserTypeList())
         ) {
             return;

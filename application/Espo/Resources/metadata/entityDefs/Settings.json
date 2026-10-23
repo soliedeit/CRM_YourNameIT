@@ -111,9 +111,9 @@
                 "Europe/London","Europe/Luxembourg","Europe/Madrid","Europe/Malta","Europe/Mariehamn","Europe/Minsk",
                 "Europe/Monaco","Europe/Moscow","Europe/Oslo","Europe/Paris","Europe/Podgorica","Europe/Prague",
                 "Europe/Riga","Europe/Rome","Europe/Samara","Europe/San_Marino","Europe/Sarajevo","Europe/Simferopol",
-                "Europe/Skopje","Europe/Sofia","Europe/Stockholm","Europe/Tallinn","Europe/Tirane","Europe/Uzhhorod",
+                "Europe/Skopje","Europe/Sofia","Europe/Stockholm","Europe/Tallinn","Europe/Tirane",
                 "Europe/Vaduz","Europe/Vatican","Europe/Vienna","Europe/Vilnius","Europe/Volgograd","Europe/Warsaw",
-                "Europe/Zagreb","Europe/Zaporizhzhia","Europe/Zurich","Indian/Antananarivo","Indian/Chagos",
+                "Europe/Zagreb","Europe/Zurich","Indian/Antananarivo","Indian/Chagos",
                 "Indian/Christmas","Indian/Cocos","Indian/Comoro","Indian/Kerguelen","Indian/Mahe","Indian/Maldives",
                 "Indian/Mauritius","Indian/Mayotte","Indian/Reunion","Pacific/Apia","Pacific/Auckland",
                 "Pacific/Chatham","Pacific/Chuuk","Pacific/Easter","Pacific/Efate","Pacific/Enderbury",
@@ -123,7 +123,8 @@
                 "Pacific/Nauru","Pacific/Niue","Pacific/Norfolk","Pacific/Noumea","Pacific/Pago_Pago","Pacific/Palau",
                 "Pacific/Pitcairn","Pacific/Pohnpei","Pacific/Port_Moresby","Pacific/Rarotonga","Pacific/Saipan",
                 "Pacific/Tahiti","Pacific/Tarawa","Pacific/Tongatapu","Pacific/Wake","Pacific/Wallis"
-            ]
+            ],
+            "view": "views/settings/fields/time-zone"
         },
         "dateFormat": {
             "type": "enum",
@@ -190,8 +191,7 @@
             "view": "views/settings/fields/default-currency"
         },
         "currencyRates": {
-            "type": "base",
-            "view": "views/settings/fields/currency-rates"
+            "type": "base"
         },
         "outboundEmailIsShared": {
             "type": "bool",
@@ -944,6 +944,12 @@
             "validatorClassNameList": [
                 "Espo\\Classes\\FieldValidators\\Settings\\AvailableReactions\\Valid"
             ]
+        },
+        "baselineRole": {
+            "type": "link",
+            "entity": "Role",
+            "tooltip": true,
+            "view": "views/settings/fields/baseline-role"
         }
     }
 }

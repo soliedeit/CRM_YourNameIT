@@ -140,7 +140,8 @@
     "jsonObject": "Oggetto Json",
     "datetime": "Data-ora",
     "datetimeOptional": "Data/data-ora",
-    "urlMultiple": "Url Multipli"
+    "urlMultiple": "Url Multipli",
+    "decimal": "Decimale"
   },
   "fields": {
     "type": "Tipo",
@@ -218,7 +219,8 @@
     "preview": "Anteprima",
     "attachmentField": "Campo allegato",
     "dynamicLogicReadOnlySaved": "Condizioni di stato salvate che rendono il campo di sola lettura",
-    "notStorable": "Non memorizzabile"
+    "notStorable": "Non memorizzabile",
+    "itemsEditable": "Elementi modificabili"
   },
   "messages": {
     "selectEntityType": "Scegli il tipo di entità dal menu di sinistra.",

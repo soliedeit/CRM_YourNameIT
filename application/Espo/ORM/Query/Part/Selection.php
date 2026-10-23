@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -63,10 +63,27 @@ class Selection
         );
     }
 
+    /**
+     * With an alias. With null, the field name will be used as an alias or an expression itself.
+     * Use `withNoAlias` to prevent alias addition.
+     */
     public function withAlias(?string $alias): self
     {
         $obj = clone $this;
         $obj->alias = $alias;
+
+        return $obj;
+    }
+
+    /**
+     * With on alias.
+     *
+     * @since 9.3.0
+     */
+    public function withNoAlias(): self
+    {
+        $obj = clone $this;
+        $obj->alias = '';
 
         return $obj;
     }

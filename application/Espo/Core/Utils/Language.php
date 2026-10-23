@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -35,6 +35,7 @@ use Espo\Core\Utils\Resource\Reader\Params as ResourceReaderParams;
 use Espo\Entities\Preferences;
 
 use RuntimeException;
+use stdClass;
 
 class Language
 {
@@ -51,16 +52,19 @@ class Language
     private string $customPath = 'custom/Espo/Custom/Resources/i18n/{language}';
     private string $resourcePath = 'i18n/{language}';
 
+    /**
+     * @param bool $noFallback As of v9.2.
+     */
     public function __construct(
         ?string $language,
         private FileManager $fileManager,
         private ResourceReader $resourceReader,
         private DataCache $dataCache,
         protected bool $useCache = false,
-        protected bool $noCustom = false
+        protected bool $noCustom = false,
+        private bool $noFallback = false,
     ) {
         $this->currentLanguage = $language ?? $this->defaultLanguage;
-
     }
 
     public function getLanguage(): string
@@ -94,7 +98,9 @@ class Language
 
     private function getCacheKey(?string $language = null): string
     {
-        return 'languages/' . ($language ?? $this->currentLanguage);
+        $language ??= $this->currentLanguage;
+
+        return 'languages/' . $language;
     }
 
     /**
@@ -217,11 +223,58 @@ class Language
     }
 
     /**
+     * @since 9.2.0
+     */
+    public function getScopeCustom(string $scope): ?stdClass
+    {
+        $language = basename($this->currentLanguage);
+        $scope = basename($scope);
+
+        $path = str_replace('{language}', $language, $this->customPath) . "/$scope.json";
+
+        if (!$this->fileManager->isFile($path)) {
+            return null;
+        }
+
+        $fileContent = $this->fileManager->getContents($path);
+
+        return Json::decode($fileContent);
+    }
+
+    /**
+     * @since 9.2.0
+     */
+    public function saveScopeCustom(string $scope, stdClass $data): void
+    {
+        $language = basename($this->currentLanguage);
+        $scope = basename($scope);
+
+        $path = str_replace('{language}', $language, $this->customPath) . "/$scope.json";
+
+        foreach (get_object_vars($data) as $key => $item) {
+            if (
+                $item instanceof stdClass &&
+                count(get_object_vars($data)) === 0
+            ) {
+                unset($data->$key);
+            }
+        }
+
+        $changedData = Json::encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        $this->fileManager->putContents($path, $changedData);
+
+        $this->init(true);
+    }
+
+    /**
      * Save changes.
      */
     public function save(): bool
     {
-        $path = str_replace('{language}', $this->currentLanguage, $this->customPath);
+        $language = basename($this->currentLanguage);
+
+        $path = str_replace('{language}', $language, $this->customPath);
 
         $result = true;
 
@@ -230,6 +283,8 @@ class Language
                 if (empty($data)) {
                     continue;
                 }
+
+                $scope = basename($scope);
 
                 $result &= $this->fileManager->mergeJsonContents($path . "/$scope.json", $data);
             }
@@ -240,6 +295,8 @@ class Language
                 if (empty($unsetData)) {
                     continue;
                 }
+
+                $scope = basename($scope);
 
                 $result &= $this->fileManager->unsetJsonContents($path . "/$scope.json", $unsetData);
             }
@@ -382,7 +439,7 @@ class Language
 
             $data = $this->resourceReader->readAsArray($path, $readerParams);
 
-            if ($language != $this->defaultLanguage) {
+            if ($language !== $this->defaultLanguage && !$this->noFallback) {
                 /** @var array<string, array<string, mixed>> $data */
                 $data = Util::merge($this->getDefaultLanguageData($reload), $data);
             }

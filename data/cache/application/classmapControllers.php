@@ -10,6 +10,8 @@ return [
   'AuthLogRecord' => 'Espo\\Controllers\\AuthLogRecord',
   'AuthToken' => 'Espo\\Controllers\\AuthToken',
   'AuthenticationProvider' => 'Espo\\Controllers\\AuthenticationProvider',
+  'CurrencyRecord' => 'Espo\\Controllers\\CurrencyRecord',
+  'CurrencyRecordRate' => 'Espo\\Controllers\\CurrencyRecordRate',
   'DashboardTemplate' => 'Espo\\Controllers\\DashboardTemplate',
   'DataPrivacy' => 'Espo\\Controllers\\DataPrivacy',
   'Email' => 'Espo\\Controllers\\Email',

@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -66,12 +66,13 @@ class UploadUrlService
     /**
      * Upload an image from and URL and store as attachment.
      *
+     * @param non-empty-string $url
      * @throws Forbidden
      * @throws Error
      */
     public function uploadImage(string $url, FieldData $data): Attachment
     {
-        if (!$this->urlCheck->isNotInternalUrl($url)) {
+        if (!$this->urlCheck->isUrlAndNotIternal($url)) {
             throw new ForbiddenSilent("Not allowed URL.");
         }
 
@@ -111,11 +112,22 @@ class UploadUrlService
     }
 
     /**
-     * @param string $url
+     * @param non-empty-string $url
      * @return ?array{string, string} A type and contents.
+     * @throws ForbiddenSilent
      */
     private function getImageDataByUrl(string $url): ?array
     {
+        $resolve = $this->urlCheck->getCurlResolve($url);
+
+        if ($resolve === []) {
+            throw new ForbiddenSilent("Could not resolve the host.");
+        }
+
+        if ($resolve !== null && !$this->urlCheck->validateCurlResolveNotInternal($resolve)) {
+            throw new ForbiddenSilent("Forbidden host.");
+        }
+
         $type = null;
 
         if (!function_exists('curl_init')) {
@@ -127,7 +139,7 @@ class UploadUrlService
         $httpHeaders = [];
         $httpHeaders[] = 'Expect:';
 
-        $opts[\CURLOPT_URL]  = $url;
+        $opts[\CURLOPT_URL] = $url;
         $opts[\CURLOPT_HTTPHEADER] = $httpHeaders;
         $opts[\CURLOPT_CONNECTTIMEOUT] = 10;
         $opts[\CURLOPT_TIMEOUT] = 10;
@@ -142,6 +154,10 @@ class UploadUrlService
         $opts[\CURLOPT_IPRESOLVE] = \CURL_IPRESOLVE_V4;
         $opts[\CURLOPT_PROTOCOLS] = \CURLPROTO_HTTPS | \CURLPROTO_HTTP;
         $opts[\CURLOPT_REDIR_PROTOCOLS] = \CURLPROTO_HTTPS;
+
+        if ($resolve) {
+            $opts[CURLOPT_RESOLVE] = $resolve;
+        }
 
         $ch = curl_init();
 

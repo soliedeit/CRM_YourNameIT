@@ -128,6 +128,12 @@ return [
     'adjustedRoute' => '/App/about'
   ],
   19 => [
+    'route' => '/App/appParams',
+    'method' => 'get',
+    'actionClassName' => 'Espo\\Tools\\App\\Api\\GetAppParams',
+    'adjustedRoute' => '/App/appParams'
+  ],
+  20 => [
     'route' => '/Metadata',
     'method' => 'get',
     'params' => [
@@ -135,7 +141,7 @@ return [
     ],
     'adjustedRoute' => '/Metadata'
   ],
-  20 => [
+  21 => [
     'route' => '/I18n',
     'method' => 'get',
     'params' => [
@@ -144,7 +150,7 @@ return [
     'noAuth' => true,
     'adjustedRoute' => '/I18n'
   ],
-  21 => [
+  22 => [
     'route' => '/Settings',
     'method' => 'get',
     'params' => [
@@ -153,7 +159,7 @@ return [
     'noAuth' => true,
     'adjustedRoute' => '/Settings'
   ],
-  22 => [
+  23 => [
     'route' => '/Settings',
     'method' => 'patch',
     'params' => [
@@ -161,7 +167,7 @@ return [
     ],
     'adjustedRoute' => '/Settings'
   ],
-  23 => [
+  24 => [
     'route' => '/Settings',
     'method' => 'put',
     'params' => [
@@ -169,7 +175,7 @@ return [
     ],
     'adjustedRoute' => '/Settings'
   ],
-  24 => [
+  25 => [
     'route' => '/Stream',
     'method' => 'get',
     'params' => [
@@ -179,26 +185,26 @@ return [
     ],
     'adjustedRoute' => '/Stream'
   ],
-  25 => [
+  26 => [
     'route' => '/GlobalStream',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\GetGlobal',
     'adjustedRoute' => '/GlobalStream'
   ],
-  26 => [
+  27 => [
     'route' => '/GlobalSearch',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\GlobalSearch\\Api\\Get',
     'adjustedRoute' => '/GlobalSearch'
   ],
-  27 => [
+  28 => [
     'route' => '/LeadCapture/form/:id',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\LeadCapture\\Api\\PostForm',
     'noAuth' => true,
     'adjustedRoute' => '/LeadCapture/form/{id}'
   ],
-  28 => [
+  29 => [
     'route' => '/LeadCapture/:apiKey',
     'method' => 'post',
     'params' => [
@@ -209,7 +215,7 @@ return [
     'noAuth' => true,
     'adjustedRoute' => '/LeadCapture/{apiKey}'
   ],
-  29 => [
+  30 => [
     'route' => '/LeadCapture/:apiKey',
     'method' => 'options',
     'params' => [
@@ -220,18 +226,9 @@ return [
     'noAuth' => true,
     'adjustedRoute' => '/LeadCapture/{apiKey}'
   ],
-  30 => [
-    'route' => '/:controller/action/:action',
-    'method' => 'post',
-    'params' => [
-      'controller' => ':controller',
-      'action' => ':action'
-    ],
-    'adjustedRoute' => '/{controller}/action/{action}'
-  ],
   31 => [
     'route' => '/:controller/action/:action',
-    'method' => 'put',
+    'method' => 'post',
     'params' => [
       'controller' => ':controller',
       'action' => ':action'
@@ -240,7 +237,7 @@ return [
   ],
   32 => [
     'route' => '/:controller/action/:action',
-    'method' => 'get',
+    'method' => 'put',
     'params' => [
       'controller' => ':controller',
       'action' => ':action'
@@ -248,6 +245,15 @@ return [
     'adjustedRoute' => '/{controller}/action/{action}'
   ],
   33 => [
+    'route' => '/:controller/action/:action',
+    'method' => 'get',
+    'params' => [
+      'controller' => ':controller',
+      'action' => ':action'
+    ],
+    'adjustedRoute' => '/{controller}/action/{action}'
+  ],
+  34 => [
     'route' => '/:controller/layout/:name',
     'method' => 'get',
     'params' => [
@@ -256,7 +262,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/layout/{name}'
   ],
-  34 => [
+  35 => [
     'route' => '/:controller/layout/:name',
     'method' => 'put',
     'params' => [
@@ -265,7 +271,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/layout/{name}'
   ],
-  35 => [
+  36 => [
     'route' => '/:controller/layout/:name/:setId',
     'method' => 'put',
     'params' => [
@@ -274,7 +280,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/layout/{name}/{setId}'
   ],
-  36 => [
+  37 => [
     'route' => '/Admin/rebuild',
     'method' => 'post',
     'params' => [
@@ -283,7 +289,7 @@ return [
     ],
     'adjustedRoute' => '/Admin/rebuild'
   ],
-  37 => [
+  38 => [
     'route' => '/Admin/clearCache',
     'method' => 'post',
     'params' => [
@@ -292,7 +298,7 @@ return [
     ],
     'adjustedRoute' => '/Admin/clearCache'
   ],
-  38 => [
+  39 => [
     'route' => '/Admin/jobs',
     'method' => 'get',
     'params' => [
@@ -301,7 +307,7 @@ return [
     ],
     'adjustedRoute' => '/Admin/jobs'
   ],
-  39 => [
+  40 => [
     'route' => '/Admin/fieldManager/:scope/:name',
     'method' => 'get',
     'params' => [
@@ -312,7 +318,7 @@ return [
     ],
     'adjustedRoute' => '/Admin/fieldManager/{scope}/{name}'
   ],
-  40 => [
+  41 => [
     'route' => '/Admin/fieldManager/:scope',
     'method' => 'post',
     'params' => [
@@ -322,20 +328,9 @@ return [
     ],
     'adjustedRoute' => '/Admin/fieldManager/{scope}'
   ],
-  41 => [
-    'route' => '/Admin/fieldManager/:scope/:name',
-    'method' => 'put',
-    'params' => [
-      'controller' => 'FieldManager',
-      'action' => 'update',
-      'scope' => ':scope',
-      'name' => ':name'
-    ],
-    'adjustedRoute' => '/Admin/fieldManager/{scope}/{name}'
-  ],
   42 => [
     'route' => '/Admin/fieldManager/:scope/:name',
-    'method' => 'patch',
+    'method' => 'put',
     'params' => [
       'controller' => 'FieldManager',
       'action' => 'update',
@@ -346,6 +341,17 @@ return [
   ],
   43 => [
     'route' => '/Admin/fieldManager/:scope/:name',
+    'method' => 'patch',
+    'params' => [
+      'controller' => 'FieldManager',
+      'action' => 'update',
+      'scope' => ':scope',
+      'name' => ':name'
+    ],
+    'adjustedRoute' => '/Admin/fieldManager/{scope}/{name}'
+  ],
+  44 => [
+    'route' => '/Admin/fieldManager/:scope/:name',
     'method' => 'delete',
     'params' => [
       'controller' => 'FieldManager',
@@ -355,297 +361,303 @@ return [
     ],
     'adjustedRoute' => '/Admin/fieldManager/{scope}/{name}'
   ],
-  44 => [
+  45 => [
     'route' => '/CurrencyRate',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Currency\\Api\\Get',
     'adjustedRoute' => '/CurrencyRate'
   ],
-  45 => [
+  46 => [
     'route' => '/CurrencyRate',
     'method' => 'put',
     'actionClassName' => 'Espo\\Tools\\Currency\\Api\\PutUpdate',
     'adjustedRoute' => '/CurrencyRate'
   ],
-  46 => [
+  47 => [
     'route' => '/Action',
     'method' => 'post',
     'actionClassName' => 'Espo\\Core\\Action\\Api\\PostProcess',
     'adjustedRoute' => '/Action'
   ],
-  47 => [
+  48 => [
     'route' => '/MassAction',
     'method' => 'post',
     'actionClassName' => 'Espo\\Core\\MassAction\\Api\\PostProcess',
     'adjustedRoute' => '/MassAction'
   ],
-  48 => [
+  49 => [
     'route' => '/MassAction/:id/status',
     'method' => 'get',
     'actionClassName' => 'Espo\\Core\\MassAction\\Api\\GetStatus',
     'adjustedRoute' => '/MassAction/{id}/status'
   ],
-  49 => [
+  50 => [
     'route' => '/MassAction/:id/subscribe',
     'method' => 'post',
     'actionClassName' => 'Espo\\Core\\MassAction\\Api\\PostSubscribe',
     'adjustedRoute' => '/MassAction/{id}/subscribe'
   ],
-  50 => [
+  51 => [
     'route' => '/Export',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Export\\Api\\PostProcess',
     'adjustedRoute' => '/Export'
   ],
-  51 => [
+  52 => [
     'route' => '/Export/:id/status',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Export\\Api\\GetStatus',
     'adjustedRoute' => '/Export/{id}/status'
   ],
-  52 => [
+  53 => [
     'route' => '/Export/:id/subscribe',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Export\\Api\\PostSubscribe',
     'adjustedRoute' => '/Export/{id}/subscribe'
   ],
-  53 => [
+  54 => [
     'route' => '/Import',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Import\\Api\\Post',
     'adjustedRoute' => '/Import'
   ],
-  54 => [
+  55 => [
     'route' => '/Import/file',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Import\\Api\\PostFile',
     'adjustedRoute' => '/Import/file'
   ],
-  55 => [
+  56 => [
     'route' => '/Import/:id/revert',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Import\\Api\\PostRevert',
     'adjustedRoute' => '/Import/{id}/revert'
   ],
-  56 => [
+  57 => [
     'route' => '/Import/:id/removeDuplicates',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Import\\Api\\PostRemoveDuplicates',
     'adjustedRoute' => '/Import/{id}/removeDuplicates'
   ],
-  57 => [
+  58 => [
     'route' => '/Import/:id/unmarkDuplicates',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Import\\Api\\PostUnmarkDuplicates',
     'adjustedRoute' => '/Import/{id}/unmarkDuplicates'
   ],
-  58 => [
+  59 => [
     'route' => '/Import/:id/exportErrors',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Import\\Api\\PostExportErrors',
     'adjustedRoute' => '/Import/{id}/exportErrors'
   ],
-  59 => [
+  60 => [
     'route' => '/Kanban/order',
     'method' => 'put',
     'actionClassName' => 'Espo\\Tools\\Kanban\\Api\\PutOrder',
     'adjustedRoute' => '/Kanban/order'
   ],
-  60 => [
+  61 => [
     'route' => '/Kanban/:entityType',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Kanban\\Api\\GetData',
     'adjustedRoute' => '/Kanban/{entityType}'
   ],
-  61 => [
+  62 => [
     'route' => '/Attachment/file/:id',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Attachment\\Api\\GetFile',
     'adjustedRoute' => '/Attachment/file/{id}'
   ],
-  62 => [
+  63 => [
     'route' => '/Attachment/chunk/:id',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Attachment\\Api\\PostChunk',
     'adjustedRoute' => '/Attachment/chunk/{id}'
   ],
-  63 => [
+  64 => [
     'route' => '/Attachment/fromImageUrl',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Attachment\\Api\\PostFromImageUrl',
     'adjustedRoute' => '/Attachment/fromImageUrl'
   ],
-  64 => [
+  65 => [
     'route' => '/Attachment/copy/:id',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Attachment\\Api\\PostCopy',
     'adjustedRoute' => '/Attachment/copy/{id}'
   ],
-  65 => [
+  66 => [
     'route' => '/Note/:id/myReactions/:type',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\PostMyReactions',
     'adjustedRoute' => '/Note/{id}/myReactions/{type}'
   ],
-  66 => [
+  67 => [
     'route' => '/Note/:id/myReactions/:type',
     'method' => 'delete',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\DeleteMyReactions',
     'adjustedRoute' => '/Note/{id}/myReactions/{type}'
   ],
-  67 => [
+  68 => [
     'route' => '/Note/:id/reactors/:type',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\GetNoteReactors',
     'adjustedRoute' => '/Note/{id}/reactors/{type}'
   ],
-  68 => [
+  69 => [
+    'route' => '/Notification/:id/group',
+    'method' => 'get',
+    'actionClassName' => 'Espo\\Tools\\Notification\\Api\\GetGroup',
+    'adjustedRoute' => '/Notification/{id}/group'
+  ],
+  70 => [
     'route' => '/EmailTemplate/:id/prepare',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\EmailTemplate\\Api\\PostPrepare',
     'adjustedRoute' => '/EmailTemplate/{id}/prepare'
   ],
-  69 => [
+  71 => [
     'route' => '/Email/:id/attachments/copy',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\PostAttachmentsCopy',
     'adjustedRoute' => '/Email/{id}/attachments/copy'
   ],
-  70 => [
+  72 => [
     'route' => '/Email/importEml',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\PostImportEml',
     'adjustedRoute' => '/Email/importEml'
   ],
-  71 => [
+  73 => [
     'route' => '/Email/sendTest',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\PostSendTest',
     'adjustedRoute' => '/Email/sendTest'
   ],
-  72 => [
+  74 => [
     'route' => '/Email/inbox/read',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\PostInboxRead',
     'adjustedRoute' => '/Email/inbox/read'
   ],
-  73 => [
+  75 => [
     'route' => '/Email/inbox/read',
     'method' => 'delete',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\DeleteInboxRead',
     'adjustedRoute' => '/Email/inbox/read'
   ],
-  74 => [
+  76 => [
     'route' => '/Email/inbox/important',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\PostInboxImportant',
     'adjustedRoute' => '/Email/inbox/important'
   ],
-  75 => [
+  77 => [
     'route' => '/Email/inbox/important',
     'method' => 'delete',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\DeleteInboxImportant',
     'adjustedRoute' => '/Email/inbox/important'
   ],
-  76 => [
+  78 => [
     'route' => '/Email/inbox/inTrash',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\PostInboxInTrash',
     'adjustedRoute' => '/Email/inbox/inTrash'
   ],
-  77 => [
+  79 => [
     'route' => '/Email/inbox/inTrash',
     'method' => 'delete',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\DeleteInboxInTrash',
     'adjustedRoute' => '/Email/inbox/inTrash'
   ],
-  78 => [
+  80 => [
     'route' => '/Email/inbox/folders/:folderId',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\PostFolder',
     'adjustedRoute' => '/Email/inbox/folders/{folderId}'
   ],
-  79 => [
+  81 => [
     'route' => '/Email/inbox/notReadCounts',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\GetNotReadCounts',
     'adjustedRoute' => '/Email/inbox/notReadCounts'
   ],
-  80 => [
+  82 => [
     'route' => '/Email/insertFieldData',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\GetInsertFieldData',
     'adjustedRoute' => '/Email/insertFieldData'
   ],
-  81 => [
+  83 => [
     'route' => '/Email/:id/users',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Email\\Api\\PostUsers',
     'adjustedRoute' => '/Email/{id}/users'
   ],
-  82 => [
+  84 => [
     'route' => '/EmailAddress/search',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\EmailAddress\\Api\\GetSearch',
     'adjustedRoute' => '/EmailAddress/search'
   ],
-  83 => [
+  85 => [
     'route' => '/User/:id/stream/own',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\GetOwn',
     'adjustedRoute' => '/User/{id}/stream/own'
   ],
-  84 => [
+  86 => [
     'route' => '/User/:id/acl',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\UserSecurity\\Api\\GetUserAcl',
     'adjustedRoute' => '/User/{id}/acl'
   ],
-  85 => [
+  87 => [
     'route' => '/UserSecurity/apiKey/generate',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\UserSecurity\\Api\\PostApiKeyGenerate',
     'adjustedRoute' => '/UserSecurity/apiKey/generate'
   ],
-  86 => [
+  88 => [
     'route' => '/UserSecurity/password',
     'method' => 'put',
     'actionClassName' => 'Espo\\Tools\\UserSecurity\\Api\\PutPassword',
     'adjustedRoute' => '/UserSecurity/password'
   ],
-  87 => [
+  89 => [
     'route' => '/UserSecurity/password/recovery',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\UserSecurity\\Api\\PostPasswordRecovery',
     'adjustedRoute' => '/UserSecurity/password/recovery'
   ],
-  88 => [
+  90 => [
     'route' => '/UserSecurity/password/generate',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\UserSecurity\\Api\\PostPasswordGenerate',
     'adjustedRoute' => '/UserSecurity/password/generate'
   ],
-  89 => [
+  91 => [
     'route' => '/User/passwordChangeRequest',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\UserSecurity\\Api\\PostPasswordChangeRequest',
     'noAuth' => true,
     'adjustedRoute' => '/User/passwordChangeRequest'
   ],
-  90 => [
+  92 => [
     'route' => '/User/changePasswordByRequest',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\UserSecurity\\Api\\PostChangePasswordByRequest',
     'noAuth' => true,
     'adjustedRoute' => '/User/changePasswordByRequest'
   ],
-  91 => [
+  93 => [
     'route' => '/Team/:id/userPosition',
     'method' => 'put',
     'actionClassName' => 'Espo\\Tools\\User\\Api\\PutTeamUserPosition',
     'adjustedRoute' => '/Team/{id}/userPosition'
   ],
-  92 => [
+  94 => [
     'route' => '/Oidc/authorizationData',
     'method' => 'get',
     'params' => [
@@ -655,7 +667,7 @@ return [
     'noAuth' => true,
     'adjustedRoute' => '/Oidc/authorizationData'
   ],
-  93 => [
+  95 => [
     'route' => '/Oidc/backchannelLogout',
     'method' => 'post',
     'params' => [
@@ -665,19 +677,25 @@ return [
     'noAuth' => true,
     'adjustedRoute' => '/Oidc/backchannelLogout'
   ],
-  94 => [
+  96 => [
     'method' => 'post',
     'route' => '/OAuth/:id/connection',
     'actionClassName' => 'Espo\\Tools\\OAuth\\Api\\PostConnection',
     'adjustedRoute' => '/OAuth/{id}/connection'
   ],
-  95 => [
+  97 => [
     'method' => 'delete',
     'route' => '/OAuth/:id/connection',
     'actionClassName' => 'Espo\\Tools\\OAuth\\Api\\DeleteConnection',
     'adjustedRoute' => '/OAuth/{id}/connection'
   ],
-  96 => [
+  98 => [
+    'method' => 'get',
+    'route' => '/OpenApi',
+    'actionClassName' => 'Espo\\Tools\\OpenApi\\Api\\GetSpec',
+    'adjustedRoute' => '/OpenApi'
+  ],
+  99 => [
     'route' => '/:controller/:id',
     'method' => 'get',
     'params' => [
@@ -687,7 +705,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}'
   ],
-  97 => [
+  100 => [
     'route' => '/:controller',
     'method' => 'get',
     'params' => [
@@ -696,7 +714,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}'
   ],
-  98 => [
+  101 => [
     'route' => '/:controller',
     'method' => 'post',
     'params' => [
@@ -705,7 +723,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}'
   ],
-  99 => [
+  102 => [
     'route' => '/:controller/:id',
     'method' => 'put',
     'params' => [
@@ -715,7 +733,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}'
   ],
-  100 => [
+  103 => [
     'route' => '/:controller/:id',
     'method' => 'patch',
     'params' => [
@@ -725,7 +743,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}'
   ],
-  101 => [
+  104 => [
     'route' => '/:controller/:id',
     'method' => 'delete',
     'params' => [
@@ -735,25 +753,25 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}'
   ],
-  102 => [
+  105 => [
     'route' => '/:entityType/:id/followers',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\GetFollowers',
     'adjustedRoute' => '/{entityType}/{id}/followers'
   ],
-  103 => [
+  106 => [
     'route' => '/:entityType/:id/followers',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\PostFollowers',
     'adjustedRoute' => '/{entityType}/{id}/followers'
   ],
-  104 => [
+  107 => [
     'route' => '/:entityType/:id/followers',
     'method' => 'delete',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\DeleteFollowers',
     'adjustedRoute' => '/{entityType}/{id}/followers'
   ],
-  105 => [
+  108 => [
     'route' => '/:controller/:id/stream',
     'method' => 'get',
     'params' => [
@@ -764,7 +782,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}/stream'
   ],
-  106 => [
+  109 => [
     'route' => '/:controller/:id/posts',
     'method' => 'get',
     'params' => [
@@ -775,7 +793,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}/posts'
   ],
-  107 => [
+  110 => [
     'route' => '/:controller/:id/updateStream',
     'method' => 'get',
     'params' => [
@@ -786,7 +804,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}/updateStream'
   ],
-  108 => [
+  111 => [
     'route' => '/:controller/:id/subscription',
     'method' => 'put',
     'params' => [
@@ -796,7 +814,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}/subscription'
   ],
-  109 => [
+  112 => [
     'route' => '/:controller/:id/subscription',
     'method' => 'delete',
     'params' => [
@@ -806,43 +824,43 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}/subscription'
   ],
-  110 => [
+  113 => [
     'route' => '/:entityType/:id/streamAttachments',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\GetStreamAttachments',
     'adjustedRoute' => '/{entityType}/{id}/streamAttachments'
   ],
-  111 => [
+  114 => [
     'route' => '/:Note/:id/pin',
     'method' => 'post',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\PostNotePin',
     'adjustedRoute' => '/{Note}/{id}/pin'
   ],
-  112 => [
+  115 => [
     'route' => '/:Note/:id/pin',
     'method' => 'delete',
     'actionClassName' => 'Espo\\Tools\\Stream\\Api\\DeleteNotePin',
     'adjustedRoute' => '/{Note}/{id}/pin'
   ],
-  113 => [
+  116 => [
     'route' => '/:entityType/:id/starSubscription',
     'method' => 'put',
     'actionClassName' => 'Espo\\Tools\\Stars\\Api\\PutStar',
     'adjustedRoute' => '/{entityType}/{id}/starSubscription'
   ],
-  114 => [
+  117 => [
     'route' => '/:entityType/:id/starSubscription',
     'method' => 'delete',
     'actionClassName' => 'Espo\\Tools\\Stars\\Api\\DeleteUnstar',
     'adjustedRoute' => '/{entityType}/{id}/starSubscription'
   ],
-  115 => [
+  118 => [
     'route' => '/:entityType/:id/usersAccess',
     'method' => 'get',
     'actionClassName' => 'Espo\\Tools\\User\\Api\\PostRecordUsersAccess',
     'adjustedRoute' => '/{entityType}/{id}/usersAccess'
   ],
-  116 => [
+  119 => [
     'route' => '/:controller/:id/:link',
     'method' => 'get',
     'params' => [
@@ -853,7 +871,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}/{link}'
   ],
-  117 => [
+  120 => [
     'route' => '/:controller/:id/:link',
     'method' => 'post',
     'params' => [
@@ -864,7 +882,7 @@ return [
     ],
     'adjustedRoute' => '/{controller}/{id}/{link}'
   ],
-  118 => [
+  121 => [
     'route' => '/:controller/:id/:link',
     'method' => 'delete',
     'params' => [

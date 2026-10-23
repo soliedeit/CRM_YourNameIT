@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -65,7 +65,11 @@ class ListLoader implements LoaderInterface
         foreach ($this->getFieldList($entityType) as $field) {
             if (
                 !in_array($field . 'Ids', $select) &&
-                !in_array($field . 'Names', $select)
+                !in_array($field . 'Names', $select) &&
+                (
+                    !$entity->hasAttribute($field . 'Columns') ||
+                    !in_array($field . 'Columns', $select)
+                )
             ) {
                 continue;
             }

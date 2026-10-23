@@ -153,6 +153,7 @@ return (object) [
       'delete' => 'all',
       'create' => 'yes'
     ],
+    'OpenApi' => false,
     'Target' => false,
     'Note' => (object) [
       'read' => 'own',
@@ -217,6 +218,11 @@ return (object) [
     'ImportEml' => true,
     'WorkingTimeRange' => true,
     'Stream' => true,
+    'CurrencyRecord' => 'boolean:Currency',
+    'CurrencyRecordRate' => (object) [
+      'read' => 'yes',
+      'edit' => 'yes'
+    ],
     'MassEmail' => (object) [
       'read' => 'no',
       'stream' => 'no',

@@ -21,13 +21,16 @@
             "default": "Active"
         },
         "host": {
-            "type": "varchar"
+            "type": "varchar",
+            "massUpdateDisabled": true
         },
         "port": {
             "type": "int",
             "min": 0,
             "max": 65535,
-            "default": 993
+            "default": 993,
+            "disableFormatting": true,
+            "massUpdateDisabled": true
         },
         "security": {
             "type": "enum",
@@ -46,12 +49,20 @@
             "view": "views/email-account/fields/folders",
             "displayAsList": true,
             "noEmptyString": true,
-            "duplicateIgnore": true
+            "duplicateIgnore": true,
+            "tooltip": true,
+            "fullNameAdditionalAttributeList": ["folderMap"]
         },
         "sentFolder": {
             "type": "varchar",
             "view": "views/email-account/fields/folder",
             "duplicateIgnore": true
+        },
+        "folderMap": {
+            "type": "jsonObject",
+            "validatorClassNameList": [
+                "Espo\\Classes\\FieldValidators\\EmailAccount\\FolderMap\\Valid"
+            ]
         },
         "storeSentEmails": {
             "type": "bool",
@@ -103,13 +114,16 @@
             "tooltip": true
         },
         "smtpHost": {
-            "type": "varchar"
+            "type": "varchar",
+            "massUpdateDisabled": true
         },
         "smtpPort": {
             "type": "int",
             "min": 0,
             "max": 65535,
-            "default": 587
+            "default": 587,
+            "disableFormatting": true,
+            "massUpdateDisabled": true
         },
         "smtpAuth": {
             "type": "bool",

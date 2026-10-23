@@ -31,7 +31,7 @@ return [
   ],
   'adminUpgradeDisabled' => false,
   'isInstalled' => true,
-  'microtimeInternal' => 1753796840.346763,
+  'microtimeInternal' => 1792766900.204408,
   'cryptKey' => '4ea0f3736053ef2f425c3c3c8bd9597e',
   'hashSecretKey' => '210ed28dd44b68327ae3d67b068847b8',
   'defaultPermissions' => [
@@ -39,6 +39,6 @@ return [
     'group' => 1017
   ],
   'actualDatabaseType' => 'mariadb',
-  'actualDatabaseVersion' => '10.6.20',
+  'actualDatabaseVersion' => '10.6.25',
   'instanceId' => 'b0259e74-0eb7-484d-a6f3-28250825845b'
 ];

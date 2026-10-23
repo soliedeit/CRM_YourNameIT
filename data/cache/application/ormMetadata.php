@@ -596,6 +596,11 @@ return [
         'notNull' => false,
         'fieldType' => 'datetime'
       ],
+      'modifiedAt' => [
+        'type' => 'datetime',
+        'notNull' => false,
+        'fieldType' => 'datetime'
+      ],
       'contents' => [
         'type' => 'text',
         'notStorable' => true,
@@ -946,6 +951,13 @@ return [
           0 => 'requestTime'
         ],
         'key' => 'IDX_REQUEST_TIME'
+      ],
+      'usernameIpAddress' => [
+        'columns' => [
+          0 => 'username',
+          1 => 'ipAddress'
+        ],
+        'key' => 'IDX_USERNAME_IP_ADDRESS'
       ],
       'portalId' => [
         'type' => 'index',
@@ -1320,6 +1332,278 @@ return [
     'relations' => [],
     'indexes' => []
   ],
+  'CurrencyRecord' => [
+    'attributes' => [
+      'id' => [
+        'len' => 17,
+        'dbType' => 'string',
+        'type' => 'id'
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'notStorable' => true
+      ],
+      'deleted' => [
+        'type' => 'bool',
+        'default' => false
+      ],
+      'code' => [
+        'type' => 'varchar',
+        'len' => 3,
+        'index' => true,
+        'fieldType' => 'varchar'
+      ],
+      'status' => [
+        'type' => 'varchar',
+        'len' => 8,
+        'default' => 'Active',
+        'fieldType' => 'varchar'
+      ],
+      'label' => [
+        'type' => 'varchar',
+        'notStorable' => true,
+        'fieldType' => 'varchar',
+        'len' => 255
+      ],
+      'symbol' => [
+        'type' => 'varchar',
+        'notStorable' => true,
+        'fieldType' => 'varchar',
+        'len' => 255
+      ],
+      'rateDate' => [
+        'type' => 'date',
+        'notNull' => false,
+        'notStorable' => true,
+        'fieldType' => 'date'
+      ],
+      'isBase' => [
+        'type' => 'bool',
+        'notNull' => true,
+        'notStorable' => true,
+        'fieldType' => 'bool',
+        'default' => false
+      ],
+      'deleteId' => [
+        'type' => 'varchar',
+        'len' => 17,
+        'notNull' => true,
+        'default' => '0',
+        'fieldType' => 'varchar'
+      ],
+      'rate' => [
+        'type' => 'varchar',
+        'dbType' => 'decimal',
+        'precision' => 13,
+        'scale' => 4,
+        'notStorable' => true
+      ],
+      'ratesIds' => [
+        'type' => 'jsonArray',
+        'notStorable' => true,
+        'isLinkStub' => true
+      ],
+      'ratesNames' => [
+        'type' => 'jsonObject',
+        'notStorable' => true,
+        'isLinkStub' => true
+      ]
+    ],
+    'relations' => [
+      'rates' => [
+        'type' => 'hasMany',
+        'entity' => 'CurrencyRecordRate',
+        'foreignKey' => 'recordId',
+        'foreign' => 'record',
+        'orderBy' => 'date',
+        'order' => 'DESC'
+      ]
+    ],
+    'indexes' => [
+      'codeDeleteId' => [
+        'type' => 'unique',
+        'columns' => [
+          0 => 'code',
+          1 => 'deleteId'
+        ],
+        'key' => 'UNIQ_CODE_DELETE_ID'
+      ],
+      'code' => [
+        'type' => 'index',
+        'columns' => [
+          0 => 'code'
+        ],
+        'key' => 'IDX_CODE'
+      ]
+    ],
+    'collection' => [
+      'orderBy' => 'code',
+      'order' => 'ASC'
+    ]
+  ],
+  'CurrencyRecordRate' => [
+    'attributes' => [
+      'id' => [
+        'len' => 17,
+        'dbType' => 'string',
+        'type' => 'id'
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'notStorable' => true
+      ],
+      'deleted' => [
+        'type' => 'bool',
+        'default' => false
+      ],
+      'baseCode' => [
+        'type' => 'varchar',
+        'len' => 3,
+        'fieldType' => 'varchar'
+      ],
+      'date' => [
+        'type' => 'date',
+        'fieldType' => 'date'
+      ],
+      'createdAt' => [
+        'type' => 'datetime',
+        'notNull' => false,
+        'fieldType' => 'datetime'
+      ],
+      'modifiedAt' => [
+        'type' => 'datetime',
+        'notNull' => false,
+        'fieldType' => 'datetime'
+      ],
+      'deleteId' => [
+        'type' => 'varchar',
+        'len' => 17,
+        'notNull' => true,
+        'default' => '0',
+        'fieldType' => 'varchar'
+      ],
+      'recordId' => [
+        'len' => 17,
+        'dbType' => 'string',
+        'type' => 'foreignId',
+        'index' => true,
+        'attributeRole' => 'id',
+        'fieldType' => 'link',
+        'notNull' => false
+      ],
+      'recordName' => [
+        'type' => 'foreign',
+        'notStorable' => true,
+        'attributeRole' => 'name',
+        'fieldType' => 'link',
+        'relation' => 'record',
+        'foreign' => 'code',
+        'foreignType' => 'varchar'
+      ],
+      'rate' => [
+        'type' => 'varchar',
+        'dbType' => 'decimal',
+        'precision' => 20,
+        'scale' => 8
+      ],
+      'createdById' => [
+        'len' => 17,
+        'dbType' => 'string',
+        'type' => 'foreignId',
+        'index' => true,
+        'attributeRole' => 'id',
+        'fieldType' => 'link',
+        'notNull' => false
+      ],
+      'createdByName' => [
+        'type' => 'foreign',
+        'notStorable' => true,
+        'attributeRole' => 'name',
+        'fieldType' => 'link',
+        'relation' => 'createdBy',
+        'foreign' => 'name',
+        'foreignType' => 'varchar'
+      ],
+      'modifiedById' => [
+        'len' => 17,
+        'dbType' => 'string',
+        'type' => 'foreignId',
+        'index' => true,
+        'attributeRole' => 'id',
+        'fieldType' => 'link',
+        'notNull' => false
+      ],
+      'modifiedByName' => [
+        'type' => 'foreign',
+        'notStorable' => true,
+        'attributeRole' => 'name',
+        'fieldType' => 'link',
+        'relation' => 'modifiedBy',
+        'foreign' => 'name',
+        'foreignType' => 'varchar'
+      ]
+    ],
+    'relations' => [
+      'modifiedBy' => [
+        'type' => 'belongsTo',
+        'entity' => 'User',
+        'key' => 'modifiedById',
+        'foreignKey' => 'id',
+        'foreign' => NULL
+      ],
+      'createdBy' => [
+        'type' => 'belongsTo',
+        'entity' => 'User',
+        'key' => 'createdById',
+        'foreignKey' => 'id',
+        'foreign' => NULL
+      ],
+      'record' => [
+        'type' => 'belongsTo',
+        'entity' => 'CurrencyRecord',
+        'key' => 'recordId',
+        'foreignKey' => 'id',
+        'foreign' => NULL
+      ]
+    ],
+    'indexes' => [
+      'recordIdBaseCodeDate' => [
+        'type' => 'unique',
+        'columns' => [
+          0 => 'recordId',
+          1 => 'baseCode',
+          2 => 'date',
+          3 => 'deleteId'
+        ],
+        'key' => 'UNIQ_RECORD_ID_BASE_CODE_DATE'
+      ],
+      'recordId' => [
+        'type' => 'index',
+        'columns' => [
+          0 => 'recordId'
+        ],
+        'key' => 'IDX_RECORD_ID'
+      ],
+      'createdById' => [
+        'type' => 'index',
+        'columns' => [
+          0 => 'createdById'
+        ],
+        'key' => 'IDX_CREATED_BY_ID'
+      ],
+      'modifiedById' => [
+        'type' => 'index',
+        'columns' => [
+          0 => 'modifiedById'
+        ],
+        'key' => 'IDX_MODIFIED_BY_ID'
+      ]
+    ],
+    'collection' => [
+      'orderBy' => 'date',
+      'order' => 'DESC'
+    ]
+  ],
   'DashboardTemplate' => [
     'attributes' => [
       'id' => [
@@ -1669,6 +1953,12 @@ return [
         'type' => 'datetime',
         'notNull' => false,
         'fieldType' => 'datetime'
+      ],
+      'isAutoReply' => [
+        'type' => 'bool',
+        'notNull' => true,
+        'fieldType' => 'bool',
+        'default' => false
       ],
       'createdAt' => [
         'type' => 'datetime',
@@ -2060,7 +2350,9 @@ return [
         'notStorable' => true,
         'columns' => [
           'inTrash' => 'inTrash',
-          'folderId' => 'folderId'
+          'folderId' => 'folderId',
+          'inArchive' => 'inArchive',
+          'isRead' => 'isRead'
         ],
         'attributeRole' => 'columnsMap'
       ],
@@ -2882,6 +3174,10 @@ return [
         'fieldType' => 'varchar',
         'len' => 255
       ],
+      'folderMap' => [
+        'type' => 'jsonObject',
+        'fieldType' => 'jsonObject'
+      ],
       'storeSentEmails' => [
         'type' => 'bool',
         'notNull' => true,
@@ -3661,11 +3957,21 @@ return [
         'default' => true,
         'fieldType' => 'bool'
       ],
+      'status' => [
+        'type' => 'varchar',
+        'len' => 8,
+        'default' => 'Active',
+        'fieldType' => 'varchar'
+      ],
       'oneOff' => [
         'type' => 'bool',
         'notNull' => true,
         'default' => false,
         'fieldType' => 'bool'
+      ],
+      'description' => [
+        'type' => 'text',
+        'fieldType' => 'text'
       ],
       'createdAt' => [
         'type' => 'datetime',
@@ -6199,6 +6505,10 @@ return [
         'len' => 2,
         'fieldType' => 'varchar'
       ],
+      'description' => [
+        'type' => 'text',
+        'fieldType' => 'text'
+      ],
       'createdAt' => [
         'type' => 'datetime',
         'notNull' => false,
@@ -7358,6 +7668,18 @@ return [
         'type' => 'text',
         'fieldType' => 'text'
       ],
+      'actionId' => [
+        'type' => 'varchar',
+        'len' => 36,
+        'index' => true,
+        'fieldType' => 'varchar'
+      ],
+      'groupedCount' => [
+        'type' => 'int',
+        'notStorable' => true,
+        'fieldType' => 'int',
+        'len' => 11
+      ],
       'userId' => [
         'len' => 17,
         'dbType' => 'string',
@@ -7485,9 +7807,19 @@ return [
         'type' => 'index',
         'columns' => [
           0 => 'userId',
-          1 => 'createdAt'
+          1 => 'number'
         ],
         'key' => 'IDX_USER'
+      ],
+      'userIdReadRelatedParentType' => [
+        'type' => 'index',
+        'columns' => [
+          0 => 'userId',
+          1 => 'deleted',
+          2 => 'read',
+          3 => 'relatedParentType'
+        ],
+        'key' => 'IDX_USER_ID_READ_RELATED_PARENT_TYPE'
       ],
       'number' => [
         'type' => 'unique',
@@ -7495,6 +7827,13 @@ return [
           0 => 'number'
         ],
         'key' => 'UNIQ_NUMBER'
+      ],
+      'actionId' => [
+        'type' => 'index',
+        'columns' => [
+          0 => 'actionId'
+        ],
+        'key' => 'IDX_ACTION_ID'
       ],
       'userId' => [
         'type' => 'index',
@@ -8169,6 +8508,10 @@ return [
         'notNull' => false,
         'fieldType' => 'float'
       ],
+      'description' => [
+        'type' => 'text',
+        'fieldType' => 'text'
+      ],
       'modifiedAt' => [
         'type' => 'datetime',
         'notNull' => false,
@@ -8817,6 +9160,12 @@ return [
         'default' => true,
         'fieldType' => 'bool'
       ],
+      'reactionNotificationsNotFollowed' => [
+        'type' => 'bool',
+        'notNull' => true,
+        'default' => false,
+        'fieldType' => 'bool'
+      ],
       'autoFollowEntityTypeList' => [
         'type' => 'jsonArray',
         'notStorable' => true,
@@ -8911,6 +9260,12 @@ return [
         'storeArrayValues' => true,
         'fieldType' => 'jsonArray'
       ],
+      'followAsCollaborator' => [
+        'type' => 'bool',
+        'notNull' => true,
+        'default' => true,
+        'fieldType' => 'bool'
+      ],
       'emailUseExternalClient' => [
         'type' => 'bool',
         'notNull' => true,
@@ -8966,6 +9321,11 @@ return [
       'deleted' => [
         'type' => 'bool',
         'default' => false
+      ],
+      'info' => [
+        'type' => 'varchar',
+        'notStorable' => true,
+        'fieldType' => 'base'
       ],
       'assignmentPermission' => [
         'type' => 'varchar',
@@ -10557,6 +10917,21 @@ return [
         'isLinkMultipleNameMap' => true,
         'attributeRole' => 'nameMap',
         'fieldType' => 'linkMultiple'
+      ],
+      'baselineRoleId' => [
+        'len' => 17,
+        'dbType' => 'string',
+        'type' => 'foreignId',
+        'index' => 'baselineRole',
+        'attributeRole' => 'id',
+        'fieldType' => 'link',
+        'notNull' => false
+      ],
+      'baselineRoleName' => [
+        'type' => 'varchar',
+        'notStorable' => true,
+        'attributeRole' => 'name',
+        'fieldType' => 'link'
       ]
     ],
     'relations' => [
@@ -10582,6 +10957,13 @@ return [
           0 => 'workingTimeCalendarId'
         ],
         'key' => 'IDX_WORKING_TIME_CALENDAR'
+      ],
+      'baselineRole' => [
+        'type' => 'index',
+        'columns' => [
+          0 => 'baselineRoleId'
+        ],
+        'key' => 'IDX_BASELINE_ROLE'
       ]
     ]
   ],
@@ -11210,6 +11592,10 @@ return [
         'fieldType' => 'varchar',
         'len' => 255
       ],
+      'description' => [
+        'type' => 'text',
+        'fieldType' => 'text'
+      ],
       'createdAt' => [
         'type' => 'datetime',
         'notNull' => false,
@@ -11564,6 +11950,12 @@ return [
         'fieldType' => 'varchar',
         'len' => 255
       ],
+      'status' => [
+        'type' => 'varchar',
+        'len' => 8,
+        'default' => 'Active',
+        'fieldType' => 'varchar'
+      ],
       'leftMargin' => [
         'type' => 'float',
         'notNull' => false,
@@ -11616,6 +12008,10 @@ return [
         'type' => 'text',
         'fieldType' => 'text'
       ],
+      'description' => [
+        'type' => 'text',
+        'fieldType' => 'text'
+      ],
       'createdAt' => [
         'type' => 'datetime',
         'notNull' => false,
@@ -11662,6 +12058,11 @@ return [
         'type' => 'varchar',
         'fieldType' => 'varchar',
         'len' => 255
+      ],
+      'filename' => [
+        'type' => 'varchar',
+        'len' => 150,
+        'fieldType' => 'varchar'
       ],
       'teamsIds' => [
         'type' => 'jsonArray',
@@ -12070,6 +12471,44 @@ return [
                 'lastName' => '{value}',
                 'CONCAT:(firstName, \' \', lastName)' => '{value}',
                 'CONCAT:(lastName, \' \', firstName)' => '{value}'
+              ]
+            ]
+          ],
+          '<>' => [
+            'whereClause' => [
+              'AND' => [
+                'firstName!=' => '{value}',
+                'lastName!=' => '{value}',
+                'CONCAT:(firstName, \' \', lastName)!=' => '{value}',
+                'CONCAT:(lastName, \' \', firstName)!=' => '{value}'
+              ]
+            ]
+          ],
+          'IN' => [
+            'whereClause' => [
+              'false:' => NULL
+            ]
+          ],
+          'NOT IN' => [
+            'whereClause' => [
+              'false:' => NULL
+            ]
+          ],
+          'IS NULL' => [
+            'whereClause' => [
+              'AND' => [
+                'firstName=' => NULL,
+                'middleName=' => NULL,
+                'lastName=' => NULL
+              ]
+            ]
+          ],
+          'IS NOT NULL' => [
+            'whereClause' => [
+              'OR' => [
+                'firstName!=' => NULL,
+                'middleName!=' => NULL,
+                'lastName!=' => NULL
               ]
             ]
           ]
@@ -14691,6 +15130,16 @@ return [
         'len' => 100,
         'fieldType' => 'varchar'
       ],
+      'skipOwn' => [
+        'type' => 'bool',
+        'notNull' => true,
+        'fieldType' => 'bool',
+        'default' => false
+      ],
+      'description' => [
+        'type' => 'text',
+        'fieldType' => 'text'
+      ],
       'createdAt' => [
         'type' => 'datetime',
         'notNull' => false,
@@ -14911,9 +15360,40 @@ return [
         'isParentName' => true,
         'attributeRole' => 'name',
         'fieldType' => 'linkParent'
+      ],
+      'userId' => [
+        'len' => 17,
+        'dbType' => 'string',
+        'type' => 'foreignId',
+        'index' => true,
+        'attributeRole' => 'id',
+        'fieldType' => 'link',
+        'notNull' => false
+      ],
+      'userName' => [
+        'type' => 'foreign',
+        'notStorable' => true,
+        'attributeRole' => 'name',
+        'fieldType' => 'link',
+        'relation' => 'user',
+        'foreign' => 'name',
+        'foreignType' => 'varchar'
       ]
     ],
-    'relations' => [],
+    'relations' => [
+      'user' => [
+        'type' => 'belongsTo',
+        'entity' => 'User',
+        'key' => 'userId',
+        'foreignKey' => 'id',
+        'foreign' => NULL
+      ],
+      'target' => [
+        'type' => 'belongsToParent',
+        'key' => 'targetId',
+        'foreign' => NULL
+      ]
+    ],
     'indexes' => [
       'number' => [
         'type' => 'unique',
@@ -14929,6 +15409,13 @@ return [
           1 => 'targetType'
         ],
         'key' => 'IDX_TARGET'
+      ],
+      'userId' => [
+        'type' => 'index',
+        'columns' => [
+          0 => 'userId'
+        ],
+        'key' => 'IDX_USER_ID'
       ]
     ],
     'collection' => [
@@ -18460,21 +18947,21 @@ return [
         'order' => [
           'order' => [
             0 => [
-              0 => 'MUL:(budget, budgetCurrencyRate.rate)',
+              0 => 'MUL:(budget, budgetCurrencyRecordRate.rate)',
               1 => '{direction}'
             ]
           ],
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'budgetCurrencyRate',
+              1 => 'budgetCurrencyRecordRate',
               2 => [
-                'budgetCurrencyRate.id:' => 'budgetCurrency'
+                'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
               ]
             ]
           ],
           'additionalSelect' => [
-            0 => 'budgetCurrencyRate.rate'
+            0 => 'budgetCurrencyRecordRate.rate'
           ]
         ]
       ],
@@ -18606,25 +19093,25 @@ return [
       'budgetConverted' => [
         'type' => 'float',
         'select' => [
-          'select' => 'MUL:(budget, budgetCurrencyRate.rate)',
+          'select' => 'MUL:(budget, budgetCurrencyRecordRate.rate)',
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'budgetCurrencyRate',
+              1 => 'budgetCurrencyRecordRate',
               2 => [
-                'budgetCurrencyRate.id:' => 'budgetCurrency'
+                'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
               ]
             ]
           ]
         ],
         'selectForeign' => [
-          'select' => 'MUL:({alias}.budget, budgetCurrencyRateCampaign{alias}Foreign.rate)',
+          'select' => 'MUL:({alias}.budget, budgetCurrencyRecordRateCampaign{alias}Foreign.rate)',
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'budgetCurrencyRateCampaign{alias}Foreign',
+              1 => 'budgetCurrencyRecordRateCampaign{alias}Foreign',
               2 => [
-                'budgetCurrencyRateCampaign{alias}Foreign.id:' => '{alias}.budgetCurrency'
+                'budgetCurrencyRecordRateCampaign{alias}Foreign.id:' => '{alias}.budgetCurrency'
               ]
             ]
           ]
@@ -18632,84 +19119,84 @@ return [
         'where' => [
           '=' => [
             'whereClause' => [
-              'MUL:(budget, budgetCurrencyRate.rate)=' => '{value}'
+              'MUL:(budget, budgetCurrencyRecordRate.rate)=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'budgetCurrencyRate',
+                1 => 'budgetCurrencyRecordRate',
                 2 => [
-                  'budgetCurrencyRate.id:' => 'budgetCurrency'
+                  'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
                 ]
               ]
             ]
           ],
           '>' => [
             'whereClause' => [
-              'MUL:(budget, budgetCurrencyRate.rate)>' => '{value}'
+              'MUL:(budget, budgetCurrencyRecordRate.rate)>' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'budgetCurrencyRate',
+                1 => 'budgetCurrencyRecordRate',
                 2 => [
-                  'budgetCurrencyRate.id:' => 'budgetCurrency'
+                  'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
                 ]
               ]
             ]
           ],
           '<' => [
             'whereClause' => [
-              'MUL:(budget, budgetCurrencyRate.rate)<' => '{value}'
+              'MUL:(budget, budgetCurrencyRecordRate.rate)<' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'budgetCurrencyRate',
+                1 => 'budgetCurrencyRecordRate',
                 2 => [
-                  'budgetCurrencyRate.id:' => 'budgetCurrency'
+                  'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
                 ]
               ]
             ]
           ],
           '>=' => [
             'whereClause' => [
-              'MUL:(budget, budgetCurrencyRate.rate)>=' => '{value}'
+              'MUL:(budget, budgetCurrencyRecordRate.rate)>=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'budgetCurrencyRate',
+                1 => 'budgetCurrencyRecordRate',
                 2 => [
-                  'budgetCurrencyRate.id:' => 'budgetCurrency'
+                  'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
                 ]
               ]
             ]
           ],
           '<=' => [
             'whereClause' => [
-              'MUL:(budget, budgetCurrencyRate.rate)<=' => '{value}'
+              'MUL:(budget, budgetCurrencyRecordRate.rate)<=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'budgetCurrencyRate',
+                1 => 'budgetCurrencyRecordRate',
                 2 => [
-                  'budgetCurrencyRate.id:' => 'budgetCurrency'
+                  'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
                 ]
               ]
             ]
           ],
           '<>' => [
             'whereClause' => [
-              'MUL:(budget, budgetCurrencyRate.rate)!=' => '{value}'
+              'MUL:(budget, budgetCurrencyRecordRate.rate)!=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'budgetCurrencyRate',
+                1 => 'budgetCurrencyRecordRate',
                 2 => [
-                  'budgetCurrencyRate.id:' => 'budgetCurrency'
+                  'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
                 ]
               ]
             ]
@@ -18729,21 +19216,21 @@ return [
         'order' => [
           'order' => [
             0 => [
-              0 => 'MUL:(budget, budgetCurrencyRate.rate)',
+              0 => 'MUL:(budget, budgetCurrencyRecordRate.rate)',
               1 => '{direction}'
             ]
           ],
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'budgetCurrencyRate',
+              1 => 'budgetCurrencyRecordRate',
               2 => [
-                'budgetCurrencyRate.id:' => 'budgetCurrency'
+                'budgetCurrencyRecordRate.id:' => 'budgetCurrency'
               ]
             ]
           ],
           'additionalSelect' => [
-            0 => 'budgetCurrencyRate.rate'
+            0 => 'budgetCurrencyRecordRate.rate'
           ]
         ],
         'attributeRole' => 'valueConverted',
@@ -20257,6 +20744,44 @@ return [
                 'lastName' => '{value}',
                 'CONCAT:(firstName, \' \', lastName)' => '{value}',
                 'CONCAT:(lastName, \' \', firstName)' => '{value}'
+              ]
+            ]
+          ],
+          '<>' => [
+            'whereClause' => [
+              'AND' => [
+                'firstName!=' => '{value}',
+                'lastName!=' => '{value}',
+                'CONCAT:(firstName, \' \', lastName)!=' => '{value}',
+                'CONCAT:(lastName, \' \', firstName)!=' => '{value}'
+              ]
+            ]
+          ],
+          'IN' => [
+            'whereClause' => [
+              'false:' => NULL
+            ]
+          ],
+          'NOT IN' => [
+            'whereClause' => [
+              'false:' => NULL
+            ]
+          ],
+          'IS NULL' => [
+            'whereClause' => [
+              'AND' => [
+                'firstName=' => NULL,
+                'middleName=' => NULL,
+                'lastName=' => NULL
+              ]
+            ]
+          ],
+          'IS NOT NULL' => [
+            'whereClause' => [
+              'OR' => [
+                'firstName!=' => NULL,
+                'middleName!=' => NULL,
+                'lastName!=' => NULL
               ]
             ]
           ]
@@ -22208,6 +22733,13 @@ return [
         'notStorable' => true,
         'notExportable' => true
       ],
+      'isStarred' => [
+        'type' => 'bool',
+        'notStorable' => true,
+        'notExportable' => true,
+        'readOnly' => true,
+        'default' => false
+      ],
       'tasksPrimaryIds' => [
         'type' => 'jsonArray',
         'notStorable' => true,
@@ -23581,6 +24113,7 @@ return [
       ]
     ],
     'collection' => [
+      'orderBy' => 'name',
       'order' => 'ASC'
     ]
   ],
@@ -24480,6 +25013,44 @@ return [
                 'CONCAT:(lastName, \' \', firstName)' => '{value}'
               ]
             ]
+          ],
+          '<>' => [
+            'whereClause' => [
+              'AND' => [
+                'firstName!=' => '{value}',
+                'lastName!=' => '{value}',
+                'CONCAT:(firstName, \' \', lastName)!=' => '{value}',
+                'CONCAT:(lastName, \' \', firstName)!=' => '{value}'
+              ]
+            ]
+          ],
+          'IN' => [
+            'whereClause' => [
+              'false:' => NULL
+            ]
+          ],
+          'NOT IN' => [
+            'whereClause' => [
+              'false:' => NULL
+            ]
+          ],
+          'IS NULL' => [
+            'whereClause' => [
+              'AND' => [
+                'firstName=' => NULL,
+                'middleName=' => NULL,
+                'lastName=' => NULL
+              ]
+            ]
+          ],
+          'IS NOT NULL' => [
+            'whereClause' => [
+              'OR' => [
+                'firstName!=' => NULL,
+                'middleName!=' => NULL,
+                'lastName!=' => NULL
+              ]
+            ]
           ]
         ],
         'order' => [
@@ -24542,21 +25113,21 @@ return [
         'order' => [
           'order' => [
             0 => [
-              0 => 'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)',
+              0 => 'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)',
               1 => '{direction}'
             ]
           ],
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'opportunityAmountCurrencyRate',
+              1 => 'opportunityAmountCurrencyRecordRate',
               2 => [
-                'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
               ]
             ]
           ],
           'additionalSelect' => [
-            0 => 'opportunityAmountCurrencyRate.rate'
+            0 => 'opportunityAmountCurrencyRecordRate.rate'
           ]
         ]
       ],
@@ -25532,25 +26103,25 @@ return [
       'opportunityAmountConverted' => [
         'type' => 'float',
         'select' => [
-          'select' => 'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)',
+          'select' => 'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)',
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'opportunityAmountCurrencyRate',
+              1 => 'opportunityAmountCurrencyRecordRate',
               2 => [
-                'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
               ]
             ]
           ]
         ],
         'selectForeign' => [
-          'select' => 'MUL:({alias}.opportunityAmount, opportunityAmountCurrencyRateLead{alias}Foreign.rate)',
+          'select' => 'MUL:({alias}.opportunityAmount, opportunityAmountCurrencyRecordRateLead{alias}Foreign.rate)',
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'opportunityAmountCurrencyRateLead{alias}Foreign',
+              1 => 'opportunityAmountCurrencyRecordRateLead{alias}Foreign',
               2 => [
-                'opportunityAmountCurrencyRateLead{alias}Foreign.id:' => '{alias}.opportunityAmountCurrency'
+                'opportunityAmountCurrencyRecordRateLead{alias}Foreign.id:' => '{alias}.opportunityAmountCurrency'
               ]
             ]
           ]
@@ -25558,84 +26129,84 @@ return [
         'where' => [
           '=' => [
             'whereClause' => [
-              'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)=' => '{value}'
+              'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'opportunityAmountCurrencyRate',
+                1 => 'opportunityAmountCurrencyRecordRate',
                 2 => [
-                  'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                  'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
                 ]
               ]
             ]
           ],
           '>' => [
             'whereClause' => [
-              'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)>' => '{value}'
+              'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)>' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'opportunityAmountCurrencyRate',
+                1 => 'opportunityAmountCurrencyRecordRate',
                 2 => [
-                  'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                  'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
                 ]
               ]
             ]
           ],
           '<' => [
             'whereClause' => [
-              'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)<' => '{value}'
+              'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)<' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'opportunityAmountCurrencyRate',
+                1 => 'opportunityAmountCurrencyRecordRate',
                 2 => [
-                  'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                  'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
                 ]
               ]
             ]
           ],
           '>=' => [
             'whereClause' => [
-              'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)>=' => '{value}'
+              'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)>=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'opportunityAmountCurrencyRate',
+                1 => 'opportunityAmountCurrencyRecordRate',
                 2 => [
-                  'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                  'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
                 ]
               ]
             ]
           ],
           '<=' => [
             'whereClause' => [
-              'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)<=' => '{value}'
+              'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)<=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'opportunityAmountCurrencyRate',
+                1 => 'opportunityAmountCurrencyRecordRate',
                 2 => [
-                  'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                  'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
                 ]
               ]
             ]
           ],
           '<>' => [
             'whereClause' => [
-              'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)!=' => '{value}'
+              'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)!=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'opportunityAmountCurrencyRate',
+                1 => 'opportunityAmountCurrencyRecordRate',
                 2 => [
-                  'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                  'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
                 ]
               ]
             ]
@@ -25655,21 +26226,21 @@ return [
         'order' => [
           'order' => [
             0 => [
-              0 => 'MUL:(opportunityAmount, opportunityAmountCurrencyRate.rate)',
+              0 => 'MUL:(opportunityAmount, opportunityAmountCurrencyRecordRate.rate)',
               1 => '{direction}'
             ]
           ],
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'opportunityAmountCurrencyRate',
+              1 => 'opportunityAmountCurrencyRecordRate',
               2 => [
-                'opportunityAmountCurrencyRate.id:' => 'opportunityAmountCurrency'
+                'opportunityAmountCurrencyRecordRate.id:' => 'opportunityAmountCurrency'
               ]
             ]
           ],
           'additionalSelect' => [
-            0 => 'opportunityAmountCurrencyRate.rate'
+            0 => 'opportunityAmountCurrencyRecordRate.rate'
           ]
         ],
         'attributeRole' => 'valueConverted',
@@ -27821,21 +28392,21 @@ return [
         'order' => [
           'order' => [
             0 => [
-              0 => 'MUL:(amount, amountCurrencyRate.rate)',
+              0 => 'MUL:(amount, amountCurrencyRecordRate.rate)',
               1 => '{direction}'
             ]
           ],
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'amountCurrencyRate',
+              1 => 'amountCurrencyRecordRate',
               2 => [
-                'amountCurrencyRate.id:' => 'amountCurrency'
+                'amountCurrencyRecordRate.id:' => 'amountCurrency'
               ]
             ]
           ],
           'additionalSelect' => [
-            0 => 'amountCurrencyRate.rate'
+            0 => 'amountCurrencyRecordRate.rate'
           ]
         ]
       ],
@@ -28041,25 +28612,25 @@ return [
       'amountConverted' => [
         'type' => 'float',
         'select' => [
-          'select' => 'MUL:(amount, amountCurrencyRate.rate)',
+          'select' => 'MUL:(amount, amountCurrencyRecordRate.rate)',
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'amountCurrencyRate',
+              1 => 'amountCurrencyRecordRate',
               2 => [
-                'amountCurrencyRate.id:' => 'amountCurrency'
+                'amountCurrencyRecordRate.id:' => 'amountCurrency'
               ]
             ]
           ]
         ],
         'selectForeign' => [
-          'select' => 'MUL:({alias}.amount, amountCurrencyRateOpportunity{alias}Foreign.rate)',
+          'select' => 'MUL:({alias}.amount, amountCurrencyRecordRateOpportunity{alias}Foreign.rate)',
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'amountCurrencyRateOpportunity{alias}Foreign',
+              1 => 'amountCurrencyRecordRateOpportunity{alias}Foreign',
               2 => [
-                'amountCurrencyRateOpportunity{alias}Foreign.id:' => '{alias}.amountCurrency'
+                'amountCurrencyRecordRateOpportunity{alias}Foreign.id:' => '{alias}.amountCurrency'
               ]
             ]
           ]
@@ -28067,84 +28638,84 @@ return [
         'where' => [
           '=' => [
             'whereClause' => [
-              'MUL:(amount, amountCurrencyRate.rate)=' => '{value}'
+              'MUL:(amount, amountCurrencyRecordRate.rate)=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'amountCurrencyRate',
+                1 => 'amountCurrencyRecordRate',
                 2 => [
-                  'amountCurrencyRate.id:' => 'amountCurrency'
+                  'amountCurrencyRecordRate.id:' => 'amountCurrency'
                 ]
               ]
             ]
           ],
           '>' => [
             'whereClause' => [
-              'MUL:(amount, amountCurrencyRate.rate)>' => '{value}'
+              'MUL:(amount, amountCurrencyRecordRate.rate)>' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'amountCurrencyRate',
+                1 => 'amountCurrencyRecordRate',
                 2 => [
-                  'amountCurrencyRate.id:' => 'amountCurrency'
+                  'amountCurrencyRecordRate.id:' => 'amountCurrency'
                 ]
               ]
             ]
           ],
           '<' => [
             'whereClause' => [
-              'MUL:(amount, amountCurrencyRate.rate)<' => '{value}'
+              'MUL:(amount, amountCurrencyRecordRate.rate)<' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'amountCurrencyRate',
+                1 => 'amountCurrencyRecordRate',
                 2 => [
-                  'amountCurrencyRate.id:' => 'amountCurrency'
+                  'amountCurrencyRecordRate.id:' => 'amountCurrency'
                 ]
               ]
             ]
           ],
           '>=' => [
             'whereClause' => [
-              'MUL:(amount, amountCurrencyRate.rate)>=' => '{value}'
+              'MUL:(amount, amountCurrencyRecordRate.rate)>=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'amountCurrencyRate',
+                1 => 'amountCurrencyRecordRate',
                 2 => [
-                  'amountCurrencyRate.id:' => 'amountCurrency'
+                  'amountCurrencyRecordRate.id:' => 'amountCurrency'
                 ]
               ]
             ]
           ],
           '<=' => [
             'whereClause' => [
-              'MUL:(amount, amountCurrencyRate.rate)<=' => '{value}'
+              'MUL:(amount, amountCurrencyRecordRate.rate)<=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'amountCurrencyRate',
+                1 => 'amountCurrencyRecordRate',
                 2 => [
-                  'amountCurrencyRate.id:' => 'amountCurrency'
+                  'amountCurrencyRecordRate.id:' => 'amountCurrency'
                 ]
               ]
             ]
           ],
           '<>' => [
             'whereClause' => [
-              'MUL:(amount, amountCurrencyRate.rate)!=' => '{value}'
+              'MUL:(amount, amountCurrencyRecordRate.rate)!=' => '{value}'
             ],
             'leftJoins' => [
               0 => [
                 0 => 'Currency',
-                1 => 'amountCurrencyRate',
+                1 => 'amountCurrencyRecordRate',
                 2 => [
-                  'amountCurrencyRate.id:' => 'amountCurrency'
+                  'amountCurrencyRecordRate.id:' => 'amountCurrency'
                 ]
               ]
             ]
@@ -28164,21 +28735,21 @@ return [
         'order' => [
           'order' => [
             0 => [
-              0 => 'MUL:(amount, amountCurrencyRate.rate)',
+              0 => 'MUL:(amount, amountCurrencyRecordRate.rate)',
               1 => '{direction}'
             ]
           ],
           'leftJoins' => [
             0 => [
               0 => 'Currency',
-              1 => 'amountCurrencyRate',
+              1 => 'amountCurrencyRecordRate',
               2 => [
-                'amountCurrencyRate.id:' => 'amountCurrency'
+                'amountCurrencyRecordRate.id:' => 'amountCurrency'
               ]
             ]
           ],
           'additionalSelect' => [
-            0 => 'amountCurrencyRate.rate'
+            0 => 'amountCurrencyRecordRate.rate'
           ]
         ],
         'attributeRole' => 'valueConverted',
@@ -29054,6 +29625,44 @@ return [
                 'lastName' => '{value}',
                 'CONCAT:(firstName, \' \', lastName)' => '{value}',
                 'CONCAT:(lastName, \' \', firstName)' => '{value}'
+              ]
+            ]
+          ],
+          '<>' => [
+            'whereClause' => [
+              'AND' => [
+                'firstName!=' => '{value}',
+                'lastName!=' => '{value}',
+                'CONCAT:(firstName, \' \', lastName)!=' => '{value}',
+                'CONCAT:(lastName, \' \', firstName)!=' => '{value}'
+              ]
+            ]
+          ],
+          'IN' => [
+            'whereClause' => [
+              'false:' => NULL
+            ]
+          ],
+          'NOT IN' => [
+            'whereClause' => [
+              'false:' => NULL
+            ]
+          ],
+          'IS NULL' => [
+            'whereClause' => [
+              'AND' => [
+                'firstName=' => NULL,
+                'middleName=' => NULL,
+                'lastName=' => NULL
+              ]
+            ]
+          ],
+          'IS NOT NULL' => [
+            'whereClause' => [
+              'OR' => [
+                'firstName!=' => NULL,
+                'middleName!=' => NULL,
+                'lastName!=' => NULL
               ]
             ]
           ]

@@ -39,7 +39,7 @@
             "index": true,
             "inlineEditDisabled": true,
             "layoutDetailDisabled": true,
-            "layoutMassUpdateDisabled": true,
+            "massUpdateDisabled": true,
             "fieldManagerParamList": [
                 "tooltipText"
             ]
@@ -49,6 +49,7 @@
             "maxLength": 150,
             "internal": true,
             "utility": true,
+            "massUpdateDisabled": true,
             "directAccessDisabled": true,
             "fieldManagerParamList": [
                 "tooltipText"
@@ -292,13 +293,17 @@
             "type": "link",
             "layoutDetailDisabled": true,
             "tooltip": true,
-            "customizationAuditedDisabled": true,
-            "customizationAutocompleteOnEmptyDisabled": true,
             "validatorClassNameList": [
                 "Espo\\Classes\\FieldValidators\\User\\DefaultTeam\\IsUserTeam"
             ],
             "view": "views/user/fields/default-team",
-            "dynamicLogicVisibleDisabled": true
+            "dynamicLogicVisibleDisabled": true,
+            "fieldManagerParamList": [
+                "audited",
+                "tooltipText",
+                "readOnly",
+                "autocompleteOnEmpty"
+            ]
         },
         "acceptanceStatus": {
             "type": "varchar",
@@ -350,8 +355,14 @@
             "additionalAttributeList": ["columns"],
             "layoutDetailDisabled": true,
             "view": "views/user/fields/teams",
-            "default": "javascript: return {teamsIds: []}",
-            "audited": true
+            "audited": true,
+            "fieldManagerParamList": [
+                "audited",
+                "tooltipText",
+                "readOnly",
+                "autocompleteOnEmpty",
+                "maxCount"
+            ]
         },
         "roles": {
             "type": "linkMultiple",

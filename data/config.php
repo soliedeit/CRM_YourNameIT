@@ -13,7 +13,6 @@ return [
   'recordsPerPageSelect' => 10,
   'recordsPerPageKanban' => 5,
   'applicationName' => 'EspoCRM',
-  'version' => '9.1.8',
   'timeZone' => 'Europe/Amsterdam',
   'dateFormat' => 'DD/MM/YYYY',
   'timeFormat' => 'HH:mm',
@@ -26,7 +25,6 @@ return [
   ],
   'defaultCurrency' => 'EUR',
   'baseCurrency' => 'EUR',
-  'currencyRates' => [],
   'currencyNoJoinMode' => false,
   'outboundEmailIsShared' => true,
   'outboundEmailFromName' => 'EspoCRM',
@@ -326,11 +324,9 @@ return [
     0 => 'youtube.com',
     1 => 'google.com'
   ],
-  'cacheTimestamp' => 1792026662,
-  'microtime' => 1792026662.02145,
+  'microtime' => 1792767588.018042,
   'siteUrl' => 'https://crm.yournameit.nl',
   'fullTextSearchMinLength' => 4,
-  'appTimestamp' => 1753796761,
   'maintenanceMode' => false,
   'cronDisabled' => false,
   'fiscalYearShift' => 0,
@@ -339,5 +335,6 @@ return [
   'emailAddressIsOptedOutByDefault' => false,
   'workingTimeCalendarName' => NULL,
   'workingTimeCalendarId' => NULL,
-  'latestVersion' => '10.0.10'
+  'latestVersion' => '10.0.10',
+  'notificationGrouping' => true
 ];

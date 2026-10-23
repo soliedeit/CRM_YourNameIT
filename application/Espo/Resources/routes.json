@@ -23,6 +23,11 @@
         "actionClassName": "Espo\\Tools\\App\\Api\\GetAbout"
     },
     {
+        "route": "/App/appParams",
+        "method": "get",
+        "actionClassName": "Espo\\Tools\\App\\Api\\GetAppParams"
+    },
+    {
         "route": "/Metadata",
         "method": "get",
         "params": {
@@ -346,6 +351,11 @@
         "actionClassName": "Espo\\Tools\\Stream\\Api\\GetNoteReactors"
     },
     {
+        "route": "/Notification/:id/group",
+        "method": "get",
+        "actionClassName": "Espo\\Tools\\Notification\\Api\\GetGroup"
+    },
+    {
         "route": "/EmailTemplate/:id/prepare",
         "method": "post",
         "actionClassName": "Espo\\Tools\\EmailTemplate\\Api\\PostPrepare"
@@ -494,6 +504,11 @@
         "method": "delete",
         "route": "/OAuth/:id/connection",
         "actionClassName": "Espo\\Tools\\OAuth\\Api\\DeleteConnection"
+    },
+    {
+        "method": "get",
+        "route": "/OpenApi",
+        "actionClassName": "Espo\\Tools\\OpenApi\\Api\\GetSpec"
     },
     {
         "route": "/:controller/:id",

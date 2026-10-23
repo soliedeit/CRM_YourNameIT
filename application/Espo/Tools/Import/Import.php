@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -204,19 +204,17 @@ class Import
         assert(is_string($this->entityType));
         assert(is_string($this->attachmentId));
 
-        if (!$this->user->isAdmin()) {
-            $forbiddenAttributeList =
-                $this->aclManager->getScopeForbiddenAttributeList($this->user, $this->entityType, Table::ACTION_EDIT);
+        $forbiddenAttributeList =
+            $this->aclManager->getScopeForbiddenAttributeList($this->user, $this->entityType, Table::ACTION_EDIT);
 
-            foreach ($attributeList as $i => $attribute) {
-                if (in_array($attribute, $forbiddenAttributeList)) {
-                    unset($attributeList[$i]);
-                }
+        foreach ($attributeList as $i => $attribute) {
+            if (in_array($attribute, $forbiddenAttributeList)) {
+                unset($attributeList[$i]);
             }
+        }
 
-            if (!$this->aclManager->checkScope($this->user, $this->entityType, Table::ACTION_CREATE)) {
-                throw new Forbidden("Import: Create is forbidden for $this->entityType.");
-            }
+        if (!$this->aclManager->checkScope($this->user, $this->entityType, Table::ACTION_CREATE)) {
+            throw new Forbidden("Import: Create is forbidden for $this->entityType.");
         }
 
         /** @var ?Attachment $attachment */
@@ -458,7 +456,6 @@ class Import
 
             if (
                 $entity &&
-                !$this->user->isAdmin() &&
                 !$this->aclManager->checkEntityEdit($this->user, $entity)
             ) {
                 $this->createError(

@@ -13,6 +13,9 @@ return (object) [
     'AuthToken' => (object) [
       'accessCheckerClassName' => 'Espo\\Classes\\Acl\\AuthToken\\AccessChecker'
     ],
+    'CurrencyRecordRate' => (object) [
+      'accessCheckerClassName' => 'Espo\\Classes\\Acl\\CurrencyRecordRate\\AccessChecker'
+    ],
     'Email' => (object) [
       'accessCheckerClassName' => 'Espo\\Classes\\Acl\\Email\\AccessChecker',
       'ownershipCheckerClassName' => 'Espo\\Classes\\Acl\\Email\\OwnershipChecker',
@@ -201,6 +204,8 @@ return (object) [
           'ImportEml' => 'Import',
           'WorkingTimeRange' => 'WorkingTimeCalendar',
           'Stream' => true,
+          'CurrencyRecord' => 'boolean:Currency',
+          'CurrencyRecordRate' => 'Currency',
           'MassEmail' => 'Campaign',
           'CampaignLogRecord' => 'Campaign',
           'CampaignTrackingUrl' => 'Campaign',
@@ -300,7 +305,11 @@ return (object) [
             'delete' => 'all'
           ],
           'Stream' => true,
-          'ImportEml' => 'Import'
+          'ImportEml' => 'Import',
+          'CurrencyRecordRate' => (object) [
+            'read' => 'yes',
+            'edit' => 'yes'
+          ]
         ]
       ],
       'valuePermissionList' => [
@@ -423,7 +432,8 @@ return (object) [
             'assignmentNotificationsIgnoreEntityTypeList' => false,
             'assignmentEmailNotificationsIgnoreEntityTypeList' => false,
             'dashletsOptions' => false,
-            'dashboardLayout' => false
+            'dashboardLayout' => false,
+            'followAsCollaborator' => false
           ],
           'Call' => (object) [
             'reminders' => false,
@@ -586,7 +596,8 @@ return (object) [
             'label' => 'Currency',
             'iconClass' => 'fas fa-euro-sign',
             'description' => 'currency',
-            'recordView' => 'views/admin/currency'
+            'recordView' => 'views/admin/currency',
+            'view' => 'views/admin/currency-main'
           ],
           5 => (object) [
             'url' => '#Admin/notifications',
@@ -946,12 +957,16 @@ return (object) [
       ],
       'addressCountryData' => (object) [
         'className' => 'Espo\\Classes\\AppParams\\AddressCountryData'
+      ],
+      'currencyRates' => (object) [
+        'className' => 'Espo\\Classes\\AppParams\\CurrencyRates'
       ]
     ],
     'authentication' => (object) [
       'beforeLoginHookClassNameList' => [
         0 => 'Espo\\Core\\Authentication\\Hook\\Hooks\\FailedAttemptsLimit',
-        1 => 'Espo\\Core\\Authentication\\Hook\\Hooks\\FailedCodeAttemptsLimit'
+        1 => 'Espo\\Core\\Authentication\\Hook\\Hooks\\UsernameFailedAttemptsLimit',
+        2 => 'Espo\\Core\\Authentication\\Hook\\Hooks\\FailedCodeAttemptsLimit'
       ],
       'onLoginHookClassNameList' => [
         0 => 'Espo\\Core\\Authentication\\Hook\\Hooks\\IpAddressWhitelist'
@@ -1672,6 +1687,12 @@ return (object) [
         ],
         'streamEmailWithContentEntityTypeList' => (object) [
           'level' => 'admin'
+        ],
+        'baselineRole' => (object) [
+          'level' => 'admin'
+        ],
+        'currencyRates' => (object) [
+          'readOnly' => true
         ]
       ]
     ],
@@ -1777,9 +1798,6 @@ return (object) [
       ],
       'number' => (object) [
         'loaderClassName' => 'Espo\\Core\\Loaders\\NumberUtil'
-      ],
-      'selectBuilderFactory' => (object) [
-        'className' => 'Espo\\Core\\Select\\SelectBuilderFactory'
       ],
       'selectManagerFactory' => (object) [
         'className' => 'Espo\\Core\\Select\\SelectManagerFactory'
@@ -2115,6 +2133,37 @@ return (object) [
         96 => 'ZAR',
         97 => 'ZMW',
         98 => 'ZWL'
+      ],
+      'precisionMap' => (object) [
+        'BHD' => 3,
+        'BIF' => 0,
+        'CLP' => 0,
+        'DJF' => 0,
+        'GNF' => 0,
+        'ISK' => 0,
+        'IQD' => 3,
+        'JOD' => 3,
+        'JPY' => 0,
+        'KMF' => 0,
+        'KRW' => 0,
+        'KWD' => 3,
+        'LYD' => 3,
+        'OMR' => 3,
+        'PYG' => 0,
+        'RWF' => 0,
+        'TND' => 3,
+        'UGX' => 0,
+        'UYI' => 0,
+        'VND' => 0,
+        'VUV' => 0,
+        'XAF' => 0,
+        'XAU' => 0,
+        'XBA' => 0,
+        'XBB' => 0,
+        'XBC' => 0,
+        'XDR' => 0,
+        'XOF' => 0,
+        'XPF' => 0
       ]
     ],
     'currencyConversion' => (object) [
@@ -2168,28 +2217,20 @@ return (object) [
           'name' => 'My Espo',
           'layout' => [
             0 => (object) [
-              'id' => 'defaultActivities',
+              'id' => 'default-activities',
               'name' => 'Activities',
               'x' => 2,
               'y' => 2,
               'width' => 2,
-              'height' => 2
+              'height' => 4
             ],
             1 => (object) [
-              'id' => 'defaultStream',
+              'id' => 'default-stream',
               'name' => 'Stream',
               'x' => 0,
               'y' => 0,
               'width' => 2,
               'height' => 4
-            ],
-            2 => (object) [
-              'id' => 'defaultTasks',
-              'name' => 'Tasks',
-              'x' => 2,
-              'y' => 4,
-              'width' => 2,
-              'height' => 2
             ]
           ]
         ]
@@ -2197,7 +2238,7 @@ return (object) [
     ],
     'defaultDashboardOptions' => (object) [
       'Standard' => (object) [
-        'defaultStream' => (object) [
+        'default-stream' => (object) [
           'displayRecords' => 10
         ]
       ]
@@ -2215,6 +2256,19 @@ return (object) [
         'currentYear' => (object) [
           'className' => 'Espo\\Tools\\EmailTemplate\\Placeholders\\CurrentYear',
           'order' => 2
+        ]
+      ],
+      'entityLinkMapping' => (object) [
+        'Contact' => (object) [
+          'Account' => 'account'
+        ],
+        'Opportunity' => (object) [
+          'Account' => 'account',
+          'Contact' => 'contact'
+        ],
+        'Case' => (object) [
+          'Account' => 'account',
+          'Contact' => 'contact'
         ]
       ]
     ],
@@ -2351,9 +2405,9 @@ return (object) [
           'param' => 'accountLink',
           'fieldDefs' => (object) [
             'type' => 'enum',
-            'tooltip' => true
-          ],
-          'view' => 'views/admin/entity-manager/fields/acl-account-link'
+            'tooltip' => true,
+            'view' => 'views/admin/entity-manager/fields/acl-account-link'
+          ]
         ]
       ],
       '@Base' => (object) [
@@ -3858,11 +3912,16 @@ return (object) [
           'unsafe' => true
         ],
         122 => (object) [
+          'name' => 'ext\\appSecret\\get',
+          'insertText' => 'ext\\appSecret\\get(STRING)',
+          'returnType' => 'string'
+        ],
+        123 => (object) [
           'name' => 'ext\\account\\findByEmailAddress',
           'insertText' => 'ext\\account\\findByEmailAddress(EMAIL_ADDRESS)',
           'returnType' => 'string'
         ],
-        123 => (object) [
+        124 => (object) [
           'name' => 'ext\\calendar\\userIsBusy',
           'insertText' => 'ext\\calendar\\userIsBusy(USER_ID, FROM, TO)',
           'returnType' => 'bool'
@@ -3877,6 +3936,7 @@ return (object) [
         'ext\\acl\\checkScope' => 'Espo\\Core\\Formula\\Functions\\ExtGroup\\AclGroup\\CheckScopeType',
         'ext\\acl\\getLevel' => 'Espo\\Core\\Formula\\Functions\\ExtGroup\\AclGroup\\GetLevelType',
         'ext\\acl\\getPermissionLevel' => 'Espo\\Core\\Formula\\Functions\\ExtGroup\\AclGroup\\GetPermissionLevelType',
+        'ext\\appSecret\\get' => 'Espo\\Core\\Formula\\Functions\\ExtGroup\\SecretGroup\\GetType',
         'util\\base64Encode' => 'Espo\\Core\\Formula\\Functions\\UtilGroup\\Base64EncodeType',
         'util\\base64Decode' => 'Espo\\Core\\Formula\\Functions\\UtilGroup\\Base64DecodeType',
         'ext\\oauth\\getAccessToken' => 'Espo\\Core\\Formula\\Functions\\ExtGroup\\OauthGroup\\GetAccessTokenType',
@@ -4011,10 +4071,6 @@ return (object) [
         'exportsTo' => '$',
         'exportsAs' => 'ui'
       ],
-      'jquery-textcomplete' => (object) [
-        'exportsTo' => '$.fn',
-        'exportsAs' => 'textcomplete'
-      ],
       'autocomplete' => (object) [
         'exportsTo' => '$.fn',
         'exportsAs' => 'autocomplete'
@@ -4032,6 +4088,15 @@ return (object) [
         'devPath' => 'client/lib/original/selectize.js',
         'exportsTo' => 'window',
         'exportsAs' => 'Selectize'
+      ],
+      '@shopify/draggable' => (object) [
+        'devPath' => 'client/lib/original/shopify-draggable.js'
+      ],
+      '@textcomplete/core' => (object) [
+        'devPath' => 'client/lib/original/textcomplete-core.js'
+      ],
+      '@textcomplete/textarea' => (object) [
+        'devPath' => 'client/lib/original/textcomplete-textarea.js'
       ],
       'autonumeric' => (object) [],
       'intl-tel-input' => (object) [
@@ -4177,32 +4242,34 @@ return (object) [
         6 => 'da_DK',
         7 => 'de_DE',
         8 => 'es_ES',
-        9 => 'hr_HR',
-        10 => 'hu_HU',
-        11 => 'fa_IR',
-        12 => 'fr_FR',
-        13 => 'ja_JP',
-        14 => 'id_ID',
-        15 => 'it_IT',
-        16 => 'lt_LT',
-        17 => 'lv_LV',
-        18 => 'nb_NO',
-        19 => 'nl_NL',
-        20 => 'th_TH',
-        21 => 'tr_TR',
-        22 => 'sk_SK',
-        23 => 'sl_SI',
-        24 => 'sr_RS',
-        25 => 'sv_SE',
-        26 => 'ro_RO',
-        27 => 'ru_RU',
-        28 => 'pl_PL',
-        29 => 'pt_BR',
-        30 => 'pt_PT',
-        31 => 'uk_UA',
-        32 => 'vi_VN',
-        33 => 'zh_CN',
-        34 => 'zh_TW'
+        9 => 'el_GR',
+        10 => 'hr_HR',
+        11 => 'hu_HU',
+        12 => 'fa_IR',
+        13 => 'fr_FR',
+        14 => 'ja_JP',
+        15 => 'id_ID',
+        16 => 'it_IT',
+        17 => 'lt_LT',
+        18 => 'lv_LV',
+        19 => 'nb_NO',
+        20 => 'nl_NL',
+        21 => 'th_TH',
+        22 => 'tr_TR',
+        23 => 'sk_SK',
+        24 => 'sl_SI',
+        25 => 'sr_RS',
+        26 => 'sv_SE',
+        27 => 'ro_RO',
+        28 => 'ru_RU',
+        29 => 'pl_PL',
+        30 => 'pt_BR',
+        31 => 'pt_PT',
+        32 => 'uk_UA',
+        33 => 'ur_IN',
+        34 => 'vi_VN',
+        35 => 'zh_CN',
+        36 => 'zh_TW'
       ],
       'aclDependencies' => (object) [
         'Meeting' => (object) [
@@ -4460,8 +4527,9 @@ return (object) [
         0 => 'Espo\\Core\\Utils\\Metadata\\AdditionalBuilder\\Fields',
         1 => 'Espo\\Core\\Utils\\Metadata\\AdditionalBuilder\\FilterFields',
         2 => 'Espo\\Core\\Utils\\Metadata\\AdditionalBuilder\\DeleteIdField',
-        3 => 'Espo\\Core\\Utils\\Metadata\\AdditionalBuilder\\StreamUpdatedAtField',
-        4 => 'Espo\\Core\\Utils\\Metadata\\AdditionalBuilder\\LogicDefsBc'
+        3 => 'Espo\\Core\\Utils\\Metadata\\AdditionalBuilder\\DisableAssignedUser',
+        4 => 'Espo\\Core\\Utils\\Metadata\\AdditionalBuilder\\StreamUpdatedAtField',
+        5 => 'Espo\\Core\\Utils\\Metadata\\AdditionalBuilder\\LogicDefsBc'
       ],
       'aclDependencies' => (object) []
     ],
@@ -4471,14 +4539,16 @@ return (object) [
           'queryComposerClassName' => 'Espo\\ORM\\QueryComposer\\MysqlQueryComposer',
           'pdoFactoryClassName' => 'Espo\\ORM\\PDO\\MysqlPDOFactory',
           'functionConverterClassNameMap' => (object) [
-            'ABS' => 'Espo\\Core\\ORM\\QueryComposer\\Part\\FunctionConverters\\Abs'
+            'ABS' => 'Espo\\Core\\ORM\\QueryComposer\\Part\\FunctionConverters\\Abs',
+            'CURRENCY_RATE' => 'Espo\\Core\\ORM\\QueryComposer\\Part\\FunctionConverters\\CurrencyRate'
           ]
         ],
         'Postgresql' => (object) [
           'queryComposerClassName' => 'Espo\\ORM\\QueryComposer\\PostgresqlQueryComposer',
           'pdoFactoryClassName' => 'Espo\\ORM\\PDO\\PostgresqlPDOFactory',
           'functionConverterClassNameMap' => (object) [
-            'ABS' => 'Espo\\Core\\ORM\\QueryComposer\\Part\\FunctionConverters\\Abs'
+            'ABS' => 'Espo\\Core\\ORM\\QueryComposer\\Part\\FunctionConverters\\Abs',
+            'CURRENCY_RATE' => 'Espo\\Core\\ORM\\QueryComposer\\Part\\FunctionConverters\\CurrencyRate'
           ]
         ]
       ]
@@ -4548,11 +4618,12 @@ return (object) [
       'actionClassNameList' => [
         0 => 'Espo\\Core\\Rebuild\\Actions\\AddSystemUser',
         1 => 'Espo\\Core\\Rebuild\\Actions\\AddSystemData',
-        2 => 'Espo\\Core\\Rebuild\\Actions\\CurrencyRates',
-        3 => 'Espo\\Core\\Rebuild\\Actions\\ScheduledJobs',
-        4 => 'Espo\\Core\\Rebuild\\Actions\\ConfigMetadataCheck',
-        5 => 'Espo\\Core\\Rebuild\\Actions\\GenerateInstanceId',
-        6 => 'Espo\\Core\\Rebuild\\Actions\\SetIntegrationDefaults'
+        2 => 'Espo\\Core\\Rebuild\\Actions\\ScheduledJobs',
+        3 => 'Espo\\Core\\Rebuild\\Actions\\ConfigMetadataCheck',
+        4 => 'Espo\\Core\\Rebuild\\Actions\\GenerateInstanceId',
+        5 => 'Espo\\Core\\Rebuild\\Actions\\SetIntegrationDefaults',
+        6 => 'Espo\\Core\\Rebuild\\Actions\\SyncCurrency',
+        7 => 'Espo\\Core\\Rebuild\\Actions\\CurrencyRates'
       ]
     ],
     'record' => (object) [
@@ -4665,6 +4736,12 @@ return (object) [
         'scheduling' => '25 5 * * *',
         'jobClassName' => 'Espo\\Classes\\Jobs\\CheckNewExtensionVersion'
       ],
+      'SyncCurrencyRates' => (object) [
+        'name' => 'Sync Currency Rates',
+        'jobClassName' => 'Espo\\Classes\\Jobs\\SyncCurrencyRates',
+        'scheduling' => '2 0 * * *',
+        'isSystem' => true
+      ],
       'Cleanup' => (object) [
         'jobClassName' => 'Espo\\Classes\\Jobs\\Cleanup'
       ],
@@ -4701,7 +4778,8 @@ return (object) [
       'markdownText' => 'Espo\\Classes\\TemplateHelpers\\MarkdownText',
       'tableTag' => 'Espo\\Classes\\TemplateHelpers\\TableTag',
       'trTag' => 'Espo\\Classes\\TemplateHelpers\\TrTag',
-      'tdTag' => 'Espo\\Classes\\TemplateHelpers\\TdTag'
+      'tdTag' => 'Espo\\Classes\\TemplateHelpers\\TdTag',
+      'currencySymbol' => 'Espo\\Classes\\TemplateHelpers\\CurrencySymbol'
     ],
     'templates' => (object) [
       'accessInfo' => (object) [
@@ -4760,6 +4838,7 @@ return (object) [
     'webSocket' => (object) [
       'categories' => (object) [
         'newNotification' => (object) [],
+        'appParamsUpdate' => (object) [],
         'recordUpdate' => (object) [
           'paramList' => [
             0 => 'scope',
@@ -4774,7 +4853,10 @@ return (object) [
           ],
           'accessCheckCommand' => 'AclCheck --userId=:userId --scope=:scope --id=:id --action=stream'
         ],
-        'popupNotifications.event' => (object) []
+        'popupNotifications.event' => (object) [],
+        'calendarUpdate' => (object) [
+          'accessCheckCommand' => 'AclCheck --userId=:userId --scope=Calendar'
+        ]
       ],
       'messagers' => (object) [
         'ZeroMQ' => (object) [
@@ -5018,6 +5100,11 @@ return (object) [
                   0 => (object) [
                     'type' => 'isTrue',
                     'attribute' => 'ldapAuth'
+                  ],
+                  1 => (object) [
+                    'type' => 'equals',
+                    'attribute' => 'authenticationMethod',
+                    'value' => 'LDAP'
                   ]
                 ]
               ]
@@ -5527,7 +5614,20 @@ return (object) [
         ]
       ],
       'filterList' => [],
-      'boolFilterList' => []
+      'boolFilterList' => [],
+      'menu' => (object) [
+        'list' => (object) [
+          'dropdown' => [
+            0 => (object) [
+              'name' => 'openApiSpec',
+              'label' => 'OpenAPI spec',
+              'link' => 'api/v1/OpenApi',
+              'handler' => 'handlers/api-user/open-api-spec-action',
+              'actionFunction' => 'process'
+            ]
+          ]
+        ]
+      ]
     ],
     'AppLogRecord' => (object) [
       'controller' => 'controllers/record',
@@ -5623,6 +5723,56 @@ return (object) [
       'massUpdateDisabled' => true,
       'massRemoveDisabled' => true,
       'mergeDisabled' => true
+    ],
+    'CurrencyRecord' => (object) [
+      'controller' => 'controllers/record',
+      'createDisabled' => true,
+      'editDisabled' => true,
+      'removeDisabled' => true,
+      'nameAttribute' => 'code',
+      'defaultFilterData' => (object) [
+        'primary' => 'active'
+      ],
+      'filterList' => [
+        0 => 'active'
+      ],
+      'views' => (object) [
+        'list' => 'views/currency-record/list'
+      ],
+      'viewSetupHandlers' => (object) [
+        'record/detail' => [
+          0 => 'handlers/currency-record/record-detail'
+        ]
+      ],
+      'relationshipPanels' => (object) [
+        'rates' => (object) [
+          'layout' => 'listForRecord',
+          'createAttributeMap' => (object) [
+            'code' => 'recordName'
+          ],
+          'view' => 'views/currency-record/record/panels/rates',
+          'unlinkDisabled' => true
+        ]
+      ],
+      'menu' => (object) [
+        'list' => (object) [
+          'buttons' => [
+            0 => (object) [
+              'name' => 'settings',
+              'labelTranslation' => 'Global.scopeNames.Settings',
+              'link' => '#Admin/currency',
+              'handler' => 'handlers/currency-record/menu-action-settings',
+              'checkVisibilityFunction' => 'isVisible'
+            ]
+          ]
+        ]
+      ]
+    ],
+    'CurrencyRecordRate' => (object) [
+      'controller' => 'controllers/record',
+      'modelDefaultsPreparator' => 'handlers/currency-record-rate/default-preparator',
+      'acl' => 'acl/currency-record-rate',
+      'textFilterDisabled' => true
     ],
     'Dashboard' => (object) [
       'controller' => 'controllers/dashboard',
@@ -5851,6 +6001,17 @@ return (object) [
             5 => 'lessThan',
             6 => 'greaterThanOrEquals',
             7 => 'lessThanOrEquals'
+          ]
+        ],
+        'decimal' => (object) [
+          'view' => 'views/admin/dynamic-logic/conditions/field-types/base',
+          'typeList' => [
+            0 => 'isEmpty',
+            1 => 'isNotEmpty',
+            2 => 'greaterThan',
+            3 => 'lessThan',
+            4 => 'greaterThanOrEquals',
+            5 => 'lessThanOrEquals'
           ]
         ],
         'currency' => (object) [
@@ -6320,6 +6481,7 @@ return (object) [
     ],
     'EmailTemplate' => (object) [
       'controller' => 'controllers/record',
+      'forceListViewSettings' => true,
       'views' => (object) [
         'list' => 'views/email-template/list'
       ],
@@ -6513,7 +6675,7 @@ return (object) [
           ]
         ]
       ],
-      'searchPanelDisabled' => true,
+      'textFilterDisabled' => true,
       'relationshipPanels' => (object) [
         'errors' => (object) [
           'unlinkDisabled' => true,
@@ -6951,6 +7113,12 @@ return (object) [
         'edit' => 'views/template/record/edit'
       ],
       'mergeDisabled' => true,
+      'filterList' => [
+        0 => 'active'
+      ],
+      'selectDefaultFilters' => (object) [
+        'filter' => 'active'
+      ],
       'iconClass' => 'fas fa-file-pdf'
     ],
     'User' => (object) [
@@ -7120,6 +7288,7 @@ return (object) [
       'mergeDisabled' => true,
       'exportDisabled' => true,
       'textFilterDisabled' => true,
+      'forceListViewSettings' => true,
       'menu' => (object) [
         'list' => (object) [
           'dropdown' => [
@@ -7274,6 +7443,9 @@ return (object) [
           'rowActionsView' => 'crm:views/record/row-actions/relationship-target',
           'layout' => 'listForTarget',
           'view' => 'crm:views/record/panels/target-lists'
+        ],
+        'cases' => (object) [
+          'layout' => 'listForAccount'
         ]
       ],
       'filterList' => [
@@ -7305,9 +7477,6 @@ return (object) [
         0 => 'Meeting',
         1 => 'Call',
         2 => 'Task'
-      ],
-      'allDayScopeList' => [
-        0 => 'Task'
       ],
       'modeList' => [
         0 => 'month',
@@ -7679,6 +7848,12 @@ return (object) [
         ],
         'listPortal' => (object) [
           'type' => 'list'
+        ],
+        'listForAccount' => (object) [
+          'type' => 'listSmall'
+        ],
+        'listForContact' => (object) [
+          'type' => 'listSmall'
         ]
       ],
       'iconClass' => 'fas fa-briefcase'
@@ -7760,13 +7935,20 @@ return (object) [
             'id' => 'contactId',
             'name' => 'contactName'
           ],
-          'selectHandler' => 'handlers/select-related/same-account'
+          'selectHandler' => 'handlers/select-related/same-account',
+          'layout' => 'listForContact'
         ],
         'targetLists' => (object) [
           'create' => false,
           'rowActionsView' => 'crm:views/record/row-actions/relationship-target',
           'layout' => 'listForTarget',
           'view' => 'crm:views/record/panels/target-lists'
+        ],
+        'meetings' => (object) [
+          'createHandler' => 'handlers/create-related/set-parent'
+        ],
+        'calls' => (object) [
+          'createHandler' => 'handlers/create-related/set-parent'
         ]
       ],
       'boolFilterList' => [
@@ -8105,6 +8287,12 @@ return (object) [
           'rowActionsView' => 'crm:views/record/row-actions/relationship-target',
           'layout' => 'listForTarget',
           'view' => 'crm:views/record/panels/target-lists'
+        ],
+        'meetings' => (object) [
+          'createHandler' => 'handlers/create-related/set-parent'
+        ],
+        'calls' => (object) [
+          'createHandler' => 'handlers/create-related/set-parent'
         ]
       ],
       'filterList' => [
@@ -10949,7 +11137,8 @@ return (object) [
           'required' => true,
           'pattern' => '[a-zA-Z]{1}[a-zA-Z0-9_]+',
           'index' => true,
-          'tooltip' => true
+          'tooltip' => true,
+          'copyToClipboard' => true
         ],
         'value' => (object) [
           'type' => 'text',
@@ -11093,6 +11282,10 @@ return (object) [
         ],
         'createdBy' => (object) [
           'type' => 'link',
+          'readOnly' => true
+        ],
+        'modifiedAt' => (object) [
+          'type' => 'datetime',
           'readOnly' => true
         ],
         'contents' => (object) [
@@ -11283,6 +11476,12 @@ return (object) [
         'requestTime' => (object) [
           'columns' => [
             0 => 'requestTime'
+          ]
+        ],
+        'usernameIpAddress' => (object) [
+          'columns' => [
+            0 => 'username',
+            1 => 'ipAddress'
           ]
         ]
       ],
@@ -11494,6 +11693,199 @@ return (object) [
       ],
       'noDeletedAttribute' => true
     ],
+    'CurrencyRecord' => (object) [
+      'fields' => (object) [
+        'code' => (object) [
+          'type' => 'varchar',
+          'maxLength' => 3,
+          'required' => true,
+          'readOnly' => true,
+          'index' => true
+        ],
+        'status' => (object) [
+          'type' => 'enum',
+          'options' => [
+            0 => 'Active',
+            1 => 'Inactive'
+          ],
+          'default' => 'Active',
+          'maxLength' => 8,
+          'style' => (object) [
+            'Inactive' => 'info'
+          ]
+        ],
+        'label' => (object) [
+          'type' => 'varchar',
+          'notStorable' => true,
+          'readOnly' => true,
+          'orderDisabled' => true,
+          'loaderClassName' => 'Espo\\Classes\\FieldProcessing\\CurrencyRecord\\Label'
+        ],
+        'symbol' => (object) [
+          'type' => 'varchar',
+          'notStorable' => true,
+          'readOnly' => true,
+          'orderDisabled' => true,
+          'loaderClassName' => 'Espo\\Classes\\FieldProcessing\\CurrencyRecord\\Symbol'
+        ],
+        'rateDate' => (object) [
+          'type' => 'date',
+          'readOnly' => true,
+          'notStorable' => true,
+          'orderDisabled' => true,
+          'loaderClassName' => 'Espo\\Classes\\FieldProcessing\\CurrencyRecord\\RateDate'
+        ],
+        'rate' => (object) [
+          'type' => 'decimal',
+          'readOnly' => true,
+          'notStorable' => true,
+          'orderDisabled' => true,
+          'decimalPlaces' => 6,
+          'loaderClassName' => 'Espo\\Classes\\FieldProcessing\\CurrencyRecord\\Rate',
+          'view' => 'views/currency-record-rate/fields/rate'
+        ],
+        'isBase' => (object) [
+          'type' => 'bool',
+          'readOnly' => true,
+          'notStorable' => true,
+          'orderDisabled' => true,
+          'loaderClassName' => 'Espo\\Classes\\FieldProcessing\\CurrencyRecord\\IsBase'
+        ],
+        'deleteId' => (object) [
+          'type' => 'varchar',
+          'maxLength' => 17,
+          'readOnly' => true,
+          'notNull' => true,
+          'default' => '0',
+          'utility' => true,
+          'customizationDisabled' => true
+        ]
+      ],
+      'links' => (object) [
+        'rates' => (object) [
+          'type' => 'hasMany',
+          'entity' => 'CurrencyRecordRate',
+          'foreign' => 'record',
+          'readOnly' => true,
+          'orderBy' => 'date',
+          'order' => 'desc'
+        ]
+      ],
+      'indexes' => (object) [
+        'codeDeleteId' => (object) [
+          'type' => 'unique',
+          'columns' => [
+            0 => 'code',
+            1 => 'deleteId'
+          ]
+        ]
+      ],
+      'deleteId' => true,
+      'collection' => (object) [
+        'textFilterFields' => [
+          0 => 'code'
+        ],
+        'orderBy' => 'code',
+        'order' => 'asc',
+        'sortBy' => 'code',
+        'asc' => true
+      ]
+    ],
+    'CurrencyRecordRate' => (object) [
+      'fields' => (object) [
+        'record' => (object) [
+          'type' => 'link',
+          'required' => true,
+          'readOnlyAfterCreate' => true,
+          'validatorClassNameList' => [
+            0 => 'Espo\\Classes\\FieldValidators\\CurrencyRecordRate\\Record\\NonBase'
+          ]
+        ],
+        'baseCode' => (object) [
+          'type' => 'varchar',
+          'readOnly' => true,
+          'maxLength' => 3
+        ],
+        'date' => (object) [
+          'type' => 'date',
+          'required' => true,
+          'readOnlyAfterCreate' => true,
+          'default' => 'javascript: return this.dateTime.getToday();'
+        ],
+        'rate' => (object) [
+          'type' => 'decimal',
+          'decimalPlaces' => 6,
+          'min' => 0.0001,
+          'precision' => 20,
+          'scale' => 8,
+          'required' => true,
+          'audited' => true,
+          'view' => 'views/currency-record-rate/fields/rate'
+        ],
+        'createdAt' => (object) [
+          'type' => 'datetime',
+          'readOnly' => true
+        ],
+        'modifiedAt' => (object) [
+          'type' => 'datetime',
+          'readOnly' => true
+        ],
+        'createdBy' => (object) [
+          'type' => 'link',
+          'readOnly' => true,
+          'view' => 'views/fields/user',
+          'fieldManagerParamList' => []
+        ],
+        'modifiedBy' => (object) [
+          'type' => 'link',
+          'readOnly' => true,
+          'view' => 'views/fields/user',
+          'fieldManagerParamList' => []
+        ],
+        'deleteId' => (object) [
+          'type' => 'varchar',
+          'maxLength' => 17,
+          'readOnly' => true,
+          'notNull' => true,
+          'default' => '0',
+          'utility' => true,
+          'customizationDisabled' => true
+        ]
+      ],
+      'links' => (object) [
+        'record' => (object) [
+          'type' => 'belongsTo',
+          'entity' => 'CurrencyRecord',
+          'foreignName' => 'code'
+        ],
+        'createdBy' => (object) [
+          'type' => 'belongsTo',
+          'entity' => 'User'
+        ],
+        'modifiedBy' => (object) [
+          'type' => 'belongsTo',
+          'entity' => 'User'
+        ]
+      ],
+      'indexes' => (object) [
+        'recordIdBaseCodeDate' => (object) [
+          'type' => 'unique',
+          'columns' => [
+            0 => 'recordId',
+            1 => 'baseCode',
+            2 => 'date',
+            3 => 'deleteId'
+          ]
+        ]
+      ],
+      'deleteId' => true,
+      'collection' => (object) [
+        'orderBy' => 'date',
+        'order' => 'desc',
+        'sortBy' => 'date',
+        'asc' => false
+      ]
+    ],
     'DashboardTemplate' => (object) [
       'fields' => (object) [
         'name' => (object) [
@@ -11505,11 +11897,13 @@ return (object) [
           'type' => 'jsonArray',
           'view' => 'views/settings/fields/dashboard-layout',
           'inlineEditDisabled' => true,
-          'required' => true
+          'required' => true,
+          'duplicatorClassName' => 'Espo\\Classes\\FieldDuplicators\\DashboardTemplate\\Layout'
         ],
         'dashletsOptions' => (object) [
           'type' => 'jsonObject',
-          'disabled' => true
+          'utility' => true,
+          'duplicateIgnore' => true
         ],
         'createdAt' => (object) [
           'type' => 'datetime',
@@ -11963,7 +12357,8 @@ return (object) [
           'type' => 'bool',
           'readOnly' => true,
           'customizationDisabled' => true,
-          'layoutDefaultSidePanelDisabled' => true
+          'layoutDefaultSidePanelDisabled' => true,
+          'layoutDetailDisabled' => true
         ],
         'parent' => (object) [
           'type' => 'linkParent',
@@ -12004,6 +12399,13 @@ return (object) [
           'validatorClassNameList' => [
             0 => 'Espo\\Classes\\FieldValidators\\Email\\SendAt\\Future'
           ]
+        ],
+        'isAutoReply' => (object) [
+          'type' => 'bool',
+          'readOnly' => true,
+          'fieldManagerParamList' => [],
+          'layoutDefaultSidePanelDisabled' => true,
+          'layoutDetailDisabled' => true
         ],
         'createdAt' => (object) [
           'type' => 'datetime',
@@ -12103,9 +12505,14 @@ return (object) [
           'readOnly' => true,
           'columns' => (object) [
             'inTrash' => 'inTrash',
-            'folderId' => 'folderId'
+            'folderId' => 'folderId',
+            'inArchive' => 'inArchive',
+            'isRead' => 'isRead'
           ],
-          'customizationDisabled' => true
+          'customizationDisabled' => true,
+          'additionalAttributeList' => [
+            0 => 'columns'
+          ]
         ],
         'assignedUsers' => (object) [
           'type' => 'linkMultiple',
@@ -12224,7 +12631,10 @@ return (object) [
           'notStorable' => true,
           'customizationDisabled' => true,
           'type' => 'date',
-          'disabled' => true
+          'utility' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'icsEventDateStart'
+          ]
         ]
       ],
       'links' => (object) [
@@ -12456,13 +12866,16 @@ return (object) [
           'default' => 'Active'
         ],
         'host' => (object) [
-          'type' => 'varchar'
+          'type' => 'varchar',
+          'massUpdateDisabled' => true
         ],
         'port' => (object) [
           'type' => 'int',
           'min' => 0,
           'max' => 65535,
-          'default' => 993
+          'default' => 993,
+          'disableFormatting' => true,
+          'massUpdateDisabled' => true
         ],
         'security' => (object) [
           'type' => 'enum',
@@ -12487,12 +12900,22 @@ return (object) [
           'view' => 'views/email-account/fields/folders',
           'displayAsList' => true,
           'noEmptyString' => true,
-          'duplicateIgnore' => true
+          'duplicateIgnore' => true,
+          'tooltip' => true,
+          'fullNameAdditionalAttributeList' => [
+            0 => 'folderMap'
+          ]
         ],
         'sentFolder' => (object) [
           'type' => 'varchar',
           'view' => 'views/email-account/fields/folder',
           'duplicateIgnore' => true
+        ],
+        'folderMap' => (object) [
+          'type' => 'jsonObject',
+          'validatorClassNameList' => [
+            0 => 'Espo\\Classes\\FieldValidators\\EmailAccount\\FolderMap\\Valid'
+          ]
         ],
         'storeSentEmails' => (object) [
           'type' => 'bool',
@@ -12544,13 +12967,16 @@ return (object) [
           'tooltip' => true
         ],
         'smtpHost' => (object) [
-          'type' => 'varchar'
+          'type' => 'varchar',
+          'massUpdateDisabled' => true
         ],
         'smtpPort' => (object) [
           'type' => 'int',
           'min' => 0,
           'max' => 65535,
-          'default' => 587
+          'default' => 587,
+          'disableFormatting' => true,
+          'massUpdateDisabled' => true
         ],
         'smtpAuth' => (object) [
           'type' => 'bool',
@@ -12840,21 +13266,38 @@ return (object) [
       'fields' => (object) [
         'name' => (object) [
           'type' => 'varchar',
-          'required' => true
+          'required' => true,
+          'audited' => true
         ],
         'subject' => (object) [
-          'type' => 'varchar'
+          'type' => 'varchar',
+          'audited' => true
         ],
         'body' => (object) [
           'type' => 'wysiwyg',
           'view' => 'views/email-template/fields/body',
           'useIframe' => true,
-          'attachmentField' => 'attachments'
+          'attachmentField' => 'attachments',
+          'audited' => true
         ],
         'isHtml' => (object) [
           'type' => 'bool',
           'default' => true,
-          'inlineEditDisabled' => true
+          'inlineEditDisabled' => true,
+          'audited' => true
+        ],
+        'status' => (object) [
+          'type' => 'enum',
+          'options' => [
+            0 => 'Active',
+            1 => 'Inactive'
+          ],
+          'default' => 'Active',
+          'style' => (object) [
+            'Inactive' => 'info'
+          ],
+          'maxLength' => 8,
+          'audited' => true
         ],
         'oneOff' => (object) [
           'type' => 'bool',
@@ -12862,7 +13305,8 @@ return (object) [
           'tooltip' => true
         ],
         'attachments' => (object) [
-          'type' => 'attachmentMultiple'
+          'type' => 'attachmentMultiple',
+          'audited' => true
         ],
         'category' => (object) [
           'type' => 'link',
@@ -12873,7 +13317,11 @@ return (object) [
           'view' => 'views/fields/assigned-user'
         ],
         'teams' => (object) [
-          'type' => 'linkMultiple'
+          'type' => 'linkMultiple',
+          'audited' => true
+        ],
+        'description' => (object) [
+          'type' => 'text'
         ],
         'createdAt' => (object) [
           'type' => 'datetime',
@@ -12943,7 +13391,7 @@ return (object) [
         'order' => (object) [
           'type' => 'int',
           'minValue' => 1,
-          'required' => true,
+          'readOnly' => true,
           'textFilterDisabled' => true
         ],
         'description' => (object) [
@@ -12969,7 +13417,8 @@ return (object) [
           'type' => 'linkMultiple'
         ],
         'parent' => (object) [
-          'type' => 'link'
+          'type' => 'link',
+          'view' => 'views/fields/link-category-tree'
         ],
         'childList' => (object) [
           'type' => 'jsonArray',
@@ -13232,6 +13681,8 @@ return (object) [
             4 => 'Failed'
           ],
           'readOnly' => true,
+          'displayAsLabel' => true,
+          'labelType' => 'state',
           'style' => (object) [
             'Complete' => 'success',
             'Failed' => 'danger'
@@ -13275,7 +13726,8 @@ return (object) [
         ],
         'createdBy' => (object) [
           'type' => 'link',
-          'readOnly' => true
+          'readOnly' => true,
+          'view' => 'views/fields/user'
         ]
       ],
       'links' => (object) [
@@ -13446,13 +13898,16 @@ return (object) [
           'default' => 'Active'
         ],
         'host' => (object) [
-          'type' => 'varchar'
+          'type' => 'varchar',
+          'massUpdateDisabled' => true
         ],
         'port' => (object) [
           'type' => 'int',
           'min' => 0,
           'max' => 65535,
-          'default' => 993
+          'default' => 993,
+          'disableFormatting' => true,
+          'massUpdateDisabled' => true
         ],
         'security' => (object) [
           'type' => 'enum',
@@ -13552,13 +14007,16 @@ return (object) [
           'tooltip' => true
         ],
         'smtpHost' => (object) [
-          'type' => 'varchar'
+          'type' => 'varchar',
+          'massUpdateDisabled' => true
         ],
         'smtpPort' => (object) [
           'type' => 'int',
           'min' => 0,
           'max' => 65535,
-          'default' => 587
+          'default' => 587,
+          'disableFormatting' => true,
+          'massUpdateDisabled' => true
         ],
         'smtpAuth' => (object) [
           'type' => 'bool',
@@ -14218,6 +14676,9 @@ return (object) [
           'view' => 'views/lead-capture/fields/phone-number-country',
           'maxLength' => 2
         ],
+        'description' => (object) [
+          'type' => 'text'
+        ],
         'createdAt' => (object) [
           'type' => 'datetime',
           'readOnly' => true
@@ -14432,12 +14893,11 @@ return (object) [
             1 => 'Create',
             2 => 'CreateRelated',
             3 => 'Update',
-            4 => 'Status',
-            5 => 'Assign',
-            6 => 'Relate',
-            7 => 'Unrelate',
-            8 => 'EmailReceived',
-            9 => 'EmailSent'
+            4 => 'Assign',
+            5 => 'Relate',
+            6 => 'Unrelate',
+            7 => 'EmailReceived',
+            8 => 'EmailSent'
           ],
           'maxLength' => 24,
           'customizationDisabled' => true,
@@ -14730,6 +15190,18 @@ return (object) [
           'type' => 'linkParent',
           'readOnly' => true
         ],
+        'actionId' => (object) [
+          'type' => 'varchar',
+          'maxLength' => 36,
+          'readOnly' => true,
+          'index' => true
+        ],
+        'groupedCount' => (object) [
+          'type' => 'int',
+          'notStorable' => true,
+          'readOnly' => true,
+          'utility' => true
+        ],
         'createdBy' => (object) [
           'type' => 'link',
           'readOnly' => true,
@@ -14770,7 +15242,16 @@ return (object) [
           'type' => 'index',
           'columns' => [
             0 => 'userId',
-            1 => 'createdAt'
+            1 => 'number'
+          ]
+        ],
+        'userIdReadRelatedParentType' => (object) [
+          'type' => 'index',
+          'columns' => [
+            0 => 'userId',
+            1 => 'deleted',
+            2 => 'read',
+            3 => 'relatedParentType'
           ]
         ]
       ]
@@ -15160,6 +15641,9 @@ return (object) [
           'min' => 0,
           'tooltip' => 'Settings.authTokenMaxIdleTime'
         ],
+        'description' => (object) [
+          'type' => 'text'
+        ],
         'modifiedAt' => (object) [
           'type' => 'datetime',
           'readOnly' => true
@@ -15416,6 +15900,10 @@ return (object) [
           'type' => 'bool',
           'default' => true
         ],
+        'reactionNotificationsNotFollowed' => (object) [
+          'type' => 'bool',
+          'default' => false
+        ],
         'autoFollowEntityTypeList' => (object) [
           'type' => 'multiEnum',
           'view' => 'views/preferences/fields/auto-follow-entity-type-list',
@@ -15512,6 +16000,10 @@ return (object) [
           'default' => [],
           'tooltip' => true
         ],
+        'followAsCollaborator' => (object) [
+          'type' => 'bool',
+          'default' => true
+        ],
         'emailUseExternalClient' => (object) [
           'type' => 'bool',
           'default' => false
@@ -15572,6 +16064,13 @@ return (object) [
           'required' => true,
           'type' => 'varchar',
           'pattern' => '$noBadCharacters'
+        ],
+        'info' => (object) [
+          'type' => 'base',
+          'orderDisabled' => true,
+          'notStorable' => true,
+          'readOnly' => true,
+          'view' => 'views/role/fields/info'
         ],
         'assignmentPermission' => (object) [
           'type' => 'enum',
@@ -16330,66 +16829,65 @@ return (object) [
             354 => 'Europe/Stockholm',
             355 => 'Europe/Tallinn',
             356 => 'Europe/Tirane',
-            357 => 'Europe/Uzhhorod',
-            358 => 'Europe/Vaduz',
-            359 => 'Europe/Vatican',
-            360 => 'Europe/Vienna',
-            361 => 'Europe/Vilnius',
-            362 => 'Europe/Volgograd',
-            363 => 'Europe/Warsaw',
-            364 => 'Europe/Zagreb',
-            365 => 'Europe/Zaporizhzhia',
-            366 => 'Europe/Zurich',
-            367 => 'Indian/Antananarivo',
-            368 => 'Indian/Chagos',
-            369 => 'Indian/Christmas',
-            370 => 'Indian/Cocos',
-            371 => 'Indian/Comoro',
-            372 => 'Indian/Kerguelen',
-            373 => 'Indian/Mahe',
-            374 => 'Indian/Maldives',
-            375 => 'Indian/Mauritius',
-            376 => 'Indian/Mayotte',
-            377 => 'Indian/Reunion',
-            378 => 'Pacific/Apia',
-            379 => 'Pacific/Auckland',
-            380 => 'Pacific/Chatham',
-            381 => 'Pacific/Chuuk',
-            382 => 'Pacific/Easter',
-            383 => 'Pacific/Efate',
-            384 => 'Pacific/Enderbury',
-            385 => 'Pacific/Fakaofo',
-            386 => 'Pacific/Fiji',
-            387 => 'Pacific/Funafuti',
-            388 => 'Pacific/Galapagos',
-            389 => 'Pacific/Gambier',
-            390 => 'Pacific/Guadalcanal',
-            391 => 'Pacific/Guam',
-            392 => 'Pacific/Honolulu',
-            393 => 'Pacific/Johnston',
-            394 => 'Pacific/Kiritimati',
-            395 => 'Pacific/Kosrae',
-            396 => 'Pacific/Kwajalein',
-            397 => 'Pacific/Majuro',
-            398 => 'Pacific/Marquesas',
-            399 => 'Pacific/Midway',
-            400 => 'Pacific/Nauru',
-            401 => 'Pacific/Niue',
-            402 => 'Pacific/Norfolk',
-            403 => 'Pacific/Noumea',
-            404 => 'Pacific/Pago_Pago',
-            405 => 'Pacific/Palau',
-            406 => 'Pacific/Pitcairn',
-            407 => 'Pacific/Pohnpei',
-            408 => 'Pacific/Port_Moresby',
-            409 => 'Pacific/Rarotonga',
-            410 => 'Pacific/Saipan',
-            411 => 'Pacific/Tahiti',
-            412 => 'Pacific/Tarawa',
-            413 => 'Pacific/Tongatapu',
-            414 => 'Pacific/Wake',
-            415 => 'Pacific/Wallis'
-          ]
+            357 => 'Europe/Vaduz',
+            358 => 'Europe/Vatican',
+            359 => 'Europe/Vienna',
+            360 => 'Europe/Vilnius',
+            361 => 'Europe/Volgograd',
+            362 => 'Europe/Warsaw',
+            363 => 'Europe/Zagreb',
+            364 => 'Europe/Zurich',
+            365 => 'Indian/Antananarivo',
+            366 => 'Indian/Chagos',
+            367 => 'Indian/Christmas',
+            368 => 'Indian/Cocos',
+            369 => 'Indian/Comoro',
+            370 => 'Indian/Kerguelen',
+            371 => 'Indian/Mahe',
+            372 => 'Indian/Maldives',
+            373 => 'Indian/Mauritius',
+            374 => 'Indian/Mayotte',
+            375 => 'Indian/Reunion',
+            376 => 'Pacific/Apia',
+            377 => 'Pacific/Auckland',
+            378 => 'Pacific/Chatham',
+            379 => 'Pacific/Chuuk',
+            380 => 'Pacific/Easter',
+            381 => 'Pacific/Efate',
+            382 => 'Pacific/Enderbury',
+            383 => 'Pacific/Fakaofo',
+            384 => 'Pacific/Fiji',
+            385 => 'Pacific/Funafuti',
+            386 => 'Pacific/Galapagos',
+            387 => 'Pacific/Gambier',
+            388 => 'Pacific/Guadalcanal',
+            389 => 'Pacific/Guam',
+            390 => 'Pacific/Honolulu',
+            391 => 'Pacific/Johnston',
+            392 => 'Pacific/Kiritimati',
+            393 => 'Pacific/Kosrae',
+            394 => 'Pacific/Kwajalein',
+            395 => 'Pacific/Majuro',
+            396 => 'Pacific/Marquesas',
+            397 => 'Pacific/Midway',
+            398 => 'Pacific/Nauru',
+            399 => 'Pacific/Niue',
+            400 => 'Pacific/Norfolk',
+            401 => 'Pacific/Noumea',
+            402 => 'Pacific/Pago_Pago',
+            403 => 'Pacific/Palau',
+            404 => 'Pacific/Pitcairn',
+            405 => 'Pacific/Pohnpei',
+            406 => 'Pacific/Port_Moresby',
+            407 => 'Pacific/Rarotonga',
+            408 => 'Pacific/Saipan',
+            409 => 'Pacific/Tahiti',
+            410 => 'Pacific/Tarawa',
+            411 => 'Pacific/Tongatapu',
+            412 => 'Pacific/Wake',
+            413 => 'Pacific/Wallis'
+          ],
+          'view' => 'views/settings/fields/time-zone'
         ],
         'dateFormat' => (object) [
           'type' => 'enum',
@@ -16467,8 +16965,7 @@ return (object) [
           'view' => 'views/settings/fields/default-currency'
         ],
         'currencyRates' => (object) [
-          'type' => 'base',
-          'view' => 'views/settings/fields/currency-rates'
+          'type' => 'base'
         ],
         'outboundEmailIsShared' => (object) [
           'type' => 'bool',
@@ -17250,12 +17747,21 @@ return (object) [
             0 => 'Espo\\Classes\\FieldValidators\\Settings\\AvailableReactions\\Valid'
           ]
         ],
+        'baselineRole' => (object) [
+          'type' => 'link',
+          'entity' => 'Role',
+          'tooltip' => true,
+          'view' => 'views/settings/fields/baseline-role'
+        ],
         'addressPreviewStreet' => (object) [
           'notStorable' => true,
           'readOnly' => true,
           'type' => 'text',
           'maxLength' => 255,
-          'dbType' => 'varchar'
+          'dbType' => 'varchar',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'addressPreview'
+          ]
         ],
         'addressPreviewCity' => (object) [
           'notStorable' => true,
@@ -17265,7 +17771,10 @@ return (object) [
           'view' => 'views/fields/address-city',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'addressPreview'
+          ]
         ],
         'addressPreviewState' => (object) [
           'notStorable' => true,
@@ -17275,7 +17784,10 @@ return (object) [
           'view' => 'views/fields/address-state',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'addressPreview'
+          ]
         ],
         'addressPreviewCountry' => (object) [
           'notStorable' => true,
@@ -17285,14 +17797,20 @@ return (object) [
           'view' => 'views/fields/address-country',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'addressPreview'
+          ]
         ],
         'addressPreviewPostalCode' => (object) [
           'notStorable' => true,
           'readOnly' => true,
           'type' => 'varchar',
           'maxLength' => 40,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'addressPreview'
+          ]
         ],
         'addressPreviewMap' => (object) [
           'notStorable' => true,
@@ -17303,7 +17821,8 @@ return (object) [
           'provider' => 'Google',
           'height' => 300,
           'exportDisabled' => true,
-          'importDisabled' => true
+          'importDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ]
       ]
     ],
@@ -17576,6 +18095,9 @@ return (object) [
           'tooltip' => true,
           'audited' => true
         ],
+        'description' => (object) [
+          'type' => 'text'
+        ],
         'createdAt' => (object) [
           'type' => 'datetime',
           'readOnly' => true
@@ -17592,7 +18114,8 @@ return (object) [
           'foreign' => 'teams',
           'columnAttributeMap' => (object) [
             'role' => 'userRole'
-          ]
+          ],
+          'apiSpecDisabled' => true
         ],
         'roles' => (object) [
           'type' => 'hasMany',
@@ -17658,6 +18181,18 @@ return (object) [
           'translation' => 'Global.scopeNames',
           'view' => 'views/template/fields/entity-type'
         ],
+        'status' => (object) [
+          'type' => 'enum',
+          'options' => [
+            0 => 'Active',
+            1 => 'Inactive'
+          ],
+          'default' => 'Active',
+          'style' => (object) [
+            'Inactive' => 'info'
+          ],
+          'maxLength' => 8
+        ],
         'leftMargin' => (object) [
           'type' => 'float',
           'default' => 10
@@ -17696,6 +18231,9 @@ return (object) [
         ],
         'teams' => (object) [
           'type' => 'linkMultiple'
+        ],
+        'description' => (object) [
+          'type' => 'text'
         ],
         'createdAt' => (object) [
           'type' => 'datetime',
@@ -17748,10 +18286,16 @@ return (object) [
         ],
         'fontFace' => (object) [
           'type' => 'enum',
-          'view' => 'views/template/fields/font-face'
+          'view' => 'views/template/fields/font-face',
+          'isSorted' => true
         ],
         'title' => (object) [
           'type' => 'varchar'
+        ],
+        'filename' => (object) [
+          'type' => 'varchar',
+          'maxLength' => 150,
+          'tooltip' => true
         ]
       ],
       'links' => (object) [
@@ -17916,7 +18460,7 @@ return (object) [
           'index' => true,
           'inlineEditDisabled' => true,
           'layoutDetailDisabled' => true,
-          'layoutMassUpdateDisabled' => true,
+          'massUpdateDisabled' => true,
           'fieldManagerParamList' => [
             0 => 'tooltipText'
           ]
@@ -17926,6 +18470,7 @@ return (object) [
           'maxLength' => 150,
           'internal' => true,
           'utility' => true,
+          'massUpdateDisabled' => true,
           'directAccessDisabled' => true,
           'fieldManagerParamList' => [
             0 => 'tooltipText'
@@ -17992,6 +18537,9 @@ return (object) [
         'salutationName' => (object) [
           'type' => 'enum',
           'customizationOptionsReferenceDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'options' => [
             0 => '',
             1 => 'Mr.',
@@ -18003,6 +18551,9 @@ return (object) [
         'firstName' => (object) [
           'type' => 'varchar',
           'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'maxLength' => 100,
           'suppressValidationList' => [
             0 => 'required'
@@ -18011,6 +18562,9 @@ return (object) [
         'lastName' => (object) [
           'type' => 'varchar',
           'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'maxLength' => 100,
           'required' => true,
           'suppressValidationList' => [
@@ -18208,13 +18762,17 @@ return (object) [
           'type' => 'link',
           'layoutDetailDisabled' => true,
           'tooltip' => true,
-          'customizationAuditedDisabled' => true,
-          'customizationAutocompleteOnEmptyDisabled' => true,
           'validatorClassNameList' => [
             0 => 'Espo\\Classes\\FieldValidators\\User\\DefaultTeam\\IsUserTeam'
           ],
           'view' => 'views/user/fields/default-team',
-          'dynamicLogicVisibleDisabled' => true
+          'dynamicLogicVisibleDisabled' => true,
+          'fieldManagerParamList' => [
+            0 => 'audited',
+            1 => 'tooltipText',
+            2 => 'readOnly',
+            3 => 'autocompleteOnEmpty'
+          ]
         ],
         'acceptanceStatus' => (object) [
           'type' => 'varchar',
@@ -18272,8 +18830,14 @@ return (object) [
           ],
           'layoutDetailDisabled' => true,
           'view' => 'views/user/fields/teams',
-          'default' => 'javascript: return {teamsIds: []}',
-          'audited' => true
+          'audited' => true,
+          'fieldManagerParamList' => [
+            0 => 'audited',
+            1 => 'tooltipText',
+            2 => 'readOnly',
+            3 => 'autocompleteOnEmpty',
+            4 => 'maxCount'
+          ]
         ],
         'roles' => (object) [
           'type' => 'linkMultiple',
@@ -18468,7 +19032,10 @@ return (object) [
         'middleName' => (object) [
           'type' => 'varchar',
           'maxLength' => 100,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ]
         ],
         'emailAddressIsOptedOut' => (object) [
           'layoutMassUpdateDisabled' => true,
@@ -18479,7 +19046,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'emailAddressIsInvalid' => (object) [
           'layoutMassUpdateDisabled' => true,
@@ -18490,7 +19060,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'phoneNumberIsOptedOut' => (object) [
           'type' => 'bool',
@@ -18500,7 +19073,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'phoneNumberIsInvalid' => (object) [
           'type' => 'bool',
@@ -18510,7 +19086,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'deleteId' => (object) [
           'type' => 'varchar',
@@ -18740,7 +19319,10 @@ return (object) [
           'type' => 'varchar',
           'maxLength' => 512,
           'required' => true,
-          'copyToClipboard' => true
+          'copyToClipboard' => true,
+          'validatorClassNameList' => [
+            0 => 'Espo\\Classes\\FieldValidators\\Webhook\\Url\\NotInternal'
+          ]
         ],
         'isActive' => (object) [
           'type' => 'bool',
@@ -18776,6 +19358,13 @@ return (object) [
           'layoutMassUpdateDisabled' => true,
           'layoutFiltersDisabled' => true,
           'layoutListDisabled' => true
+        ],
+        'skipOwn' => (object) [
+          'type' => 'bool',
+          'tooltip' => true
+        ],
+        'description' => (object) [
+          'type' => 'text'
         ],
         'createdAt' => (object) [
           'type' => 'datetime',
@@ -18859,6 +19448,9 @@ return (object) [
         'target' => (object) [
           'type' => 'linkParent'
         ],
+        'user' => (object) [
+          'type' => 'link'
+        ],
         'data' => (object) [
           'type' => 'jsonObject'
         ],
@@ -18870,7 +19462,15 @@ return (object) [
           'type' => 'bool'
         ]
       ],
-      'links' => (object) [],
+      'links' => (object) [
+        'target' => (object) [
+          'type' => 'belongsToParent'
+        ],
+        'user' => (object) [
+          'type' => 'belongsTo',
+          'entity' => 'User'
+        ]
+      ],
       'collection' => (object) [
         'orderBy' => 'number',
         'order' => 'desc',
@@ -19123,12 +19723,20 @@ return (object) [
         ],
         'calendars' => (object) [
           'type' => 'linkMultiple',
-          'tooltip' => true
+          'tooltip' => true,
+          'validatorClassNameList' => [
+            0 => 'Espo\\Classes\\FieldValidators\\WorkingTimeRange\\Calendars\\OnlyIfNoUsers',
+            1 => 'Espo\\Classes\\FieldValidators\\WorkingTimeRange\\Calendars\\RequiredIfNoUsers'
+          ],
+          'autocompleteOnEmpty' => true
         ],
         'users' => (object) [
           'type' => 'linkMultiple',
           'view' => 'views/working-time-range/fields/users',
-          'tooltip' => true
+          'tooltip' => true,
+          'validatorClassNameList' => [
+            0 => 'Espo\\Classes\\FieldValidators\\WorkingTimeRange\\Users\\OnlyIfNoCalendars'
+          ]
         ],
         'createdAt' => (object) [
           'type' => 'datetime',
@@ -19223,6 +19831,7 @@ return (object) [
             2 => 'Customer'
           ],
           'customizationOptionsReferenceDisabled' => true,
+          'audited' => true,
           'style' => (object) [
             '' => NULL,
             'Reseller' => NULL,
@@ -19375,7 +19984,10 @@ return (object) [
         'billingAddressStreet' => (object) [
           'type' => 'text',
           'maxLength' => 255,
-          'dbType' => 'varchar'
+          'dbType' => 'varchar',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'billingAddress'
+          ]
         ],
         'billingAddressCity' => (object) [
           'type' => 'varchar',
@@ -19383,7 +19995,10 @@ return (object) [
           'view' => 'views/fields/address-city',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'billingAddress'
+          ]
         ],
         'billingAddressState' => (object) [
           'type' => 'varchar',
@@ -19391,7 +20006,10 @@ return (object) [
           'view' => 'views/fields/address-state',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'billingAddress'
+          ]
         ],
         'billingAddressCountry' => (object) [
           'type' => 'varchar',
@@ -19399,12 +20017,18 @@ return (object) [
           'view' => 'views/fields/address-country',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'billingAddress'
+          ]
         ],
         'billingAddressPostalCode' => (object) [
           'type' => 'varchar',
           'maxLength' => 40,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'billingAddress'
+          ]
         ],
         'shippingAddress' => (object) [
           'type' => 'address',
@@ -19413,7 +20037,10 @@ return (object) [
         'shippingAddressStreet' => (object) [
           'type' => 'text',
           'maxLength' => 255,
-          'dbType' => 'varchar'
+          'dbType' => 'varchar',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'shippingAddress'
+          ]
         ],
         'shippingAddressCity' => (object) [
           'type' => 'varchar',
@@ -19421,7 +20048,10 @@ return (object) [
           'view' => 'views/fields/address-city',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'shippingAddress'
+          ]
         ],
         'shippingAddressState' => (object) [
           'type' => 'varchar',
@@ -19429,7 +20059,10 @@ return (object) [
           'view' => 'views/fields/address-state',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'shippingAddress'
+          ]
         ],
         'shippingAddressCountry' => (object) [
           'type' => 'varchar',
@@ -19437,12 +20070,18 @@ return (object) [
           'view' => 'views/fields/address-country',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'shippingAddress'
+          ]
         ],
         'shippingAddressPostalCode' => (object) [
           'type' => 'varchar',
           'maxLength' => 40,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'shippingAddress'
+          ]
         ],
         'description' => (object) [
           'type' => 'text'
@@ -19490,6 +20129,9 @@ return (object) [
           'layoutListDisabled' => true,
           'importDisabled' => true,
           'exportDisabled' => true,
+          'directAccessDisabled' => true,
+          'directUpdateEnabled' => true,
+          'filtersEnabled' => true,
           'noLoad' => true
         ],
         'targetList' => (object) [
@@ -19501,7 +20143,8 @@ return (object) [
           'layoutMassUpdateDisabled' => true,
           'layoutFiltersDisabled' => true,
           'entity' => 'TargetList',
-          'directAccessDisabled' => true
+          'directAccessDisabled' => true,
+          'importEnabled' => true
         ],
         'originalLead' => (object) [
           'type' => 'linkOne',
@@ -19523,7 +20166,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'emailAddressIsInvalid' => (object) [
           'type' => 'bool',
@@ -19533,7 +20179,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'phoneNumberIsOptedOut' => (object) [
           'type' => 'bool',
@@ -19543,7 +20192,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'phoneNumberIsInvalid' => (object) [
           'type' => 'bool',
@@ -19553,7 +20205,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'billingAddressMap' => (object) [
           'type' => 'map',
@@ -19564,7 +20219,8 @@ return (object) [
           'provider' => 'Google',
           'height' => 300,
           'exportDisabled' => true,
-          'importDisabled' => true
+          'importDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ],
         'shippingAddressMap' => (object) [
           'type' => 'map',
@@ -19575,7 +20231,8 @@ return (object) [
           'provider' => 'Google',
           'height' => 300,
           'exportDisabled' => true,
-          'importDisabled' => true
+          'importDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ],
         'streamUpdatedAt' => (object) [
           'type' => 'datetime',
@@ -19884,6 +20541,7 @@ return (object) [
           'customizationAuditedDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
           'directAccessDisabled' => true,
+          'filtersEnabled' => true,
           'where' => (object) [
             '=' => (object) [
               'whereClause' => (object) [
@@ -20068,7 +20726,8 @@ return (object) [
             0 => 'columns'
           ],
           'orderBy' => 'name',
-          'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees'
+          'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees',
+          'audited' => true
         ],
         'contacts' => (object) [
           'type' => 'linkMultiple',
@@ -20082,7 +20741,8 @@ return (object) [
             0 => 'columns'
           ],
           'orderBy' => 'name',
-          'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees'
+          'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees',
+          'audited' => true
         ],
         'leads' => (object) [
           'type' => 'linkMultiple',
@@ -20096,7 +20756,8 @@ return (object) [
             0 => 'columns'
           ],
           'orderBy' => 'name',
-          'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees'
+          'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees',
+          'audited' => true
         ],
         'createdAt' => (object) [
           'type' => 'datetime',
@@ -20278,7 +20939,8 @@ return (object) [
           'displayAsLabel' => true,
           'labelType' => 'state',
           'customizationOptionsDisabled' => true,
-          'customizationOptionsReferenceDisabled' => true
+          'customizationOptionsReferenceDisabled' => true,
+          'audited' => true
         ],
         'type' => (object) [
           'type' => 'enum',
@@ -20294,19 +20956,22 @@ return (object) [
           'default' => 'Email',
           'maxLength' => 64,
           'customizationOptionsDisabled' => true,
-          'customizationOptionsReferenceDisabled' => true
+          'customizationOptionsReferenceDisabled' => true,
+          'audited' => true
         ],
         'startDate' => (object) [
           'type' => 'date',
           'validatorClassNameList' => [
             0 => 'Espo\\Modules\\Crm\\Classes\\FieldValidators\\Campaign\\StartDate\\BeforeEndDate'
-          ]
+          ],
+          'audited' => true
         ],
         'endDate' => (object) [
           'type' => 'date',
           'validatorClassNameList' => [
             0 => 'Espo\\Modules\\Crm\\Classes\\FieldValidators\\Campaign\\EndDate\\AfterStartDate'
-          ]
+          ],
+          'audited' => true
         ],
         'description' => (object) [
           'type' => 'text'
@@ -20339,11 +21004,13 @@ return (object) [
         ],
         'assignedUser' => (object) [
           'type' => 'link',
-          'view' => 'views/fields/assigned-user'
+          'view' => 'views/fields/assigned-user',
+          'audited' => true
         ],
         'teams' => (object) [
           'type' => 'linkMultiple',
-          'view' => 'views/fields/teams'
+          'view' => 'views/fields/teams',
+          'audited' => true
         ],
         'targetLists' => (object) [
           'type' => 'linkMultiple',
@@ -20535,7 +21202,11 @@ return (object) [
           'customizationInlineEditDisabledDisabled' => true,
           'customizationDefaultView' => 'views/admin/field-manager/fields/currency-default',
           'customizationTooltipTextDisabled' => true,
-          'maxLength' => 3
+          'maxLength' => 3,
+          'apiSpecDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'revenue'
+          ]
         ],
         'revenueConverted' => (object) [
           'notStorable' => true,
@@ -20544,7 +21215,8 @@ return (object) [
           'readOnly' => true,
           'type' => 'currencyConverted',
           'importDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ],
         'budgetCurrency' => (object) [
           'type' => 'enum',
@@ -20563,13 +21235,18 @@ return (object) [
           'customizationInlineEditDisabledDisabled' => true,
           'customizationDefaultView' => 'views/admin/field-manager/fields/currency-default',
           'customizationTooltipTextDisabled' => true,
-          'maxLength' => 3
+          'maxLength' => 3,
+          'apiSpecDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'budget'
+          ]
         ],
         'budgetConverted' => (object) [
           'type' => 'currencyConverted',
           'readOnly' => true,
           'importDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ]
       ],
       'links' => (object) [
@@ -21156,6 +21833,9 @@ return (object) [
         'salutationName' => (object) [
           'type' => 'enum',
           'customizationOptionsReferenceDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'options' => [
             0 => '',
             1 => 'Mr.',
@@ -21167,11 +21847,17 @@ return (object) [
         'firstName' => (object) [
           'type' => 'varchar',
           'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'maxLength' => 100
         ],
         'lastName' => (object) [
           'type' => 'varchar',
           'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'maxLength' => 100,
           'required' => true
         ],
@@ -21418,7 +22104,8 @@ return (object) [
             ]
           ],
           'customizationOptionsDisabled' => true,
-          'textFilterDisabled' => true
+          'textFilterDisabled' => true,
+          'importEnabled' => true
         ],
         'description' => (object) [
           'type' => 'text'
@@ -21449,7 +22136,10 @@ return (object) [
         'addressStreet' => (object) [
           'type' => 'text',
           'maxLength' => 255,
-          'dbType' => 'varchar'
+          'dbType' => 'varchar',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressCity' => (object) [
           'type' => 'varchar',
@@ -21457,7 +22147,10 @@ return (object) [
           'view' => 'views/fields/address-city',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressState' => (object) [
           'type' => 'varchar',
@@ -21465,7 +22158,10 @@ return (object) [
           'view' => 'views/fields/address-state',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressCountry' => (object) [
           'type' => 'varchar',
@@ -21473,12 +22169,18 @@ return (object) [
           'view' => 'views/fields/address-country',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressPostalCode' => (object) [
           'type' => 'varchar',
           'maxLength' => 40,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'account' => (object) [
           'type' => 'link',
@@ -21630,6 +22332,7 @@ return (object) [
             'relationName' => 'contactOpportunity',
             'nearKey' => 'contactId'
           ],
+          'directUpdateDisabled' => true,
           'view' => 'crm:views/contact/fields/opportunity-role'
         ],
         'acceptanceStatus' => (object) [
@@ -21644,6 +22347,8 @@ return (object) [
           'type' => 'enum',
           'notStorable' => true,
           'orderDisabled' => true,
+          'directAccessDisabled' => true,
+          'filtersEnabled' => true,
           'directUpdateDisabled' => true,
           'layoutAvailabilityList' => [
             0 => 'filters'
@@ -21660,6 +22365,8 @@ return (object) [
           'notStorable' => true,
           'orderDisabled' => true,
           'directUpdateDisabled' => true,
+          'directAccessDisabled' => true,
+          'filtersEnabled' => true,
           'layoutAvailabilityList' => [
             0 => 'filters'
           ],
@@ -21712,6 +22419,9 @@ return (object) [
           'layoutDetailDisabled' => true,
           'layoutListDisabled' => true,
           'importDisabled' => true,
+          'directAccessDisabled' => true,
+          'filtersEnabled' => true,
+          'directUpdateEnabled' => true,
           'noLoad' => true
         ],
         'targetList' => (object) [
@@ -21724,7 +22434,8 @@ return (object) [
           'layoutFiltersDisabled' => true,
           'exportDisabled' => true,
           'entity' => 'TargetList',
-          'directAccessDisabled' => true
+          'directAccessDisabled' => true,
+          'importEnabled' => true
         ],
         'portalUser' => (object) [
           'type' => 'linkOne',
@@ -21815,7 +22526,10 @@ return (object) [
         'middleName' => (object) [
           'type' => 'varchar',
           'maxLength' => 100,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ]
         ],
         'emailAddressIsOptedOut' => (object) [
           'type' => 'bool',
@@ -21825,7 +22539,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'emailAddressIsInvalid' => (object) [
           'type' => 'bool',
@@ -21835,7 +22552,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'phoneNumberIsOptedOut' => (object) [
           'type' => 'bool',
@@ -21845,7 +22565,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'phoneNumberIsInvalid' => (object) [
           'type' => 'bool',
@@ -21855,7 +22578,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'addressMap' => (object) [
           'type' => 'map',
@@ -21866,7 +22592,8 @@ return (object) [
           'provider' => 'Google',
           'height' => 300,
           'exportDisabled' => true,
-          'importDisabled' => true
+          'importDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ],
         'streamUpdatedAt' => (object) [
           'type' => 'datetime',
@@ -22088,7 +22815,8 @@ return (object) [
             11 => '.csv',
             12 => '.md',
             13 => '.txt'
-          ]
+          ],
+          'audited' => true
         ],
         'status' => (object) [
           'type' => 'enum',
@@ -22127,16 +22855,19 @@ return (object) [
             3 => 'EULA',
             4 => 'License Agreement'
           ],
-          'customizationOptionsReferenceDisabled' => true
+          'customizationOptionsReferenceDisabled' => true,
+          'audited' => true
         ],
         'publishDate' => (object) [
           'type' => 'date',
           'required' => true,
-          'default' => 'javascript: return this.dateTime.getToday();'
+          'default' => 'javascript: return this.dateTime.getToday();',
+          'audited' => true
         ],
         'expirationDate' => (object) [
           'type' => 'date',
-          'after' => 'publishDate'
+          'after' => 'publishDate',
+          'audited' => true
         ],
         'description' => (object) [
           'type' => 'text'
@@ -22169,7 +22900,8 @@ return (object) [
         ],
         'assignedUser' => (object) [
           'type' => 'link',
-          'view' => 'views/fields/assigned-user'
+          'view' => 'views/fields/assigned-user',
+          'audited' => true
         ],
         'teams' => (object) [
           'type' => 'linkMultiple',
@@ -22187,7 +22919,8 @@ return (object) [
         ],
         'folder' => (object) [
           'type' => 'link',
-          'view' => 'views/fields/link-category-tree'
+          'view' => 'views/fields/link-category-tree',
+          'audited' => true
         ]
       ],
       'links' => (object) [
@@ -22281,7 +23014,8 @@ return (object) [
           'view' => 'views/fields/teams'
         ],
         'parent' => (object) [
-          'type' => 'link'
+          'type' => 'link',
+          'view' => 'views/fields/link-category-tree'
         ],
         'childList' => (object) [
           'type' => 'jsonArray',
@@ -22322,9 +23056,9 @@ return (object) [
         ]
       ],
       'collection' => (object) [
-        'orderBy' => 'parent',
+        'orderBy' => 'name',
         'order' => 'asc',
-        'sortBy' => 'parent',
+        'sortBy' => 'name',
         'asc' => true
       ],
       'additionalTables' => (object) [
@@ -22444,13 +23178,15 @@ return (object) [
           'activeOptions' => [
             0 => 'Published'
           ],
-          'customizationOptionsReferenceDisabled' => true
+          'customizationOptionsReferenceDisabled' => true,
+          'audited' => true
         ],
         'language' => (object) [
           'type' => 'enum',
           'view' => 'crm:views/knowledge-base-article/fields/language',
           'customizationOptionsDisabled' => true,
-          'customizationOptionsReferenceDisabled' => true
+          'customizationOptionsReferenceDisabled' => true,
+          'audited' => true
         ],
         'type' => (object) [
           'type' => 'enum',
@@ -22461,14 +23197,17 @@ return (object) [
         ],
         'portals' => (object) [
           'type' => 'linkMultiple',
-          'tooltip' => true
+          'tooltip' => true,
+          'audited' => true
         ],
         'publishDate' => (object) [
-          'type' => 'date'
+          'type' => 'date',
+          'audited' => true
         ],
         'expirationDate' => (object) [
           'type' => 'date',
-          'after' => 'publishDate'
+          'after' => 'publishDate',
+          'audited' => true
         ],
         'order' => (object) [
           'type' => 'int',
@@ -22504,7 +23243,8 @@ return (object) [
         ],
         'assignedUser' => (object) [
           'type' => 'link',
-          'view' => 'views/fields/assigned-user'
+          'view' => 'views/fields/assigned-user',
+          'audited' => true
         ],
         'teams' => (object) [
           'type' => 'linkMultiple',
@@ -22611,7 +23351,8 @@ return (object) [
         ],
         'order' => (object) [
           'type' => 'int',
-          'required' => true,
+          'minValue' => 1,
+          'readOnly' => true,
           'disableFormatting' => true,
           'textFilterDisabled' => true
         ],
@@ -22620,7 +23361,8 @@ return (object) [
           'view' => 'views/fields/teams'
         ],
         'parent' => (object) [
-          'type' => 'link'
+          'type' => 'link',
+          'view' => 'views/fields/link-category-tree'
         ],
         'childList' => (object) [
           'type' => 'jsonArray',
@@ -22702,6 +23444,9 @@ return (object) [
         'salutationName' => (object) [
           'type' => 'enum',
           'customizationOptionsReferenceDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'options' => [
             0 => '',
             1 => 'Mr.',
@@ -22713,11 +23458,17 @@ return (object) [
         'firstName' => (object) [
           'type' => 'varchar',
           'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'maxLength' => 100
         ],
         'lastName' => (object) [
           'type' => 'varchar',
           'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'maxLength' => 100
         ],
         'title' => (object) [
@@ -22790,7 +23541,8 @@ return (object) [
           'type' => 'currencyConverted',
           'readOnly' => true,
           'importDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ],
         'website' => (object) [
           'type' => 'url',
@@ -22803,7 +23555,10 @@ return (object) [
         'addressStreet' => (object) [
           'type' => 'text',
           'maxLength' => 255,
-          'dbType' => 'varchar'
+          'dbType' => 'varchar',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressCity' => (object) [
           'type' => 'varchar',
@@ -22811,7 +23566,10 @@ return (object) [
           'view' => 'views/fields/address-city',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressState' => (object) [
           'type' => 'varchar',
@@ -22819,7 +23577,10 @@ return (object) [
           'view' => 'views/fields/address-state',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressCountry' => (object) [
           'type' => 'varchar',
@@ -22827,12 +23588,18 @@ return (object) [
           'view' => 'views/fields/address-country',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressPostalCode' => (object) [
           'type' => 'varchar',
           'maxLength' => 40,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'emailAddress' => (object) [
           'type' => 'email',
@@ -22851,7 +23618,8 @@ return (object) [
           'isPersonalData' => true
         ],
         'doNotCall' => (object) [
-          'type' => 'bool'
+          'type' => 'bool',
+          'audited' => true
         ],
         'description' => (object) [
           'type' => 'text'
@@ -22908,6 +23676,8 @@ return (object) [
           'notStorable' => true,
           'orderDisabled' => true,
           'directUpdateDisabled' => true,
+          'directAccessDisabled' => true,
+          'filtersEnabled' => true,
           'layoutAvailabilityList' => [
             0 => 'filters'
           ],
@@ -22923,6 +23693,8 @@ return (object) [
           'notStorable' => true,
           'orderDisabled' => true,
           'directUpdateDisabled' => true,
+          'directAccessDisabled' => true,
+          'filtersEnabled' => true,
           'layoutAvailabilityList' => [
             0 => 'filters'
           ],
@@ -22962,6 +23734,9 @@ return (object) [
           'layoutDetailDisabled' => true,
           'layoutListDisabled' => true,
           'importDisabled' => true,
+          'directAccessDisabled' => true,
+          'directUpdateEnabled' => true,
+          'filtersEnabled' => true,
           'noLoad' => true
         ],
         'targetList' => (object) [
@@ -22973,7 +23748,8 @@ return (object) [
           'layoutMassUpdateDisabled' => true,
           'layoutFiltersDisabled' => true,
           'entity' => 'TargetList',
-          'directAccessDisabled' => true
+          'directAccessDisabled' => true,
+          'importEnabled' => true
         ],
         'targetListIsOptedOut' => (object) [
           'type' => 'bool',
@@ -22994,7 +23770,10 @@ return (object) [
         'middleName' => (object) [
           'type' => 'varchar',
           'maxLength' => 100,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ]
         ],
         'opportunityAmountCurrency' => (object) [
           'type' => 'enum',
@@ -23013,7 +23792,11 @@ return (object) [
           'customizationInlineEditDisabledDisabled' => true,
           'customizationDefaultView' => 'views/admin/field-manager/fields/currency-default',
           'customizationTooltipTextDisabled' => true,
-          'maxLength' => 3
+          'maxLength' => 3,
+          'apiSpecDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'opportunityAmount'
+          ]
         ],
         'addressMap' => (object) [
           'type' => 'map',
@@ -23024,7 +23807,8 @@ return (object) [
           'provider' => 'Google',
           'height' => 300,
           'exportDisabled' => true,
-          'importDisabled' => true
+          'importDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ],
         'emailAddressIsOptedOut' => (object) [
           'type' => 'bool',
@@ -23034,7 +23818,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'emailAddressIsInvalid' => (object) [
           'type' => 'bool',
@@ -23044,7 +23831,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'phoneNumberIsOptedOut' => (object) [
           'type' => 'bool',
@@ -23054,7 +23844,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'phoneNumberIsInvalid' => (object) [
           'type' => 'bool',
@@ -23064,7 +23857,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'streamUpdatedAt' => (object) [
           'type' => 'datetime',
@@ -23304,6 +24100,7 @@ return (object) [
         'emailTemplate' => (object) [
           'type' => 'link',
           'required' => true,
+          'createButton' => true,
           'view' => 'crm:views/mass-email/fields/email-template'
         ],
         'campaign' => (object) [
@@ -23537,6 +24334,7 @@ return (object) [
           'customizationAuditedDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
           'directAccessDisabled' => true,
+          'filtersEnabled' => true,
           'where' => (object) [
             '=' => (object) [
               'whereClause' => (object) [
@@ -23721,6 +24519,7 @@ return (object) [
             0 => 'columns'
           ],
           'orderBy' => 'name',
+          'audited' => true,
           'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees'
         ],
         'contacts' => (object) [
@@ -23735,6 +24534,7 @@ return (object) [
             0 => 'columns'
           ],
           'orderBy' => 'name',
+          'audited' => true,
           'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees'
         ],
         'leads' => (object) [
@@ -23749,6 +24549,7 @@ return (object) [
             0 => 'columns'
           ],
           'orderBy' => 'name',
+          'audited' => true,
           'duplicatorClassName' => 'Espo\\Modules\\Crm\\Classes\\FieldDuplicators\\Meeting\\Attendees'
         ],
         'sourceEmail' => (object) [
@@ -23801,11 +24602,17 @@ return (object) [
         ],
         'dateStartDate' => (object) [
           'type' => 'date',
-          'disabled' => true
+          'utility' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'dateStart'
+          ]
         ],
         'dateEndDate' => (object) [
           'type' => 'date',
-          'disabled' => true
+          'utility' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'dateEnd'
+          ]
         ],
         'streamUpdatedAt' => (object) [
           'type' => 'datetime',
@@ -23944,7 +24751,8 @@ return (object) [
           'type' => 'currencyConverted',
           'readOnly' => true,
           'importDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ],
         'amountWeightedConverted' => (object) [
           'type' => 'float',
@@ -24096,7 +24904,8 @@ return (object) [
           'view' => 'views/fields/currency-converted'
         ],
         'account' => (object) [
-          'type' => 'link'
+          'type' => 'link',
+          'audited' => true
         ],
         'contacts' => (object) [
           'type' => 'linkMultiple',
@@ -24169,7 +24978,8 @@ return (object) [
           'type' => 'enum',
           'view' => 'crm:views/opportunity/fields/lead-source',
           'customizationOptionsDisabled' => true,
-          'optionsReference' => 'Lead.source'
+          'optionsReference' => 'Lead.source',
+          'audited' => true
         ],
         'closeDate' => (object) [
           'type' => 'date',
@@ -24180,7 +24990,8 @@ return (object) [
           'type' => 'text'
         ],
         'campaign' => (object) [
-          'type' => 'link'
+          'type' => 'link',
+          'audited' => true
         ],
         'originalLead' => (object) [
           'type' => 'linkOne',
@@ -24191,6 +25002,7 @@ return (object) [
           'type' => 'enum',
           'notStorable' => true,
           'orderDisabled' => true,
+          'directUpdateDisabled' => true,
           'layoutMassUpdateDisabled' => true,
           'layoutDetailDisabled' => true,
           'layoutAvailabilityList' => [
@@ -24264,7 +25076,11 @@ return (object) [
           'customizationInlineEditDisabledDisabled' => true,
           'customizationDefaultView' => 'views/admin/field-manager/fields/currency-default',
           'customizationTooltipTextDisabled' => true,
-          'maxLength' => 3
+          'maxLength' => 3,
+          'apiSpecDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'amount'
+          ]
         ],
         'streamUpdatedAt' => (object) [
           'type' => 'datetime',
@@ -24480,6 +25296,9 @@ return (object) [
         'salutationName' => (object) [
           'type' => 'enum',
           'customizationOptionsReferenceDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'options' => [
             0 => '',
             1 => 'Mr.',
@@ -24492,12 +25311,18 @@ return (object) [
         'firstName' => (object) [
           'type' => 'varchar',
           'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'maxLength' => 100,
           'default' => ''
         ],
         'lastName' => (object) [
           'type' => 'varchar',
           'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ],
           'maxLength' => 100,
           'required' => true,
           'default' => ''
@@ -24519,7 +25344,10 @@ return (object) [
         'addressStreet' => (object) [
           'type' => 'text',
           'maxLength' => 255,
-          'dbType' => 'varchar'
+          'dbType' => 'varchar',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressCity' => (object) [
           'type' => 'varchar',
@@ -24527,7 +25355,10 @@ return (object) [
           'view' => 'views/fields/address-city',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressState' => (object) [
           'type' => 'varchar',
@@ -24535,7 +25366,10 @@ return (object) [
           'view' => 'views/fields/address-state',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressCountry' => (object) [
           'type' => 'varchar',
@@ -24543,12 +25377,18 @@ return (object) [
           'view' => 'views/fields/address-country',
           'customizationOptionsDisabled' => true,
           'customizationOptionsReferenceDisabled' => true,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'addressPostalCode' => (object) [
           'type' => 'varchar',
           'maxLength' => 40,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'address'
+          ]
         ],
         'emailAddress' => (object) [
           'type' => 'email'
@@ -24599,7 +25439,10 @@ return (object) [
         'middleName' => (object) [
           'type' => 'varchar',
           'maxLength' => 100,
-          'pattern' => '$noBadCharacters'
+          'pattern' => '$noBadCharacters',
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'name'
+          ]
         ],
         'addressMap' => (object) [
           'type' => 'map',
@@ -24610,7 +25453,8 @@ return (object) [
           'provider' => 'Google',
           'height' => 300,
           'exportDisabled' => true,
-          'importDisabled' => true
+          'importDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ],
         'emailAddressIsOptedOut' => (object) [
           'type' => 'bool',
@@ -24620,7 +25464,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'emailAddressIsInvalid' => (object) [
           'type' => 'bool',
@@ -24630,7 +25477,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'emailAddress'
+          ]
         ],
         'phoneNumberIsOptedOut' => (object) [
           'type' => 'bool',
@@ -24640,7 +25490,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ],
         'phoneNumberIsInvalid' => (object) [
           'type' => 'bool',
@@ -24650,7 +25503,10 @@ return (object) [
           'mergeDisabled' => true,
           'customizationDefaultDisabled' => true,
           'customizationReadOnlyDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'phoneNumber'
+          ]
         ]
       ],
       'links' => (object) [
@@ -24767,7 +25623,8 @@ return (object) [
         ],
         'assignedUser' => (object) [
           'type' => 'link',
-          'view' => 'views/fields/assigned-user'
+          'view' => 'views/fields/assigned-user',
+          'audited' => true
         ],
         'teams' => (object) [
           'type' => 'linkMultiple',
@@ -24948,7 +25805,7 @@ return (object) [
         'order' => (object) [
           'type' => 'int',
           'minValue' => 1,
-          'required' => true,
+          'readOnly' => true,
           'textFilterDisabled' => true
         ],
         'description' => (object) [
@@ -24974,7 +25831,8 @@ return (object) [
           'type' => 'linkMultiple'
         ],
         'parent' => (object) [
-          'type' => 'link'
+          'type' => 'link',
+          'view' => 'views/fields/link-category-tree'
         ],
         'childList' => (object) [
           'type' => 'jsonArray',
@@ -25108,13 +25966,17 @@ return (object) [
         ],
         'dateStartDate' => (object) [
           'type' => 'date',
-          'disabled' => true,
-          'utility' => true
+          'utility' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'dateStart'
+          ]
         ],
         'dateEndDate' => (object) [
           'type' => 'date',
-          'disabled' => true,
-          'utility' => true
+          'utility' => true,
+          'detailLayoutIncompatibleFieldList' => [
+            0 => 'dateEnd'
+          ]
         ],
         'dateCompleted' => (object) [
           'type' => 'datetime',
@@ -25362,7 +26224,8 @@ return (object) [
           'provider' => 'Google',
           'height' => 300,
           'exportDisabled' => true,
-          'importDisabled' => true
+          'importDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ]
       ],
       'params' => [
@@ -25430,34 +26293,39 @@ return (object) [
           'tooltip' => true
         ],
         9 => (object) [
+          'name' => 'itemsEditable',
+          'type' => 'bool',
+          'tooltip' => true
+        ],
+        10 => (object) [
           'name' => 'pattern',
           'type' => 'varchar',
           'tooltip' => true,
           'view' => 'views/admin/field-manager/fields/pattern'
         ],
-        10 => (object) [
+        11 => (object) [
           'name' => 'audited',
           'type' => 'bool'
         ],
-        11 => (object) [
+        12 => (object) [
           'name' => 'readOnly',
           'type' => 'bool'
         ],
-        12 => (object) [
+        13 => (object) [
           'name' => 'readOnlyAfterCreate',
           'type' => 'bool'
         ],
-        13 => (object) [
+        14 => (object) [
           'name' => 'optionsPath',
           'type' => 'varchar',
           'hidden' => true
         ],
-        14 => (object) [
+        15 => (object) [
           'name' => 'keepItems',
           'type' => 'bool',
           'hidden' => true
         ],
-        15 => (object) [
+        16 => (object) [
           'name' => 'maxItemLength',
           'type' => 'int',
           'hidden' => true
@@ -25965,13 +26833,15 @@ return (object) [
           'customizationInlineEditDisabledDisabled' => true,
           'customizationDefaultView' => 'views/admin/field-manager/fields/currency-default',
           'customizationTooltipTextDisabled' => true,
-          'maxLength' => 3
+          'maxLength' => 3,
+          'apiSpecDisabled' => true
         ],
         'converted' => (object) [
           'type' => 'currencyConverted',
           'readOnly' => true,
           'importDisabled' => true,
-          'customizationInlineEditDisabledDisabled' => true
+          'customizationInlineEditDisabledDisabled' => true,
+          'detailLayoutIncompatibleFieldList' => []
         ]
       ],
       'converterClassName' => 'Espo\\Core\\Utils\\Database\\Orm\\FieldConverters\\Currency',
@@ -26020,21 +26890,22 @@ return (object) [
             9 => 'javascript: return this.dateTime.getDateShiftedFromToday(8, \'days\');',
             10 => 'javascript: return this.dateTime.getDateShiftedFromToday(9, \'days\');',
             11 => 'javascript: return this.dateTime.getDateShiftedFromToday(10, \'days\');',
-            12 => 'javascript: return this.dateTime.getDateShiftedFromToday(1, \'weeks\');',
-            13 => 'javascript: return this.dateTime.getDateShiftedFromToday(2, \'weeks\');',
-            14 => 'javascript: return this.dateTime.getDateShiftedFromToday(3, \'weeks\');',
-            15 => 'javascript: return this.dateTime.getDateShiftedFromToday(1, \'months\');',
-            16 => 'javascript: return this.dateTime.getDateShiftedFromToday(2, \'months\');',
-            17 => 'javascript: return this.dateTime.getDateShiftedFromToday(3, \'months\');',
-            18 => 'javascript: return this.dateTime.getDateShiftedFromToday(4, \'months\');',
-            19 => 'javascript: return this.dateTime.getDateShiftedFromToday(5, \'months\');',
-            20 => 'javascript: return this.dateTime.getDateShiftedFromToday(6, \'months\');',
-            21 => 'javascript: return this.dateTime.getDateShiftedFromToday(7, \'months\');',
-            22 => 'javascript: return this.dateTime.getDateShiftedFromToday(8, \'months\');',
-            23 => 'javascript: return this.dateTime.getDateShiftedFromToday(9, \'months\');',
-            24 => 'javascript: return this.dateTime.getDateShiftedFromToday(10, \'months\');',
-            25 => 'javascript: return this.dateTime.getDateShiftedFromToday(11, \'months\');',
-            26 => 'javascript: return this.dateTime.getDateShiftedFromToday(1, \'year\');'
+            12 => 'javascript: return this.dateTime.getDateShiftedFromToday(30, \'days\');',
+            13 => 'javascript: return this.dateTime.getDateShiftedFromToday(1, \'weeks\');',
+            14 => 'javascript: return this.dateTime.getDateShiftedFromToday(2, \'weeks\');',
+            15 => 'javascript: return this.dateTime.getDateShiftedFromToday(3, \'weeks\');',
+            16 => 'javascript: return this.dateTime.getDateShiftedFromToday(1, \'months\');',
+            17 => 'javascript: return this.dateTime.getDateShiftedFromToday(2, \'months\');',
+            18 => 'javascript: return this.dateTime.getDateShiftedFromToday(3, \'months\');',
+            19 => 'javascript: return this.dateTime.getDateShiftedFromToday(4, \'months\');',
+            20 => 'javascript: return this.dateTime.getDateShiftedFromToday(5, \'months\');',
+            21 => 'javascript: return this.dateTime.getDateShiftedFromToday(6, \'months\');',
+            22 => 'javascript: return this.dateTime.getDateShiftedFromToday(7, \'months\');',
+            23 => 'javascript: return this.dateTime.getDateShiftedFromToday(8, \'months\');',
+            24 => 'javascript: return this.dateTime.getDateShiftedFromToday(9, \'months\');',
+            25 => 'javascript: return this.dateTime.getDateShiftedFromToday(10, \'months\');',
+            26 => 'javascript: return this.dateTime.getDateShiftedFromToday(11, \'months\');',
+            27 => 'javascript: return this.dateTime.getDateShiftedFromToday(1, \'year\');'
           ],
           'translation' => 'FieldManager.options.dateDefault'
         ],
@@ -26279,7 +27150,7 @@ return (object) [
       'fields' => (object) [
         'date' => (object) [
           'type' => 'date',
-          'disabled' => true
+          'utility' => true
         ]
       ],
       'validationList' => [
@@ -26303,6 +27174,66 @@ return (object) [
         1 => 'Espo\\Classes\\FieldSanitizers\\DatetimeOptionalDate'
       ],
       'default' => NULL
+    ],
+    'decimal' => (object) [
+      'params' => [
+        0 => (object) [
+          'name' => 'required',
+          'type' => 'bool',
+          'default' => false
+        ],
+        1 => (object) [
+          'name' => 'default',
+          'type' => 'decimal'
+        ],
+        2 => (object) [
+          'name' => 'min',
+          'type' => 'decimal'
+        ],
+        3 => (object) [
+          'name' => 'max',
+          'type' => 'decimal'
+        ],
+        4 => (object) [
+          'name' => 'decimalPlaces',
+          'type' => 'int'
+        ],
+        5 => (object) [
+          'name' => 'audited',
+          'type' => 'bool'
+        ],
+        6 => (object) [
+          'name' => 'readOnly',
+          'type' => 'bool'
+        ],
+        7 => (object) [
+          'name' => 'readOnlyAfterCreate',
+          'type' => 'bool'
+        ],
+        8 => (object) [
+          'name' => 'precision',
+          'type' => 'int',
+          'hidden' => true
+        ],
+        9 => (object) [
+          'name' => 'scale',
+          'type' => 'int',
+          'hidden' => true
+        ]
+      ],
+      'filter' => true,
+      'validationList' => [
+        0 => 'required',
+        1 => 'min',
+        2 => 'max'
+      ],
+      'mandatoryValidationList' => [
+        0 => 'valid'
+      ],
+      'sanitizerClassNameList' => [
+        0 => 'Espo\\Classes\\FieldSanitizers\\Decimal'
+      ],
+      'converterClassName' => 'Espo\\Core\\Utils\\Database\\Orm\\FieldConverters\\Decimal'
     ],
     'duration' => (object) [
       'params' => [
@@ -27281,6 +28212,12 @@ return (object) [
           'name' => 'copyToClipboard',
           'type' => 'bool',
           'default' => false
+        ],
+        4 => (object) [
+          'name' => 'suppressHook',
+          'type' => 'bool',
+          'default' => false,
+          'hidden' => true
         ]
       ],
       'filter' => true,
@@ -27940,6 +28877,20 @@ return (object) [
     ]
   ],
   'logicDefs' => (object) [
+    'CurrencyRecordRate' => (object) [
+      'fields' => (object) [
+        'baseCode' => (object) [
+          'visible' => (object) [
+            'conditionGroup' => [
+              0 => (object) [
+                'type' => 'isNotEmpty',
+                'attribute' => 'id'
+              ]
+            ]
+          ]
+        ]
+      ]
+    ],
     'Email' => (object) [
       'fields' => (object) [
         'replied' => (object) [
@@ -28559,12 +29510,42 @@ return (object) [
     ],
     'Preferences' => (object) [
       'fields' => (object) [
+        'tabList' => (object) [
+          'visible' => (object) [
+            'conditionGroup' => [
+              0 => (object) [
+                'type' => 'isTrue',
+                'attribute' => 'useCustomTabList'
+              ]
+            ]
+          ]
+        ],
+        'addCustomTabs' => (object) [
+          'visible' => (object) [
+            'conditionGroup' => [
+              0 => (object) [
+                'type' => 'isTrue',
+                'attribute' => 'useCustomTabList'
+              ]
+            ]
+          ]
+        ],
         'assignmentEmailNotificationsIgnoreEntityTypeList' => (object) [
           'visible' => (object) [
             'conditionGroup' => [
               0 => (object) [
                 'type' => 'isTrue',
                 'attribute' => 'receiveAssignmentEmailNotifications'
+              ]
+            ]
+          ]
+        ],
+        'reactionNotificationsNotFollowed' => (object) [
+          'visible' => (object) [
+            'conditionGroup' => [
+              0 => (object) [
+                'type' => 'isTrue',
+                'attribute' => 'reactionNotifications'
               ]
             ]
           ]
@@ -28740,6 +29721,19 @@ return (object) [
               ]
             ]
           ]
+        ],
+        'skipOwn' => (object) [
+          'visible' => (object) [
+            'conditionGroup' => [
+              0 => (object) [
+                'type' => 'isNotEmpty',
+                'attribute' => 'userId',
+                'data' => (object) [
+                  'field' => 'user'
+                ]
+              ]
+            ]
+          ]
         ]
       ]
     ],
@@ -28840,7 +29834,7 @@ return (object) [
             ]
           ]
         ],
-        'users' => (object) [
+        'calendars' => (object) [
           'visible' => (object) [
             'conditionGroup' => [
               0 => (object) [
@@ -28848,13 +29842,41 @@ return (object) [
                 'value' => [
                   0 => (object) [
                     'type' => 'isNotEmpty',
-                    'attribute' => 'id'
+                    'attribute' => 'calendarsIds'
                   ],
                   1 => (object) [
+                    'type' => 'isEmpty',
+                    'attribute' => 'usersIds'
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        'users' => (object) [
+          'required' => (object) [
+            'conditionGroup' => [
+              0 => (object) [
+                'type' => 'or',
+                'value' => [
+                  0 => (object) [
+                    'type' => 'isEmpty',
+                    'attribute' => 'calendarsIds'
+                  ]
+                ]
+              ]
+            ]
+          ],
+          'visible' => (object) [
+            'conditionGroup' => [
+              0 => (object) [
+                'type' => 'or',
+                'value' => [
+                  0 => (object) [
                     'type' => 'isNotEmpty',
                     'attribute' => 'usersIds'
                   ],
-                  2 => (object) [
+                  1 => (object) [
                     'type' => 'isEmpty',
                     'attribute' => 'calendarsIds'
                   ]
@@ -29424,6 +30446,23 @@ return (object) [
         0 => 'Espo\\Classes\\Record\\AuthToken\\UpdateInputFilter'
       ]
     ],
+    'CurrencyRecordRate' => (object) [
+      'beforeCreateHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\CurrencyRecordRate\\BeforeSaveValidation'
+      ],
+      'beforeUpdateHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\CurrencyRecordRate\\BeforeSaveValidation'
+      ],
+      'afterCreateHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\CurrencyRecordRate\\AfterSave'
+      ],
+      'afterUpdateHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\CurrencyRecordRate\\AfterSave'
+      ],
+      'afterDeleteHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\CurrencyRecordRate\\AfterDelete'
+      ]
+    ],
     'DashboardTemplate' => (object) [
       'massActions' => (object) [
         'delete' => (object) [
@@ -29506,7 +30545,13 @@ return (object) [
         0 => 'Espo\\Classes\\Record\\InboundEmail\\PasswordsInputFilter'
       ],
       'beforeCreateHookClassNameList' => [
-        0 => 'Espo\\Classes\\RecordHooks\\EmailAccount\\BeforeCreate'
+        0 => 'Espo\\Classes\\RecordHooks\\EmailAccount\\BeforeCreate',
+        1 => 'Espo\\Classes\\RecordHooks\\EmailAccount\\BeforeSave',
+        2 => 'Espo\\Classes\\RecordHooks\\EmailAccount\\BeforeSaveValidateHosts'
+      ],
+      'beforeUpdateHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\EmailAccount\\BeforeSave',
+        1 => 'Espo\\Classes\\RecordHooks\\EmailAccount\\BeforeSaveValidateHosts'
       ]
     ],
     'EmailAddress' => (object) [
@@ -29592,6 +30637,12 @@ return (object) [
       ],
       'listLoaderClassNameList' => [
         0 => 'Espo\\Classes\\FieldProcessing\\InboundEmail\\IsSystemLoader'
+      ],
+      'beforeCreateHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\EmailAccount\\BeforeSaveValidateHosts'
+      ],
+      'beforeUpdateHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\EmailAccount\\BeforeSaveValidateHosts'
       ]
     ],
     'Job' => (object) [
@@ -29804,6 +30855,12 @@ return (object) [
         1 => 'userName',
         2 => 'type'
       ],
+      'createInputFilterClassNameList' => [
+        0 => 'Espo\\Classes\\Record\\User\\InputFilter'
+      ],
+      'updateInputFilterClassNameList' => [
+        0 => 'Espo\\Classes\\Record\\User\\InputFilter'
+      ],
       'outputFilterClassNameList' => [
         0 => 'Espo\\Classes\\Record\\User\\OutputFilter'
       ],
@@ -29818,7 +30875,11 @@ return (object) [
       ],
       'afterUpdateHookClassNameList' => [
         0 => 'Espo\\Classes\\RecordHooks\\User\\AfterUpdate'
-      ]
+      ],
+      'beforeDeleteHookClassNameList' => [
+        0 => 'Espo\\Classes\\RecordHooks\\User\\BeforeDelete'
+      ],
+      'deletedRestorerClassName' => 'Espo\\Classes\\Record\\User\\DeletedRestorer'
     ],
     'Webhook' => (object) [
       'defaultsPopulatorClassName' => 'Espo\\Classes\\Record\\Webhook\\DefaultsPopulator',
@@ -29857,6 +30918,13 @@ return (object) [
       ]
     ],
     'WebhookQueueItem' => (object) [
+      'massActions' => (object) [
+        'delete' => (object) [
+          'allowed' => true
+        ]
+      ]
+    ],
+    'WorkingTimeRange' => (object) [
       'massActions' => (object) [
         'delete' => (object) [
           'allowed' => true
@@ -30522,6 +31590,14 @@ return (object) [
       'aclFieldLevelDisabled' => true,
       'customizable' => false
     ],
+    'CurrencyRecord' => (object) [
+      'entity' => true,
+      'tab' => true
+    ],
+    'CurrencyRecordRate' => (object) [
+      'entity' => true,
+      'preserveAuditLog' => true
+    ],
     'Dashboard' => (object) [
       'entity' => false,
       'layouts' => false,
@@ -30530,7 +31606,11 @@ return (object) [
       'customizable' => false
     ],
     'DashboardTemplate' => (object) [
-      'entity' => true
+      'entity' => true,
+      'exportFormatList' => [
+        0 => 'csv'
+      ],
+      'importable' => true
     ],
     'Email' => (object) [
       'entity' => true,
@@ -30539,11 +31619,10 @@ return (object) [
       'acl' => true,
       'aclPortal' => true,
       'aclPortalLevelList' => [
-        0 => 'all',
-        1 => 'account',
-        2 => 'contact',
-        3 => 'own',
-        4 => 'no'
+        0 => 'account',
+        1 => 'contact',
+        2 => 'own',
+        3 => 'no'
       ],
       'aclPortalActionList' => [
         0 => 'read'
@@ -30599,6 +31678,7 @@ return (object) [
       'aclFieldLevelDisabled' => true,
       'customizable' => false,
       'importable' => true,
+      'lastViewed' => true,
       'stars' => true
     ],
     'EmailTemplateCategory' => (object) [
@@ -30746,6 +31826,9 @@ return (object) [
         0 => 'name'
       ]
     ],
+    'OpenApi' => (object) [
+      'acl' => 'boolean'
+    ],
     'PasswordChangeRequest' => (object) [
       'entity' => true,
       'layouts' => false,
@@ -30866,7 +31949,8 @@ return (object) [
       'aclPortalFieldLevelDisabled' => true,
       'customizable' => false,
       'importable' => true,
-      'disabled' => false
+      'disabled' => false,
+      'lastViewed' => true
     ],
     'UniqueId' => (object) [
       'entity' => true,
@@ -31049,6 +32133,7 @@ return (object) [
       'module' => 'Crm',
       'customizable' => true,
       'stream' => true,
+      'stars' => true,
       'importable' => true,
       'notifications' => true,
       'object' => true,
@@ -31081,13 +32166,22 @@ return (object) [
       'entity' => true,
       'layouts' => false,
       'tab' => false,
-      'acl' => 'recordAllTeamNo',
-      'aclPortal' => 'recordAllNo',
+      'aclLevelList' => [
+        0 => 'all',
+        1 => 'team',
+        2 => 'no'
+      ],
+      'aclPortalLevelList' => [
+        0 => 'all',
+        1 => 'no'
+      ],
+      'acl' => true,
+      'aclPortal' => true,
       'aclPortalActionList' => [
         0 => 'read'
       ],
       'module' => 'Crm',
-      'customizable' => true,
+      'customizable' => false,
       'importable' => false,
       'type' => 'CategoryTree',
       'stream' => false,
@@ -31128,13 +32222,22 @@ return (object) [
       'entity' => true,
       'layouts' => false,
       'tab' => false,
-      'acl' => 'recordAllTeamNo',
-      'aclPortal' => 'recordAllNo',
+      'aclLevelList' => [
+        0 => 'all',
+        1 => 'team',
+        2 => 'no'
+      ],
+      'aclPortalLevelList' => [
+        0 => 'all',
+        1 => 'no'
+      ],
+      'acl' => true,
+      'aclPortal' => true,
       'aclPortalActionList' => [
         0 => 'read'
       ],
       'module' => 'Crm',
-      'customizable' => true,
+      'customizable' => false,
       'importable' => false,
       'type' => 'CategoryTree',
       'stream' => false,
@@ -31318,6 +32421,7 @@ return (object) [
       'importable' => true,
       'notifications' => true,
       'calendar' => true,
+      'calendarOneDay' => true,
       'object' => true,
       'statusField' => 'status',
       'stream' => true,
@@ -31364,6 +32468,27 @@ return (object) [
         'inactive' => 'Espo\\Classes\\Select\\AuthToken\\PrimaryFilters\\Inactive'
       ]
     ],
+    'CurrencyRecord' => (object) [
+      'primaryFilterClassNameMap' => (object) [
+        'active' => 'Espo\\Classes\\Select\\CurrencyRecord\\PrimaryFilters\\Active'
+      ],
+      'selectAttributesDependencyMap' => (object) [
+        'id' => [
+          0 => 'code'
+        ]
+      ],
+      'accessControlFilterResolverClassName' => 'Espo\\Core\\Select\\AccessControl\\FilterResolvers\\Boolean'
+    ],
+    'CurrencyRecordRate' => (object) [
+      'selectAttributesDependencyMap' => (object) [
+        'id' => [
+          0 => 'recordId',
+          1 => 'recordName',
+          2 => 'baseCode'
+        ]
+      ],
+      'accessControlFilterResolverClassName' => 'Espo\\Core\\Select\\AccessControl\\FilterResolvers\\Boolean'
+    ],
     'Email' => (object) [
       'whereItemConverterClassNameMap' => (object) [
         'folderId_inFolder' => 'Espo\\Classes\\Select\\Email\\Where\\ItemConverters\\InFolder',
@@ -31400,7 +32525,9 @@ return (object) [
       ],
       'selectAttributesDependencyMap' => (object) [
         'subject' => [
-          0 => 'name'
+          0 => 'name',
+          1 => 'isAutoReply',
+          2 => 'hasAttachment'
         ],
         'personStringData' => [
           0 => 'fromString',
@@ -31440,6 +32567,11 @@ return (object) [
     'EmailTemplate' => (object) [
       'primaryFilterClassNameMap' => (object) [
         'actual' => 'Espo\\Classes\\Select\\EmailTemplate\\PrimaryFilters\\Actual'
+      ]
+    ],
+    'GroupEmailFolder' => (object) [
+      'accessControlFilterClassNameMap' => (object) [
+        'onlyTeam' => 'Espo\\Classes\\Select\\GroupEmailFolder\\AccessControlFilters\\OnlyTeam'
       ]
     ],
     'Import' => (object) [
@@ -31505,6 +32637,9 @@ return (object) [
     'Template' => (object) [
       'accessControlFilterClassNameMap' => (object) [
         'mandatory' => 'Espo\\Classes\\Select\\Template\\AccessControlFilters\\Mandatory'
+      ],
+      'primaryFilterClassNameMap' => (object) [
+        'active' => 'Espo\\Classes\\Select\\Template\\PrimaryFilters\\Active'
       ]
     ],
     'User' => (object) [
@@ -31898,7 +33033,7 @@ return (object) [
     'Hazyblue' => (object) [
       'stylesheet' => 'client/css/espo/hazyblue.css',
       'stylesheetIframe' => 'client/css/espo/hazyblue-iframe.css',
-      'logo' => 'client/img/logo.svg',
+      'logo' => 'client/img/logo-light.svg',
       'textColor' => '#333',
       'chartGridColor' => '#ddd',
       'chartTickColor' => '#e8eced',
@@ -31959,7 +33094,7 @@ return (object) [
     'Sakura' => (object) [
       'stylesheet' => 'client/css/espo/sakura.css',
       'stylesheetIframe' => 'client/css/espo/sakura-iframe.css',
-      'logo' => 'client/img/logo-lite.svg',
+      'logo' => 'client/img/logo-light.svg',
       'textColor' => '#424242',
       'chartGridColor' => '#ddd',
       'chartTickColor' => '#e8eced',
@@ -31986,7 +33121,7 @@ return (object) [
     'Violet' => (object) [
       'stylesheet' => 'client/css/espo/violet.css',
       'stylesheetIframe' => 'client/css/espo/violet-iframe.css',
-      'logo' => 'client/img/logo.svg',
+      'logo' => 'client/img/logo-light.svg',
       'textColor' => '#424242',
       'chartGridColor' => '#ddd',
       'chartTickColor' => '#e8eced',

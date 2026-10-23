@@ -181,6 +181,7 @@ Are you sure?'
       'personName' => 'Person Name',
       'autoincrement' => 'Auto-increment',
       'bool' => 'Boolean',
+      'decimal' => 'Decimal',
       'currency' => 'Currency',
       'currencyConverted' => 'Currency (Converted)',
       'date' => 'Date',
@@ -297,7 +298,8 @@ Are you sure?'
       'relateOnImport' => 'Relate on Import',
       'aclScope' => 'ACL Scope',
       'onlyAdmin' => 'Only for Admin',
-      'notStorable' => 'Not Storable'
+      'notStorable' => 'Not Storable',
+      'itemsEditable' => 'Items Editable'
     ],
     'strings' => [
       'rebuildRequired' => 'Rebuild is required'
@@ -446,7 +448,8 @@ Are you sure?'
   ],
   'ApiUser' => [
     'labels' => [
-      'Create ApiUser' => 'Create API User'
+      'Create ApiUser' => 'Create API User',
+      'OpenAPI spec' => 'OpenAPI spec'
     ]
   ],
   'AppLogRecord' => [
@@ -744,6 +747,44 @@ Are you sure?'
       'ZAR' => 'South African Rand',
       'ZMW' => 'Zambian Kwacha',
       'ZWL' => 'Zimbabwe Dollar'
+    ],
+    'messages' => [
+      'rateOnDateAlreadyExists' => 'A rate on this date already exists.'
+    ]
+  ],
+  'CurrencyRecord' => [
+    'fields' => [
+      'code' => 'Code',
+      'status' => 'Status',
+      'label' => 'Label',
+      'symbol' => 'Symbol',
+      'isBase' => 'Is Base',
+      'rate' => 'Rate',
+      'rateDate' => 'Rate Date'
+    ],
+    'links' => [
+      'rates' => 'Rates'
+    ],
+    'options' => [
+      'status' => [
+        'Active' => 'Active',
+        'Inactive' => 'Inactive'
+      ]
+    ]
+  ],
+  'CurrencyRecordRate' => [
+    'labels' => [
+      'Create CurrencyRecordRate' => 'Create Exchange Rate'
+    ],
+    'fields' => [
+      'record' => 'Currency',
+      'baseCode' => 'Base',
+      'date' => 'Date',
+      'rate' => 'Rate',
+      'number' => 'Number'
+    ],
+    'links' => [
+      'record' => 'Currency'
     ]
   ],
   'DashboardTemplate' => [
@@ -905,6 +946,7 @@ Are you sure?'
       'groupFolder' => 'Group Folder',
       'groupStatusFolder' => 'Group Status Folder',
       'sendAt' => 'Send At',
+      'isAutoReply' => 'Is Auto-Reply',
       'tasks' => 'Tasks'
     ],
     'links' => [
@@ -1064,7 +1106,8 @@ It will be removed for other users too.',
       'smtpSecurity' => 'SMTP Security',
       'smtpAuthMechanism' => 'SMTP Auth Mechanism',
       'smtpUsername' => 'SMTP Username',
-      'smtpPassword' => 'SMTP Password'
+      'smtpPassword' => 'SMTP Password',
+      'folderMap' => 'Folder Mapping'
     ],
     'links' => [
       'filters' => 'Filters',
@@ -1101,6 +1144,7 @@ It will be removed for other users too.',
       'active' => 'Active'
     ],
     'messages' => [
+      'noFolder' => 'Mapped folder does not exist.',
       'couldNotConnectToImap' => 'Could not connect to IMAP server',
       'connectionIsOk' => 'Connection is Ok',
       'imapNotConnected' => 'Could not connect to [IMAP account](#EmailAccount/view/{id}).'
@@ -1108,9 +1152,9 @@ It will be removed for other users too.',
     'tooltips' => [
       'useSmtp' => 'The ability to send emails.',
       'emailAddress' => 'The user record (assigned user) should have the same email address to be able to use this email account for sending.',
-      'monitoredFolders' => 'Multiple folders should be separated by comma.
+      'monitoredFolders' => 'Select IMAP folders to import. Optionally, map them to Espo folders.
 
-You can add a \'Sent\' folder to sync emails sent from an external email client.',
+You can add the \'Sent\' folder to sync emails sent from an external email client.',
       'storeSentEmails' => 'Sent emails will be stored on the IMAP server. Email Address field should match the address emails will be sent from.'
     ]
   ],
@@ -1161,15 +1205,15 @@ You can add a \'Sent\' folder to sync emails sent from an external email client.
     ],
     'tooltips' => [
       'name' => 'Give the filter a descriptive name.',
-      'subject' => 'Use a wildcard *: 
+      'subject' => 'Use a wildcard (`*`): 
 
- * `text*` – starts with text,
- * `*text*` – contains text,
- * `*text` – ends with text.',
+ * `text*` – starts with text
+ * `*text*` – contains text
+ * `*text` – ends with text',
       'bodyContains' => 'Body of the email contains any of the specified words or phrases.',
       'bodyContainsAll' => 'An email body contains all specified words or phrases.',
-      'from' => 'Emails being sent from the specified address. Leave empty if not needed. You can use wildcard *.',
-      'to' => 'Emails being sent to the specified address. Leave empty if not needed. You can use wildcard *.',
+      'from' => 'Emails sent from the specified address will be filtered. Leave empty if not needed. You can use a wildcard (`*`).',
+      'to' => 'Emails sent to the specified address will be filtered. Leave empty if not needed. You can use a wildcard (`*`).',
       'isGlobal' => 'Applies this filter to all emails incoming to system.'
     ]
   ],
@@ -1200,6 +1244,12 @@ You can add a \'Sent\' folder to sync emails sent from an external email client.
       'Create EmailTemplate' => 'Create Email Template',
       'Info' => 'Info',
       'Available placeholders' => 'Available placeholders'
+    ],
+    'options' => [
+      'status' => [
+        'Active' => 'Active',
+        'Inactive' => 'Inactive'
+      ]
     ],
     'messages' => [
       'infoText' => 'Available placeholders:
@@ -1383,7 +1433,7 @@ Event - available in Calendar and Activities panel.',
     'options' => [
       'format' => [
         'csv' => 'CSV',
-        'xlsx' => 'XLSX (Excel)'
+        'xlsx' => 'XLSX · Spreadsheet'
       ],
       'status' => [
         'Pending' => 'Pending',
@@ -1478,6 +1528,7 @@ Event - available in Calendar and Activities panel.',
         'javascript: return this.dateTime.getDateShiftedFromToday(8, \'days\');' => '+8 days',
         'javascript: return this.dateTime.getDateShiftedFromToday(9, \'days\');' => '+9 days',
         'javascript: return this.dateTime.getDateShiftedFromToday(10, \'days\');' => '+10 days',
+        'javascript: return this.dateTime.getDateShiftedFromToday(30, \'days\');' => '+30 days',
         'javascript: return this.dateTime.getDateShiftedFromToday(1, \'weeks\');' => '+1 week',
         'javascript: return this.dateTime.getDateShiftedFromToday(2, \'weeks\');' => '+2 weeks',
         'javascript: return this.dateTime.getDateShiftedFromToday(3, \'weeks\');' => '+3 weeks',
@@ -1522,7 +1573,7 @@ Event - available in Calendar and Activities panel.',
       'default' => 'Value will be set by default upon creating.',
       'min' => 'Min acceptable value.',
       'max' => 'Max acceptable value.',
-      'seeMoreDisabled' => 'If not checked then long texts will be shortened.',
+      'seeMoreDisabled' => 'If not checked, then long texts will be shortened.',
       'lengthOfCut' => 'How long text can be before it will be cut.',
       'maxLength' => 'Max acceptable length of text.',
       'before' => 'The date value should be before the date value of the specified field.',
@@ -1536,6 +1587,7 @@ Event - available in Calendar and Activities panel.',
       'conversionDisabled' => 'The currency conversion action won\'t be applied to this field.',
       'pattern' => 'A regular expression to check a field value against. Define an expression or select a predefined one.',
       'options' => 'A list of possible values and their labels.',
+      'itemsEditable' => 'Items can be edited. Applicable only if no options are specified.',
       'optionsArray' => 'A list of possible values and their labels. If empty, the field will allow entering custom values.',
       'maxCount' => 'Maximum number of items allowed to be selected.',
       'displayAsList' => 'Each item in a new line.',
@@ -1570,6 +1622,7 @@ It will also disable the ability to create a related record from relationship pa
     ],
     'fieldInfo' => [
       'varchar' => 'A single-line text.',
+      'decimal' => 'A decimal number with fixed-point precision.',
       'enum' => 'Selectbox, only one value can be selected.',
       'text' => 'A multiline text with markdown support.',
       'date' => 'Date w/o time.',
@@ -1655,7 +1708,7 @@ Field removal does not remove data from the database. Data from the database wil
       'Stream' => 'Stream',
       'Import' => 'Import',
       'ImportError' => 'Import Error',
-      'Template' => 'Template',
+      'Template' => 'PDF Template',
       'Job' => 'Job',
       'EmailFilter' => 'Email Filter',
       'Portal' => 'Portal',
@@ -1705,6 +1758,9 @@ Field removal does not remove data from the database. Data from the database wil
       'AppSecret' => 'App Secret',
       'OAuthProvider' => 'OAuth Provider',
       'OAuthAccount' => 'OAuth Account',
+      'OpenApi' => 'OpenAPI',
+      'CurrencyRecord' => 'Currency Record',
+      'CurrencyRecordRate' => 'Currency Rate',
       'Account' => 'Account',
       'Contact' => 'Contact',
       'Lead' => 'Lead',
@@ -1749,7 +1805,7 @@ Field removal does not remove data from the database. Data from the database wil
       'Stream' => 'Stream',
       'Import' => 'Import',
       'ImportError' => 'Import Errors',
-      'Template' => 'Templates',
+      'Template' => 'PDF Templates',
       'Job' => 'Jobs',
       'EmailFilter' => 'Email Filters',
       'Portal' => 'Portals',
@@ -1785,6 +1841,9 @@ Field removal does not remove data from the database. Data from the database wil
       'AppSecret' => 'App Secrets',
       'OAuthProvider' => 'OAuth Providers',
       'OAuthAccount' => 'OAuth Accounts',
+      'OpenApi' => 'OpenAPI',
+      'CurrencyRecord' => 'Currencies',
+      'CurrencyRecordRate' => 'Currency Rates',
       'Account' => 'Accounts',
       'Contact' => 'Contacts',
       'Lead' => 'Leads',
@@ -1842,6 +1901,7 @@ Field removal does not remove data from the database. Data from the database wil
       'Done' => 'Done',
       'Access denied' => 'Access denied',
       'Not found' => 'Not found',
+      'Internal server error' => 'Internal server error',
       'Access' => 'Access',
       'Timeout' => 'Timeout',
       'No internet' => 'No internet',
@@ -1952,6 +2012,7 @@ Field removal does not remove data from the database. Data from the database wil
       'No' => 'No',
       'Select All Results' => 'Select All Results',
       'Value' => 'Value',
+      'Edit Item' => 'Edit Item',
       'Current version' => 'Current version',
       'List View' => 'List View',
       'Tree View' => 'Tree View',
@@ -2025,6 +2086,7 @@ Field removal does not remove data from the database. Data from the database wil
       'Tasks' => 'Tasks'
     ],
     'messages' => [
+      'checkLogsForDetails' => 'Check logs for details.',
       'pleaseWait' => 'Please wait...',
       'loading' => 'Loading...',
       'saving' => 'Saving...',
@@ -2086,6 +2148,7 @@ Field removal does not remove data from the database. Data from the database wil
       'massRemoveResult' => '{count} records have been removed',
       'massRemoveResultSingle' => '{count} record has been removed',
       'noRecordsRemoved' => 'No records were removed',
+      'changesLossConfirmation' => 'Unsaved changes will be lost. Are you sure?',
       'clickToRefresh' => 'Click to refresh',
       'writeYourCommentHere' => 'Write your comment here',
       'writeMessageToUser' => 'Write a message to {user}',
@@ -2154,7 +2217,8 @@ Validation: `{type}`',
     'presetFilters' => [
       'followed' => 'Followed',
       'all' => 'All',
-      'starred' => 'Starred'
+      'starred' => 'Starred',
+      'active' => 'Active'
     ],
     'massActions' => [
       'delete' => 'Delete',
@@ -2282,6 +2346,7 @@ Validation: `{type}`',
       'entityRemoved' => '{user} removed {entityType} {entity}',
       'emailInbox' => '{user} added email {entity} to your inbox',
       'userPostReaction' => '{user} reacted to your {post}',
+      'addedToCollaborators' => '{user} added you as a collaborator to {entityType} {entity}',
       'userPostInParentReaction' => '{user} reacted to your {post} in {entityType} {entity}',
       'eventAttendee' => '{user} added you to {entityType} {entity}'
     ],
@@ -2500,6 +2565,7 @@ Validation: `{type}`',
         'tr_TR' => 'Turkish',
         'uk_UA' => 'Ukrainian',
         'ur_PK' => 'Urdu',
+        'ur_IN' => 'Urdu (India)',
         'vi_VN' => 'Vietnamese',
         'zh_CN' => 'Simplified Chinese (China)',
         'zh_HK' => 'Traditional Chinese (Hong Kong)',
@@ -2845,7 +2911,7 @@ Validation: `{type}`',
       'What to Import?' => 'What to Import?',
       'Entity Type' => 'Entity Type',
       'What to do?' => 'What to do?',
-      'Properties' => 'Properties',
+      'Parameters' => 'Parameters',
       'Header Row' => 'Header Row',
       'Person Name Format' => 'Person Name Format',
       'John Smith' => 'John Smith',
@@ -3001,8 +3067,8 @@ Validation: `{type}`',
       'reply' => 'Notify email senders that their emails has been received.
 
  Only one email will be sent to a particular recipient during some period of time to prevent looping.',
-      'createCase' => 'Automatically create case from incoming emails.',
-      'replyToAddress' => 'Specify email address of this mailbox to make responses come here.',
+      'createCase' => 'Automatically create cases from incoming emails.',
+      'replyToAddress' => 'To route responses to this email account, specify the email address of this account.',
       'caseDistribution' => 'How cases will be assigned to. Assigned directly to the user or among the team.',
       'assignToUser' => 'User cases will be assigned to.',
       'team' => 'Team cases will be assigned to.',
@@ -3010,8 +3076,8 @@ Validation: `{type}`',
       'targetUserPosition' => 'Users with specified position will be distributed with cases.',
       'addAllTeamUsers' => 'Emails will be appearing in Inbox of all users of specified teams.',
       'monitoredFolders' => 'Multiple folders should be separated by comma.',
-      'smtpIsShared' => 'If checked then users will be able to send emails using this SMTP. Availability is controlled by Roles through the Group Email Account permission.',
-      'smtpIsForMassEmail' => 'If checked then SMTP will be available for Mass Email.',
+      'smtpIsShared' => 'If checked, then users will be able to send emails using this SMTP. Availability is controlled by Roles through the Group Email Account permission.',
+      'smtpIsForMassEmail' => 'If checked, then SMTP will be available for Mass Email.',
       'storeSentEmails' => 'Sent emails will be stored on the IMAP server.',
       'groupEmailFolder' => 'Put incoming emails in a group folder.',
       'excludeFromReply' => 'When replying on emails sent to this account\'s email address, its email address won\'t be added to CC.
@@ -3438,7 +3504,7 @@ Visit [Google Developers Console](https://console.developers.google.com/project)
       'articles' => 'Knowledge Base Articles'
     ],
     'tooltips' => [
-      'layoutSet' => 'Provides the ability to have layouts that differ from standard ones.',
+      'layoutSet' => 'Provides the ability to have layouts that differ from the standard ones.',
       'portalRoles' => 'Specified Portal Roles will be applied to all users of this portal.'
     ],
     'labels' => [
@@ -3488,6 +3554,7 @@ Visit [Google Developers Console](https://console.developers.google.com/project)
       'assignmentNotificationsIgnoreEntityTypeList' => 'In-app assignment notifications',
       'assignmentEmailNotificationsIgnoreEntityTypeList' => 'Email assignment notifications',
       'reactionNotifications' => 'In-app notifications about reactions',
+      'reactionNotificationsNotFollowed' => 'Notifications about reactions for non-followed records',
       'autoFollowEntityTypeList' => 'Global Auto-Follow',
       'signature' => 'Email Signature',
       'dashboardTabList' => 'Tab List',
@@ -3506,6 +3573,7 @@ Visit [Google Developers Console](https://console.developers.google.com/project)
       'followEntityOnStreamPost' => 'Auto-follow record after posting in Stream',
       'followCreatedEntities' => 'Auto-follow created records',
       'followCreatedEntityTypeList' => 'Auto-follow created records of specific entity types',
+      'followAsCollaborator' => 'Auto-follow when added as a collaborator',
       'emailUseExternalClient' => 'Use an external email client',
       'textSearchStoringDisabled' => 'Disable text filter storing',
       'calendarSlotDuration' => 'Calendar Slot Duration',
@@ -3532,9 +3600,9 @@ Visit [Google Developers Console](https://console.developers.google.com/project)
     'tooltips' => [
       'addCustomTabs' => 'If checked, custom tabs will be appended to default tabs. Otherwise, custom tabs will be used instead of default tabs.',
       'autoFollowEntityTypeList' => 'Automatically follow ALL new records (created by any user) of the selected entity types. To be able to see information in the stream and receive notifications about all records in the system.',
-      'doNotFillAssignedUserIfNotRequired' => 'When create record assigned user won\'t be filled with own user unless the field is required.',
-      'followCreatedEntities' => 'When create new records, they will be automatically followed even if assigned to another user.',
-      'followCreatedEntityTypeList' => 'When create new records of selected entity types, they will be followed automatically even if assigned to another user.'
+      'doNotFillAssignedUserIfNotRequired' => 'When creating a new record, the assigned user won\'t be pre-filled with the own user. If the assigned user field is required, then this parameter has no effect.',
+      'followCreatedEntities' => 'Created records will be automatically followed, regardless of who they assigned to.',
+      'followCreatedEntityTypeList' => 'Records of the selected entity types will be automatically followed, regardless of who they assigned to. Use this parameter to follow only specific entity types.'
     ],
     'tabFields' => [
       'label' => 'Label',
@@ -3595,7 +3663,8 @@ Visit [Google Developers Console](https://console.developers.google.com/project)
       'Access' => 'Access',
       'Create Role' => 'Create Role',
       'Scope Level' => 'Scope Level',
-      'Field Level' => 'Field Level'
+      'Field Level' => 'Field Level',
+      'Baseline' => 'Baseline'
     ],
     'options' => [
       'accessList' => [
@@ -3856,7 +3925,8 @@ Visit [Google Developers Console](https://console.developers.google.com/project)
       'authIpAddressCheck' => 'Restrict access by IP address',
       'authIpAddressWhitelist' => 'IP Address Whitelist',
       'authIpAddressCheckExcludedUsers' => 'Users excluded from check',
-      'availableReactions' => 'Available Reactions'
+      'availableReactions' => 'Available Reactions',
+      'baselineRole' => 'Baseline Role'
     ],
     'options' => [
       'authenticationMethod' => [
@@ -3894,26 +3964,26 @@ Visit [Google Developers Console](https://console.developers.google.com/project)
 
 Portals are not affected by restriction.',
       'workingTimeCalendar' => 'A working time calendar that will be applied to all users by default.',
-      'displayListViewRecordCount' => 'A total number of records will be shown on the list view.',
-      'currencyList' => 'What currencies will be available in the system.',
-      'activitiesEntityList' => 'What records will be available in the Activities panel.',
-      'historyEntityList' => 'What records will be available in the History panel.',
-      'calendarEntityList' => 'What records will be available in the Calendar.',
+      'displayListViewRecordCount' => 'The total number of records will be shown on the list view.',
+      'currencyList' => 'Currencies available in the system.',
+      'activitiesEntityList' => 'Record types included in the Activities panel.',
+      'historyEntityList' => 'Record types included in the History panel.',
+      'calendarEntityList' => 'Record types included in the Calendar.',
       'addressStateList' => 'State suggestions for address fields.',
       'addressCityList' => 'City suggestions for address fields.',
       'addressCountryList' => 'Country suggestions for address fields.',
       'exportDisabled' => 'Users won\'t be able to export records. Only admin will be allowed.',
-      'globalSearchEntityList' => 'What records can be searched with Global Search.',
+      'globalSearchEntityList' => 'Defines which record types are searchable with Global Search.',
       'siteUrl' => 'A URL of this EspoCRM instance. You need to change it if you move to another domain.',
       'useCache' => 'Not recommended to disable, unless for development purpose.',
       'useWebSocket' => 'WebSocket enables two-way interactive communication between a server and a browser. Requires setting up the WebSocket daemon on your server. Check the documentation for more info.',
-      'passwordRecoveryForInternalUsersDisabled' => 'Only portal users will be able to recover password.',
-      'passwordRecoveryNoExposure' => 'It won\'t be possible to determine whether a specific email address is registered in the system.',
-      'emailAddressLookupEntityTypeList' => 'For email address autocomplete.',
-      'emailAddressSelectEntityTypeList' => 'Entity types available when searching for an email address from a modal.',
+      'passwordRecoveryForInternalUsersDisabled' => 'Only portal users will be able to recover passwords.',
+      'passwordRecoveryNoExposure' => 'It won\'t be possible to determine whether a specific email address exists in the system. Recommended for security.',
+      'emailAddressLookupEntityTypeList' => 'Record types included in email address autocomplete.',
+      'emailAddressSelectEntityTypeList' => 'Record types available when selecting recipients for a composed email.',
       'emailNotificationsDelay' => 'A message can be edited within the specified timeframe before the notification is sent.',
       'outboundEmailFromAddress' => 'System emails will be sent from this email address. A [group email account](#InboundEmail) with the same email address must be set up and properly configured to send emails.',
-      'busyRangesEntityList' => 'What will be taken into account when showing busy time ranges in scheduler & timeline.',
+      'busyRangesEntityList' => 'Specifies which record types are used to determine busy time ranges in the scheduler and timeline.',
       'massEmailVerp' => 'Variable envelope return path. For better handling of bounced messages. Make sure that your SMTP provider supports it.',
       'recordsPerPage' => 'Number of records initially displayed in list views.',
       'recordsPerPageSmall' => 'Number of records initially displayed in relationship panels.',
@@ -3921,12 +3991,18 @@ Portals are not affected by restriction.',
       'recordsPerPageKanban' => 'Number of records initially displayed in kanban columns.',
       'outboundEmailIsShared' => 'Allow users to send emails from this address.',
       'followCreatedEntities' => 'Users will automatically follow records they created.',
-      'emailMessageMaxSize' => 'All inbound emails exceeding a specified size will be fetched w/o body and attachments.',
-      'authTokenLifetime' => 'Defines how long tokens can exist.
-0 - means no expiration.',
-      'authTokenMaxIdleTime' => 'Defines how long since the last access tokens can exist.
-0 - means no expiration.',
-      'userThemesDisabled' => 'If checked then users won\'t be able to select another theme.',
+      'emailMessageMaxSize' => 'All inbound emails exceeding the specified size will be fetched without the body and attachments.',
+      'authTokenLifetime' => 'Defines how long access tokens can be valid.
+
+Examples:
+- 0 – no expiration
+- 48 – expires 2 days after login',
+      'authTokenMaxIdleTime' => 'Defines the maximum period of inactivity after which an access token expires. Value is in hours.
+
+Examples:
+- 0 – no expiration
+- 48 – expires after 2 days of inactivity',
+      'userThemesDisabled' => 'If checked, then users won\'t be able to choose another theme.',
       'ldapUsername' => 'The full system user DN which allows to search other users. E.g. "CN=LDAP System User,OU=users,OU=espocrm, DC=test,DC=lan".',
       'ldapPassword' => 'The password to access to LDAP server.',
       'ldapAuth' => 'Access credentials for the LDAP server.',
@@ -3961,23 +4037,23 @@ E.g. "userPrincipalName" or "sAMAccountName" for Active Directory, "uid" for Ope
       'ldapPortalUserPortals' => 'Default Portals for created Portal User',
       'ldapPortalUserRoles' => 'Default Roles for created Portal User',
       'b2cMode' => 'By default EspoCRM is adapted for B2B. You can switch it to B2C.',
-      'currencyDecimalPlaces' => 'Number of decimal places. If empty then all nonempty decimal places will be displayed.',
+      'currencyDecimalPlaces' => 'Number of decimal places. If empty, then all nonempty decimal places will be displayed.',
       'aclStrictMode' => 'Enabled: Access to scopes will be forbidden if it\'s not specified in roles.
 
 Disabled: Access to scopes will be allowed if it\'s not specified in roles.',
-      'aclAllowDeleteCreated' => 'Users will be able to remove records they created even if they don\'t have a delete access.',
-      'textFilterUseContainsForVarchar' => 'If not checked then \'starts with\' operator is used. You can use the wildcard \'%\'.',
+      'aclAllowDeleteCreated' => 'If enabled, users are allowed to delete their newly created records, regardless of delete permissions, for a limited time.',
+      'textFilterUseContainsForVarchar' => 'If enabled, the text search uses the *contains* operator. Otherwise, it will use *starts with*. If disabled, you can still use the wildcard (`*`) in the search query.',
       'streamEmailNotificationsEntityList' => 'Email notifications about stream updates of followed records. Users will receive email notifications only for specified entity types.',
       'authTokenPreventConcurrent' => 'Users won\'t be able to be logged in on multiple devices simultaneously.',
-      'emailAddressIsOptedOutByDefault' => 'When creating new record email address will be marked as opted-out.',
-      'cleanupDeletedRecords' => 'Removed records will be deleted from database after a while.',
-      'jobRunInParallel' => 'Jobs will be executed in parallel processes.',
+      'emailAddressIsOptedOutByDefault' => 'When creating a new record, its email address will be marked as opted out.',
+      'cleanupDeletedRecords' => 'Soft-removed records will be permanently deleted from the database after a retention period.',
+      'jobRunInParallel' => 'Jobs will run in parallel processes. It\'s highly recommended to enable.',
       'jobPoolConcurrencyNumber' => 'Max number of processes run simultaneously.',
-      'jobMaxPortion' => 'Max number of jobs processed per one execution.',
+      'jobMaxPortion' => 'Maximum number of jobs processed per cycle.',
       'jobForceUtc' => 'Use the UTC time zone for scheduled jobs. Otherwise, the time zone set in settings will be used.',
-      'daemonInterval' => 'Interval between process cron runs in seconds.',
-      'daemonMaxProcessNumber' => 'Max number of cron processes run simultaneously.',
-      'daemonProcessTimeout' => 'Max execution time (in seconds) allocated for a single cron process.',
+      'daemonInterval' => 'Interval between cycles in seconds.',
+      'daemonMaxProcessNumber' => 'Maximum number of cycles that can run simultaneously. If exceeded, the next cycle will wait until the number drops before starting.',
+      'daemonProcessTimeout' => 'Maximum execution time (in seconds) allocated for a cycle process.',
       'cronDisabled' => 'Cron will not run.',
       'maintenanceMode' => 'Only administrators will have access to the system.',
       'oidcGroupClaim' => 'A claim to use for team mapping.',
@@ -3987,12 +4063,15 @@ Disabled: Access to scopes will be allowed if it\'s not specified in roles.',
       'oidcSyncTeams' => 'Sync user teams (on every login).',
       'oidcUsernameClaim' => 'A claim to use for a username (for user matching and creation).',
       'oidcTeams' => 'Espo teams mapped against groups/teams/roles of the identity provider. Teams with an empty mapping value will be always assigned to a user (when creating or syncing).',
-      'oidcLogoutUrl' => 'An URL the browser will redirect to after logging out from Espo. Intended for clearing the session information in the browser and doing logging out on the provider side. Usually the URL contains a redirect-URL parameter, to return back to Espo.
+      'oidcLogoutUrl' => 'A URL the browser will redirect to after logging out from Espo. Intended for clearing the session information in the browser and doing logging out on the provider side. Usually the URL contains a redirect-URL parameter, to return back to Espo.
 
 Available placeholders:
 * `{siteUrl}`
 * `{clientId}`',
-      'quickSearchFullTextAppendWildcard' => 'Append a wildcard to an autocomplete search query when Full-Text search is enabled. Reduces search performance.'
+      'quickSearchFullTextAppendWildcard' => 'Append a wildcard to the autocomplete search query when Full-Text search is enabled. Reduces search performance.',
+      'baselineRole' => 'The default role applied to all users. Any additional roles assigned to a user grant permissions on top of this baseline.
+
+**Important**. Changing this role affects all users – review the change carefully to avoid granting unintended permissions.'
     ],
     'labels' => [
       'Group Tab' => 'Group Tab',
@@ -4026,7 +4105,8 @@ Available placeholders:
       'Recovery' => 'Recovery'
     ],
     'messages' => [
-      'ldapTestConnection' => 'The connection successfully established.'
+      'ldapTestConnection' => 'The connection successfully established.',
+      'confirmBaselineRoleChange' => 'Are you sure you want to change the baseline role? An unconsidered change may grant unintended permissions to all users.'
     ]
   ],
   'Stream' => [
@@ -4065,9 +4145,9 @@ Available placeholders:
     ],
     'tooltips' => [
       'workingTimeCalendar' => 'A calendar will be applied to users who have this team set as a Default Team.',
-      'layoutSet' => 'Provides the ability to have layouts that differ from standard ones. Layout Set will be applied to users who have this team set as Default Team.',
-      'roles' => 'Access Roles. Users of this team obtain access control level from selected roles.',
-      'positionList' => 'Available positions in this team. E.g. Salesperson, Manager.'
+      'layoutSet' => 'Provides the ability to have layouts that differ from the standard ones. Layout Set will be applied to users who have this team set as Default Team.',
+      'roles' => 'Access roles. Users of this team obtain access control level from the specified roles.',
+      'positionList' => 'Positions available in this team. For example, Salesperson, Manager.'
     ],
     'labels' => [
       'Create Team' => 'Create Team'
@@ -4095,13 +4175,19 @@ Available placeholders:
       'pageHeight' => 'Page Height (mm)',
       'fontFace' => 'Font',
       'title' => 'Title',
-      'style' => 'Style'
+      'style' => 'Style',
+      'status' => 'Status',
+      'filename' => 'Filename'
     ],
     'links' => [],
     'labels' => [
       'Create Template' => 'Create Template'
     ],
     'options' => [
+      'status' => [
+        'Active' => 'Active',
+        'Inactive' => 'Inactive'
+      ],
       'pageOrientation' => [
         'Portrait' => 'Portrait',
         'Landscape' => 'Landscape'
@@ -4117,6 +4203,13 @@ Available placeholders:
       'fontFace' => []
     ],
     'tooltips' => [
+      'filename' => 'An optional filename. Entity attributes can be used as placeholders.
+
+Additional placeholder:
+- `{{today}}`
+
+Example:
+`Document_{{today}}_{{name}}`',
       'footer' => 'Use {pageNumber} to print page number.',
       'variables' => 'Copy-paste needed placeholder to Header, Body or Footer.'
     ]
@@ -4217,14 +4310,14 @@ Available placeholders:
     ],
     'tooltips' => [
       'defaultTeam' => 'All records created by this user will be related to this team by default.',
-      'userName' => 'Letters a-z, numbers 0-9, dots, hyphens, @-signs and underscores are allowed.',
+      'userName' => 'Allowed characters: `a-z`, `0-9`, `-_@.`.',
       'isAdmin' => 'Admin user can access everything.',
-      'isActive' => 'If unchecked then user won\'t be able to login.',
+      'isActive' => 'If unchecked, then the user won\'t be able to log in.',
       'teams' => 'Teams which this user belongs to. Access control level is inherited from team\'s roles.',
       'roles' => 'Additional access roles. Use it if user doesn\'t belong to any team or you need to extend access control level exclusively for this user.',
       'portalRoles' => 'Additional portal roles. Use it to extend access control level exclusively for this user.',
       'portals' => 'Portals which this user has access to.',
-      'layoutSet' => 'Layouts from a specified set will be applied for the user instead of default ones.'
+      'layoutSet' => 'Layouts from the specified layout set will be applied for the user. The default layouts will be overridden.'
     ],
     'messages' => [
       '2faMethodNotConfigured' => 'The 2FA method is not fully configured in the system.',
@@ -4310,11 +4403,15 @@ Available placeholders:
       'user' => 'API User',
       'entityType' => 'Entity Type',
       'field' => 'Field',
-      'secretKey' => 'Secret Key'
+      'secretKey' => 'Secret Key',
+      'skipOwn' => 'Skip Own'
     ],
     'links' => [
       'user' => 'User',
       'queueItems' => 'Queue Items'
+    ],
+    'tooltips' => [
+      'skipOwn' => 'Do not send if the event was initiated by the user owning the webhook.'
     ]
   ],
   'WebhookEventQueueItem' => [
@@ -4322,7 +4419,12 @@ Available placeholders:
       'event' => 'Event',
       'target' => 'Target',
       'data' => 'Data',
-      'isProcessed' => 'Is Processed'
+      'isProcessed' => 'Is Processed',
+      'user' => 'User'
+    ],
+    'links' => [
+      'target' => 'Target',
+      'user' => 'User'
     ]
   ],
   'WebhookQueueItem' => [

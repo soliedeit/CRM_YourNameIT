@@ -3,7 +3,7 @@
  * This file is part of EspoCRM.
  *
  * EspoCRM – Open Source CRM application.
- * Copyright (C) 2014-2025 Yurii Kuznietsov, Taras Machyshyn, Oleksii Avramenko
+ * Copyright (C) 2014-2026 EspoCRM, Inc.
  * Website: https://www.espocrm.com
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 
 namespace Espo\Entities;
 
+use Espo\Core\Field\Link;
 use Espo\Core\Name\Field;
 use Espo\Core\ORM\Entity;
 
@@ -214,5 +215,14 @@ class Attachment extends Entity
         $this->relations->set('related', $related);
 
         return $this;
+    }
+
+    /**
+     * @since 9.3.5
+     */
+    public function getCreatedBy(): ?Link
+    {
+        /** @var ?Link */
+        return $this->getValueObject(Field::CREATED_BY);
     }
 }
