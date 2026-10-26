@@ -1,1 +1,6 @@
 /data/.backup/
+
+# Per-environment config and state; secrets live only on each server.
+/data/config.php
+/data/config-internal.php
+/data/state.php

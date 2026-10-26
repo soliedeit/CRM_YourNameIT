@@ -1,12 +1,15 @@
 <?php
+// Template for data/config-internal.php. Copy to config-internal.php and fill in
+// the real values per environment. Never commit the real file: it holds secrets.
+// Keep the production cryptKey stable: changing it makes stored passwords unreadable.
 return [
   'database' => [
-    'host' => 'localhost',
+    'host' => '127.0.0.1',
     'port' => '',
     'charset' => NULL,
     'dbname' => 'crm_db',
-    'user' => 'crm_db',
-    'password' => 'rGnHrsStJGw4WqNtt2T5',
+    'user' => 'CHANGE_ME',
+    'password' => 'CHANGE_ME',
     'platform' => 'Mysql'
   ],
   'smtpPassword' => NULL,
@@ -31,14 +34,13 @@ return [
   ],
   'adminUpgradeDisabled' => false,
   'isInstalled' => true,
-  'microtimeInternal' => 1792766900.204408,
-  'cryptKey' => '4ea0f3736053ef2f425c3c3c8bd9597e',
-  'hashSecretKey' => '210ed28dd44b68327ae3d67b068847b8',
+  'cryptKey' => 'CHANGE_ME',
+  'hashSecretKey' => 'CHANGE_ME',
   'defaultPermissions' => [
     'user' => 1016,
     'group' => 1017
   ],
   'actualDatabaseType' => 'mariadb',
-  'actualDatabaseVersion' => '10.6.25',
-  'instanceId' => 'b0259e74-0eb7-484d-a6f3-28250825845b'
+  'actualDatabaseVersion' => '',
+  'instanceId' => 'CHANGE_ME'
 ];
